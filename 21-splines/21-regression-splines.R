@@ -1,0 +1,99 @@
+#' ---
+#' title: "Session 21 — Regression splines: truncated powers, bs() and ns()"
+#' subtitle: "Statistical Modelling (BAM), Spring 2027"
+#' author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+#' output: html_document
+#' ---
+#' 
+
+#' 
+## ----data---------------------------------------------------------------------
+library(MASS)
+library(splines)
+data(mcycle)
+x <- mcycle$times
+y <- mcycle$accel
+n <- length(y)
+
+#' 
+#' ## 1. The truncated power basis
+#' 
+#' A spline of degree $q$ with knots $\kappa_1 < \dots < \kappa_K$ can be written as
+#' $$f(x) = \sum_{k=0}^{q} \beta_k x^k + \sum_{k=1}^{K} \gamma_k (x - \kappa_k)_+^q,$$
+#' where $u_+ = \max(u, 0)$. The polynomial part goes up to $x^q$; each truncated
+#' term adds a jump of size $q!\,\gamma_k$ in the $q$-th derivative at $\kappa_k$, so
+#' derivatives up to order $q - 1$ stay continuous.
+#' 
+## ----tpf----------------------------------------------------------------------
+tpower <- function(x, knots, q) {
+  outer(x, knots, function(x, k) pmax(x - k, 0)^q)
+}
+q <- 3
+knots <- quantile(x, probs = (1:8) / 9)       # 8 interior knots at quantiles
+X_tp <- cbind(outer(x, 0:q, `^`), tpower(x, knots, q))
+dim(X_tp)                                      # q + 1 + K = 12 columns
+fit_tp <- lm(y ~ X_tp - 1)
+sum(resid(fit_tp)^2)
+
+#' 
+#' The same function space is spanned by `bs(x, knots = knots, degree = 3)` plus an
+#' intercept, so the fitted values are identical; only the parametrization (and
+#' its conditioning) differs.
+#' 
+## ----tp-vs-bs-----------------------------------------------------------------
+fit_bs <- lm(y ~ bs(x, knots = knots, degree = 3))
+max(abs(fitted(fit_tp) - fitted(fit_bs)))
+c(kappa_truncated = kappa(X_tp, exact = TRUE),
+  kappa_bspline = kappa(cbind(1, bs(x, knots = knots)), exact = TRUE))
+
+#' 
+#' ## 2. Regression splines with `bs()` and `ns()`
+#' 
+#' `bs(x, df = m)` builds a cubic B-spline basis with $m - 3$ interior knots at
+#' quantiles of $x$ (no intercept column, `lm()` adds it). `ns(x, df = m)` builds a
+#' natural cubic spline basis with $m - 1$ interior knots: the fit is linear beyond
+#' the boundary knots.
+#' 
+## ----bs-ns--------------------------------------------------------------------
+for (df in c(5, 8, 10, 12, 15)) {
+  fb <- lm(accel ~ bs(times, df = df), data = mcycle)
+  fn <- lm(accel ~ ns(times, df = df), data = mcycle)
+  cat(sprintf("df = %2d | bs: %2d coef, AIC %.1f | ns: %2d coef, AIC %.1f\n",
+              df, length(coef(fb)), AIC(fb), length(coef(fn)), AIC(fn)))
+}
+attr(ns(x, df = 8), "knots")      # 7 interior knots
+
+#' 
+#' ## 3. Number and placement of knots
+#' 
+#' Too few knots miss the dip; too many chase the noise. A simple strategy is to
+#' place knots at quantiles and choose their number by AIC or cross-validation.
+#' Here we compare quantile knots with equally spaced knots for $K = 8$.
+#' 
+## ----knots--------------------------------------------------------------------
+K <- 8
+k_quant <- quantile(x, probs = (1:K) / (K + 1))
+k_equal <- seq(min(x), max(x), length.out = K + 2)[-c(1, K + 2)]
+rbind(quantile = round(k_quant, 1), equal = round(k_equal, 1))
+c(RSS_quantile = sum(resid(lm(y ~ bs(x, knots = k_quant)))^2),
+  RSS_equal = sum(resid(lm(y ~ bs(x, knots = k_equal)))^2))
+
+#' 
+#' Choosing the knots is a discrete, awkward model-selection problem: models with
+#' different knot sets are generally not nested. Penalized splines (file
+#' `21-bsplines-psplines.Rmd`) replace this choice by a single continuous
+#' smoothing parameter $\lambda$.
+#' 
+#' ## 4. Natural splines behave better beyond the data
+#' 
+## ----extrapolate--------------------------------------------------------------
+fb <- lm(accel ~ bs(times, df = 8), data = mcycle)
+fn <- lm(accel ~ ns(times, df = 8), data = mcycle)
+new <- data.frame(times = c(60, 65, 70))
+# bs() warns that these times lie beyond its boundary knots: that is the point
+cbind(new, bs = suppressWarnings(predict(fb, new)), ns = predict(fn, new))
+
+#' 
+#' The cubic B-spline fit continues with its last cubic piece; the natural spline
+#' continues with a straight line. Neither should be trusted far from the data,
+#' but the natural spline at least does not explode.

@@ -1,0 +1,55 @@
+---
+title: "Session 06 — Confounding, omitted-variable bias and collinearity"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+```{r data}
+library(faraway)
+data(savings)
+cor(savings$pop15, savings$pop75)
+```
+
+## Marginal vs adjusted slope of pop75
+
+```{r ovb}
+short <- lm(sr ~ pop75, data = savings)          # omits pop15
+long  <- lm(sr ~ pop75 + pop15, data = savings)
+aux   <- lm(pop15 ~ pop75, data = savings)        # pop15 on pop75
+coef(short); coef(long); coef(aux)
+```
+
+The omitted-variable identity holds exactly in the sample:
+$\tilde\beta_{75} = \hat\beta_{75} + \hat\beta_{15}\,\hat\delta$.
+
+```{r ovb-identity}
+coef(long)[["pop75"]] + coef(long)[["pop15"]] * coef(aux)[["pop75"]]
+coef(short)[["pop75"]]
+```
+
+## Frisch–Waugh–Lovell: the adjusted slope from residuals
+
+```{r fwl}
+ry <- resid(lm(sr ~ pop15, data = savings))
+rx <- resid(lm(pop75 ~ pop15, data = savings))
+coef(lm(ry ~ rx))[["rx"]]          # equals the pop75 coefficient in 'long'
+```
+
+## Variance inflation factors
+
+$\mathrm{VIF}_j = 1/(1-R_j^2)$, where $R_j^2$ comes from regressing $x_j$ on the other predictors.
+
+```{r vif}
+fit <- lm(sr ~ pop15 + pop75 + dpi + ddpi, data = savings)
+car::vif(fit)
+R2_15 <- summary(lm(pop15 ~ pop75 + dpi + ddpi, data = savings))$r.squared
+1 / (1 - R2_15)
+# se(beta_j)^2 = sigma^2 / ((n-1) var(x_j)) * VIF_j
+s <- summary(fit)$sigma; n <- nrow(savings)
+sqrt(s^2 / ((n - 1) * var(savings$pop15)) * car::vif(fit)[["pop15"]])
+coef(summary(fit))["pop15", "Std. Error"]
+```

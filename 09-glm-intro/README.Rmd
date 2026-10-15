@@ -1,0 +1,16 @@
+---
+title: "Session 9 — R examples index"
+subtitle: "Statistical Modelling (BAM)"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+date: "Spring 2027"
+output:
+  html_document:
+    theme: flatly
+---
+
+## Files
+
+- `09-exponential-family.Rmd` / `.R` — $b'(\theta)$ and $b''(\theta)a(\phi)$ checked numerically and by simulation; variance functions; `family` objects.
+- `09-logistic-birthwt.Rmd` / `.R` — `MASS::birthwt`: linear probability model vs logistic GLM, odds ratios with profile intervals, predicted probabilities.
+- `09-poisson-ships.Rmd` / `.R` — `MASS::ships`: Poisson regression with offset `log(service)`, rate ratios, a prediction by hand.
+- `09-classification-pima.Rmd` / `.R` — `MASS::Pima.tr` / `Pima.te`: sensitivity, specificity, cost-optimal and Youden thresholds chosen on training data, ROC and AUC by hand.

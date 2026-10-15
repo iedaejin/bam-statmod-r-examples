@@ -1,0 +1,18 @@
+---
+title: "Session 22 — R examples index"
+subtitle: "Computer lab: smoothing and splines — Statistical Modelling (BAM)"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+date: "Spring 2027"
+output:
+  html_document:
+    theme: flatly
+---
+
+Running dataset: `MASS::mcycle` (Silverman, 1985).
+
+## Files
+
+1. [`22-cv-pitfalls.Rmd`](22-cv-pitfalls.Rmd) (script: [`22-cv-pitfalls.R`](22-cv-pitfalls.R))
+2. [`22-heteroscedasticity.Rmd`](22-heteroscedasticity.Rmd) (script: [`22-heteroscedasticity.R`](22-heteroscedasticity.R))
+
+Lab: `R Labs/bam-statmod/Lab_05_Smoothing_Splines/` (public repo `iedaejin/bam-statmod`).

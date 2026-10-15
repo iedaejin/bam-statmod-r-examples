@@ -1,0 +1,87 @@
+---
+title: "Session 16 — BLUPs and shrinkage"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE, purl=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+The best linear unbiased predictor of the random effects is
+$\tilde b = G Z^\top V^{-1}(y - X\hat\beta)$.
+For a random intercept, subject $i$ gets
+$\tilde b_{0i} = k_i\,(\bar y_{i\cdot} - \bar x_{i\cdot}^\top\hat\beta)$ with shrinkage factor
+$k_i = n_i\sigma_b^2/(n_i\sigma_b^2 + \sigma^2)$.
+
+```{r data}
+library(lme4)
+data(sleepstudy)
+m_ri <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+vc <- as.data.frame(VarCorr(m_ri))$vcov
+sigma_b2 <- vc[1]; sigma2 <- vc[2]
+beta <- fixef(m_ri)
+```
+
+## BLUP with the matrix formula
+
+```{r matrix-blup}
+y <- sleepstudy$Reaction
+X <- model.matrix(~ Days, sleepstudy)
+Z <- model.matrix(~ 0 + Subject, sleepstudy)
+G <- sigma_b2 * diag(ncol(Z))
+V <- Z %*% G %*% t(Z) + sigma2 * diag(nrow(Z))
+b_tilde <- G %*% t(Z) %*% solve(V, y - X %*% beta)
+head(cbind(by_hand = b_tilde[, 1], ranef = ranef(m_ri)$Subject[, 1]))
+```
+
+## BLUP as a shrunken raw deviation
+
+```{r shrinkage}
+n_i  <- 10
+k    <- n_i * sigma_b2 / (n_i * sigma_b2 + sigma2)
+k
+raw  <- tapply(y - X %*% beta, sleepstudy$Subject, mean)   # ybar_i - xbar_i' beta_hat
+blup <- ranef(m_ri)$Subject[, 1]
+head(cbind(raw = raw, k_times_raw = k * raw, blup = blup))
+```
+
+Subject 309 has a raw deviation of $-83.3$ ms and a BLUP of $-77.8$ ms:
+it keeps 93.5% of its own evidence.
+
+## Unbalanced data: fewer observations, more shrinkage
+
+Keep only Days 0--1 (two observations) for the first six subjects and all
+ten days for the others.
+
+```{r unbalanced}
+few <- levels(sleepstudy$Subject)[1:6]
+sl_unb <- subset(sleepstudy, !(Subject %in% few) | Days <= 1)
+table(table(droplevels(sl_unb$Subject)))
+m_unb <- lmer(Reaction ~ Days + (1 | Subject), data = sl_unb)
+vcu <- as.data.frame(VarCorr(m_unb))$vcov
+ni_u  <- as.vector(table(sl_unb$Subject))
+k_u   <- ni_u * vcu[1] / (ni_u * vcu[1] + vcu[2])
+raw_u <- tapply(sl_unb$Reaction - model.matrix(~ Days, sl_unb) %*% fixef(m_unb),
+                sl_unb$Subject, mean)
+blup_u <- ranef(m_unb)$Subject[, 1]
+res <- data.frame(n_i = ni_u, k_i = round(k_u, 3), raw = round(raw_u, 1),
+                  blup = round(blup_u, 1), ratio = round(blup_u / raw_u, 3))  # ratio = k_i
+res[c(1:3, 7:9), ]
+```
+
+## The same idea for random slopes
+
+With `(Days | Subject)`, `coef()` returns $\hat\beta + \tilde b_i$ for each subject;
+compare with the separate `lm` fits.
+
+```{r slopes}
+m_ris <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+np <- coef(lmList(Reaction ~ Days | Subject, data = sleepstudy))
+pp <- coef(m_ris)$Subject
+c(sd_slopes_no_pooling = sd(np[, 2]), sd_slopes_lmm = sd(pp[, 2]),
+  sigma_b1_hat = attr(VarCorr(m_ris)$Subject, "stddev")[2])
+```
+
+The BLUP slopes vary less than the separate slopes (shrinkage), and even less
+than $\hat\sigma_{b1}$: predicted random effects are not a sample from $N(0, G)$.

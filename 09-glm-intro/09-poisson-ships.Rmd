@@ -1,0 +1,72 @@
+---
+title: "Session 9 — Poisson regression with an offset: ship damage"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+`MASS::ships` records damage incidents to cargo ships (McCullagh and Nelder, 1989, Sec. 6.3.2).
+Each row is a ship `type` (A–E), a construction `year` (60, 65, 70, 75), a `period` of operation (60 = 1960–74, 75 = 1975–79),
+the aggregate months of `service`, and the number of `incidents`.
+More service means more chances for an incident, so we model the **rate** with an offset.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Data
+
+```{r data}
+library(MASS)
+# Six cells have no service at all: they carry no information about a rate
+sh <- subset(ships, service > 0)
+sh$year   <- factor(sh$year)
+sh$period <- factor(sh$period)
+nrow(sh)
+head(sh)
+```
+
+## Poisson model for the rate
+
+$\log \mu_i = \log(\text{service}_i) + x_i^\top\beta$, so $\mu_i/\text{service}_i = \exp(x_i^\top\beta)$.
+
+```{r fit}
+fit <- glm(incidents ~ type + year + period + offset(log(service)),
+           family = poisson, data = sh)
+summary(fit)
+```
+
+## Rate ratios
+
+```{r rr}
+round(exp(cbind(RR = coef(fit), confint(fit))), 3)
+```
+
+Ships of type B have an incident rate about 0.58 times that of type A ships of the same construction year and period.
+
+## A prediction by hand
+
+```{r by-hand}
+b <- coef(fit)
+# Type B, built 1965-69, operating 1975-79, 1000 months of service
+eta <- log(1000) + b["(Intercept)"] + b["typeB"] + b["year65"] + b["period75"]
+unname(exp(eta))
+predict(fit, data.frame(type = "B", year = "65", period = "75", service = 1000),
+        type = "response")
+```
+
+## The offset is a coefficient fixed at 1
+
+```{r free-offset}
+fit_free <- glm(incidents ~ type + year + period + log(service),
+                family = poisson, data = sh)
+coef(fit_free)["log(service)"]   # estimated freely: close to 1?
+```
+
+## A first look at fit
+
+```{r fit-check}
+c(deviance = deviance(fit), df = df.residual(fit),
+  pearson_X2 = sum(residuals(fit, type = "pearson")^2))
+```
+
+Both statistics are a bit large for 25 degrees of freedom. Session 10 shows how to measure and handle this.

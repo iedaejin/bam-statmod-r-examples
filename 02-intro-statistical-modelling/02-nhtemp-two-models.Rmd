@@ -1,0 +1,125 @@
+---
+title: "Session 02 — Two models for the New Haven temperatures"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 7, fig.height = 4)
+```
+
+We compare two statistical models for the same series:
+
+* **Model 1** (constant mean + noise): $y_i = \mu + \varepsilon_i$, $\varepsilon_i \overset{\text{iid}}{\sim} N(0,\sigma^2)$.
+* **Model 2** (linear trend + noise): $y_i = \beta_0 + \beta_1 t_i + \varepsilon_i$, $\varepsilon_i \overset{\text{iid}}{\sim} N(0,\sigma^2)$.
+
+## 1. Load the data from the package
+
+Never type the values by hand: load them from `datasets`.
+
+```{r load}
+data(nhtemp)
+class(nhtemp)       # "ts": a time series
+tsp(nhtemp)         # start 1912, end 1971, frequency 1
+nh <- data.frame(year = as.numeric(time(nhtemp)),
+                 temp = as.numeric(nhtemp))
+n <- nrow(nh)
+n                   # 60 annual means (deg F)
+summary(nh$temp)
+
+plot(nhtemp, type = "o", pch = 19, cex = 0.6,
+     xlab = "Year", ylab = "Mean annual temperature (deg F)")
+```
+
+## 2. Model 1: least squares gives the sample mean
+
+Minimising $Q(\mu)=\sum_i (y_i-\mu)^2$ gives $\hat\mu=\bar y$, and $\mathrm{Var}(\bar y)=\sigma^2/n$.
+
+```{r model1}
+ybar <- mean(nh$temp)
+s    <- sd(nh$temp)
+c(ybar = ybar, s = s, se_ybar = s / sqrt(n))   # 51.16, 1.266, 0.163
+
+m1 <- lm(temp ~ 1, data = nh)
+coef(m1)            # identical to ybar
+summary(m1)$sigma   # identical to s (divisor n - 1)
+```
+
+## 3. Model 2: slope $= S_{xy}/S_{xx}$
+
+```{r model2}
+Sxx <- sum((nh$year - mean(nh$year))^2)
+Sxy <- sum((nh$year - mean(nh$year)) * (nh$temp - ybar))
+b1  <- Sxy / Sxx
+b0  <- ybar - b1 * mean(nh$year)
+c(Sxx = Sxx, Sxy = Sxy, b0 = b0, b1 = b1)
+
+m2 <- lm(temp ~ year, data = nh)
+coef(m2)            # same numbers as the hand computation
+10 * coef(m2)[2]    # about 0.37 deg F per decade
+
+# Centre the year so that the intercept means something (temperature in 1912)
+coef(lm(temp ~ I(year - 1912), data = nh))
+```
+
+## 4. Compare the fits
+
+```{r compare}
+rss1 <- sum(resid(m1)^2)
+rss2 <- sum(resid(m2)^2)
+c(RSS1 = rss1, RSS2 = rss2,
+  sigma1 = summary(m1)$sigma, sigma2 = summary(m2)$sigma,
+  R2 = 1 - rss2 / rss1)
+anova(m1, m2)       # F test of the trend: a preview of Session 5
+
+# Normal log-likelihood at the estimates (Session 3 develops this)
+c(logLik(m1), logLik(m2))
+c(sigma2_ML_m1 = rss1 / n, sigma2_ML_m2 = rss2 / n)
+```
+
+## 5. Residuals
+
+The residuals are what the systematic part leaves behind. Under model 1 they still contain the trend.
+
+```{r residuals, fig.height=3.5}
+op <- par(mfrow = c(1, 2))
+plot(nh$year, resid(m1), pch = 19, main = "Model 1", xlab = "Year", ylab = "Residual")
+abline(h = 0, col = "grey50")
+plot(nh$year, resid(m2), pch = 19, main = "Model 2", xlab = "Year", ylab = "Residual")
+abline(h = 0, col = "grey50")
+par(op)
+```
+
+## 6. Checking the assumptions of model 2
+
+```{r checks}
+qqnorm(resid(m2)); qqline(resid(m2))
+shapiro.test(resid(m2))                        # no evidence against normality
+acf(resid(m2), lag.max = 15)                   # independence over time?
+c(lag1_m1 = acf(resid(m1), plot = FALSE)$acf[2],
+  lag1_m2 = acf(resid(m2), plot = FALSE)$acf[2])
+```
+
+## 7. Predicting 1972: confidence vs prediction interval
+
+```{r predict}
+new <- data.frame(year = 1972)
+predict(m2, new, interval = "confidence")      # uncertainty about the mean
+predict(m2, new, interval = "prediction")      # plus the variability of one year
+```
+
+## 8. A predictive check
+
+Fit on 1912–1961 and predict the last ten years.
+
+```{r holdout}
+train <- subset(nh, year <= 1961)
+test  <- subset(nh, year >  1961)
+h1 <- lm(temp ~ 1,    data = train)
+h2 <- lm(temp ~ year, data = train)
+rmse <- function(fit) sqrt(mean((test$temp - predict(fit, test))^2))
+c(rmse_model1 = rmse(h1), rmse_model2 = rmse(h2))
+```
+
+Model 2 fits the 60 years better, yet on these ten test years the constant mean predicts better: the warm 1950s pull the trend fitted on 1912–1961 upwards. A better in-sample fit is not the same as a better prediction.

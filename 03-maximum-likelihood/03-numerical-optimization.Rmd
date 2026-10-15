@@ -1,0 +1,131 @@
+---
+title: "Session 3 — Numerical maximum likelihood"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+Most likelihoods have no closed-form maximiser. This file shows Newton–Raphson by hand,
+`optim()` with a reparametrisation, standard errors from the Hessian, a likelihood-ratio
+test, and three practical problems.
+
+## 1. Gamma model for the aircondit failure times
+
+$y_i \stackrel{iid}{\sim}\text{Gamma}(\alpha,\beta)$ (shape $\alpha$, rate $\beta$):
+$\ell(\alpha,\beta)=n\alpha\log\beta-n\log\Gamma(\alpha)+(\alpha-1)\sum\log y_i-\beta\sum y_i$.
+For fixed $\alpha$, $\hat\beta(\alpha)=\alpha/\bar y$. Substituting gives the profile score
+for $\alpha$:
+$S(\alpha)=n\{\log\alpha-\psi(\alpha)-\log\bar y+\overline{\log y}\}$, with
+$I(\alpha)=-S'(\alpha)=n\{\psi'(\alpha)-1/\alpha\}$ ($\psi$ = digamma, $\psi'$ = trigamma).
+
+```{r newton}
+data(aircondit, package = "boot")
+y <- aircondit$hours; n <- length(y)
+
+S <- function(a) n * (log(a) - digamma(a) - log(mean(y)) + mean(log(y)))
+I <- function(a) n * (trigamma(a) - 1 / a)
+
+a <- 1                                    # start at the exponential model
+iter <- data.frame()
+for (k in 0:5) {
+  iter <- rbind(iter, data.frame(k = k, alpha = a, score = S(a), info = I(a)))
+  a <- a + S(a) / I(a)                    # Newton-Raphson step
+}
+print(iter, digits = 6)
+alpha_hat <- a
+beta_hat  <- alpha_hat / mean(y)
+c(alpha_hat = alpha_hat, beta_hat = beta_hat)
+```
+
+Here $I(\alpha)$ does not depend on the data, so Newton–Raphson and Fisher scoring
+take the same steps.
+
+## 2. The same fit with `optim()`
+
+`optim()` minimises, so we pass the negative log-likelihood. Working with
+$(\log\alpha,\log\beta)$ keeps both parameters positive with no constraints.
+
+```{r optim}
+nll <- function(par) -sum(dgamma(y, shape = exp(par[1]), rate = exp(par[2]), log = TRUE))
+fit <- optim(c(0, log(1 / mean(y))), nll, method = "BFGS", hessian = TRUE)
+fit$convergence                  # 0 = the algorithm reports convergence
+exp(fit$par)                     # (alpha_hat, beta_hat)
+-fit$value                       # maximised log-likelihood
+
+V_log <- solve(fit$hessian)      # inverse observed information, log scale
+se_log <- sqrt(diag(V_log))
+se_log
+# Delta method: se(alpha_hat) = alpha_hat * se(log alpha_hat)
+se_alpha <- exp(fit$par[1]) * se_log[1]
+se_alpha
+1 / sqrt(I(alpha_hat))           # same, from the profile information
+```
+
+## 3. Likelihood-ratio test: exponential ($\alpha=1$) against gamma
+
+```{r lrt}
+ll_exp   <- sum(dexp(y, rate = 1 / mean(y), log = TRUE))
+ll_gamma <- -fit$value
+LR <- 2 * (ll_gamma - ll_exp)
+c(ll_exp = ll_exp, ll_gamma = ll_gamma, LR = LR,
+  p_value = pchisq(LR, df = 1, lower.tail = FALSE))
+
+# Wald test of the same hypothesis
+z_wald <- (alpha_hat - 1) / (1 / sqrt(I(alpha_hat)))
+c(z = z_wald, p_value = 2 * pnorm(-abs(z_wald)))
+```
+
+With 12 observations the data cannot distinguish the exponential from the gamma.
+
+## 4. Practical problem 1: several local maxima (Cauchy location)
+
+```{r cauchy}
+yc <- c(-2, -1, 0, 7, 8)
+ll_c <- function(t) -sum(log(1 + (yc - t)^2))      # Cauchy location, scale 1
+starts <- c(-3, 0, 4, 6, 10)
+res <- t(sapply(starts, function(s) {
+  o <- optim(s, function(t) -ll_c(t), method = "BFGS")
+  c(start = s, theta_hat = o$par, loglik = -o$value, convergence = o$convergence)
+}))
+round(res, 3)
+```
+
+Every run reports convergence, but starts at 6 and 10 stop at a local maximum
+with a lower log-likelihood. Use several starting values and keep the best.
+
+```{r cauchy-plot, fig.width=6, fig.height=3.5}
+tt <- seq(-5, 12, by = 0.02)
+plot(tt, sapply(tt, ll_c), type = "l", lwd = 2,
+     xlab = expression(theta), ylab = "log-likelihood")
+rug(yc)
+```
+
+## 5. Practical problem 2: an estimate on the boundary
+
+```{r boundary}
+n0 <- 20; y0 <- 0                     # no successes in 20 trials
+theta_hat0 <- y0 / n0
+se0 <- sqrt(theta_hat0 * (1 - theta_hat0) / n0)   # = Ii(theta_hat)^(-1/2), and Ii(0) is infinite
+c(theta_hat = theta_hat0, wald_se = se0)           # usual Wald interval is [0, 0]: useless
+# The MLE is on the boundary, so it does not solve S(theta) = 0: S(0) = -n0 = -20
+# LR interval: l(theta) = 20 log(1 - theta), l(0) = 0, so the upper end solves 20 log(1 - theta) = -1.92
+1 - exp(-qchisq(0.95, 1) / 2 / n0)
+```
+
+## 6. Practical problem 3: non-identifiability
+
+If $y_i\sim N(a+b,1)$, only $a+b$ is identified: the log-likelihood is flat along the
+lines $a+b=c$ and the Hessian is singular.
+
+```{r nonident}
+set.seed(2027)
+yn <- rnorm(30, mean = 3, sd = 1)
+nll_ab <- function(p) -sum(dnorm(yn, mean = p[1] + p[2], sd = 1, log = TRUE))
+o1 <- optim(c(0, 0), nll_ab, method = "BFGS", hessian = TRUE)
+o2 <- optim(c(5, -5), nll_ab, method = "BFGS", hessian = TRUE)
+rbind(start_00 = c(o1$par, sum = sum(o1$par)), start_5m5 = c(o2$par, sum = sum(o2$par)))
+eigen(o1$hessian)$values              # one eigenvalue is 0: no unique maximiser
+```

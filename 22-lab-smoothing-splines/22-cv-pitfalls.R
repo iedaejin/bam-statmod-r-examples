@@ -1,0 +1,87 @@
+#' ---
+#' title: "Session 22 — Cross-validating a smoother: three pitfalls"
+#' subtitle: "Statistical Modelling (BAM), Spring 2027"
+#' author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+#' output: html_document
+#' ---
+#' 
+
+#' 
+## ----data---------------------------------------------------------------------
+library(MASS)
+data(mcycle)
+n <- nrow(mcycle)
+!is.unsorted(mcycle$times)       # the rows are sorted by time
+
+#' 
+#' ## Pitfall 1: folds that follow the row order
+#' 
+#' `mcycle` is sorted by time. If fold $k$ is rows $13k-12, \dots, 13k$, each test fold
+#' is a contiguous block of time and the training data have a hole exactly where
+#' we predict. Shuffle the fold labels instead.
+#' 
+## ----folds--------------------------------------------------------------------
+folds_sorted <- rep(1:10, each = ceiling(n / 10))[1:n]
+set.seed(2027)
+folds_shuffled <- sample(rep(1:10, length.out = n))
+table(folds_shuffled)            # balanced: 13 or 14 observations per fold
+
+#' 
+#' ## Pitfall 2: `predict.loess()` returns NA outside the training range
+#' 
+#' With the default `surface = "interpolate"`, LOESS cannot predict outside the
+#' range of its training $x$. Any test point beyond the extremes gives `NA`, and
+#' `sum()` then returns `NA` (or `na.rm = TRUE` silently drops the hardest points).
+#' 
+## ----na-----------------------------------------------------------------------
+train <- folds_sorted != 1
+m <- loess(accel ~ times, data = mcycle[train, ], span = 0.3)
+sum(is.na(predict(m, mcycle[!train, ])))      # all 14 test points of fold 1
+m_direct <- loess(accel ~ times, data = mcycle[train, ], span = 0.3,
+                  control = loess.control(surface = "direct"))
+sum(is.na(predict(m_direct, mcycle[!train, ])))
+
+#' 
+#' ## The CV function
+#' 
+## ----cv-----------------------------------------------------------------------
+cv_loess <- function(span, folds) {
+  sse <- 0
+  for (k in unique(folds)) {
+    test <- folds == k
+    m <- loess(accel ~ times, data = mcycle[!test, ], span = span, degree = 2,
+               control = loess.control(surface = "direct"))
+    sse <- sse + sum((mcycle$accel[test] - predict(m, mcycle[test, ]))^2)
+  }
+  sse / n
+}
+spans <- seq(0.15, 0.60, by = 0.025)
+cv_shuf <- sapply(spans, cv_loess, folds = folds_shuffled)
+cv_sort <- sapply(spans, cv_loess, folds = folds_sorted)
+rbind(shuffled = c(span = spans[which.min(cv_shuf)], cv = min(cv_shuf)),
+      sorted = c(span = spans[which.min(cv_sort)], cv = min(cv_sort)))
+matplot(spans, cbind(cv_shuf, cv_sort), type = "l", lty = 1, lwd = 2,
+        col = c("navy", "red"), log = "y", xlab = "span", ylab = "10-fold CV (log scale)")
+legend("topright", bty = "n", lwd = 2, col = c("navy", "red"),
+       legend = c("shuffled folds", "sorted folds"))
+
+#' 
+#' ## Pitfall 3: one random split is one draw
+#' 
+#' The chosen span depends on the seed. Repeat the shuffled CV and average the
+#' curves (repeated $K$-fold CV), or report the range.
+#' 
+## ----repeat-------------------------------------------------------------------
+reps <- sapply(1:20, function(s) {
+  set.seed(s)
+  sapply(spans, cv_loess, folds = sample(rep(1:10, length.out = n)))
+})
+table(spans[apply(reps, 2, which.min)])       # chosen span across 20 seeds
+spans[which.min(rowMeans(reps))]              # span minimizing the average curve
+
+#' 
+#' For linear smoothers with a fixed bandwidth or penalty, leave-one-out CV needs
+#' no random split at all: $\mathrm{LOOCV} = n^{-1}\sum_i\{(y_i - \hat f_i)/(1 - S_{ii})\}^2$.
+#' With tied $x$ values (as in `mcycle`), leaving out one observation still leaves
+#' its twins in the training set, which makes LOOCV slightly optimistic; leaving
+#' out all observations at the same time (grouped CV) avoids this.

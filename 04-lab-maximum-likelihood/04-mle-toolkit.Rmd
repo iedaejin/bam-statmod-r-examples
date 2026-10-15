@@ -1,0 +1,86 @@
+---
+title: "Session 4 — A small toolkit for numerical MLE"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+The same steps as Lab 01, Sections 2–5, written once as functions and applied to a different
+dataset: the number of warp breaks per loom in `warpbreaks` (package `datasets`, 54 looms).
+
+## 1. Fit any model from its negative log-likelihood
+
+`fit_mle()` calls `optim()` and returns the estimates, the maximised log-likelihood and the
+standard errors from the inverse Hessian, $\mathrm{se}=\sqrt{\mathrm{diag}\{I(\hat\theta)^{-1}\}}$,
+on the scale used by the optimiser.
+
+```{r toolkit}
+fit_mle <- function(nll, start, ...) {
+  fit <- optim(start, nll, method = "BFGS", hessian = TRUE, ...)
+  if (fit$convergence != 0) warning("optim() did not report convergence")
+  ev <- eigen(fit$hessian, symmetric = TRUE, only.values = TRUE)$values
+  if (min(ev) <= 0) warning("Hessian not positive definite: not a proper maximum")
+  list(par = fit$par, se = sqrt(diag(solve(fit$hessian))),
+       loglik = -fit$value, convergence = fit$convergence)
+}
+
+# 95% likelihood interval for a one-parameter log-likelihood
+lr_interval <- function(loglik, mle, lower, upper, level = 0.95) {
+  cut <- qchisq(level, df = 1) / 2
+  f <- function(t) loglik(t) - loglik(mle) + cut
+  c(uniroot(f, c(lower, mle), tol = 1e-10)$root,
+    uniroot(f, c(mle, upper), tol = 1e-10)$root)
+}
+```
+
+## 2. Poisson model for the warp breaks
+
+```{r poisson}
+y <- warpbreaks$breaks
+n <- length(y)
+loglik <- function(lambda) sum(dpois(y, lambda, log = TRUE))
+
+fit <- fit_mle(function(theta) -loglik(exp(theta)), start = 0)   # theta = log(lambda)
+lambda_hat <- exp(fit$par)
+se_lambda  <- lambda_hat * fit$se                                 # delta method
+c(lambda_hat = lambda_hat, mean = mean(y), se = se_lambda, se_formula = sqrt(mean(y) / n))
+```
+
+## 3. Wald and likelihood intervals
+
+```{r intervals}
+wald <- lambda_hat + c(-1, 1) * qnorm(0.975) * se_lambda
+lr   <- lr_interval(loglik, mean(y), lower = 1, upper = 100)
+round(rbind(Wald = wald, LR = lr), 3)
+```
+
+## 4. Check the model before trusting the standard error
+
+```{r dispersion}
+c(mean = mean(y), variance = var(y), ratio = var(y) / mean(y))
+D <- sum((y - mean(y))^2) / mean(y)                 # ~ chi^2_{n-1} under the Poisson model
+c(D = D, df = n - 1, p_value = pchisq(D, n - 1, lower.tail = FALSE))
+```
+
+The variance is about six times the mean. The Poisson standard error above is far too small:
+the interval looks precise only because the model is wrong. The negative binomial and
+quasi-Poisson models of Session 10 address this.
+
+## 5. A two-parameter alternative and an LR test
+
+The negative binomial with mean $\mu$ and size $k$ has variance $\mu+\mu^2/k$ and tends to the
+Poisson as $k\to\infty$. Here $k$ is on the boundary under the Poisson null, so the usual
+$\chi^2_1$ reference is not exact (the p-value is conservative); with a statistic this large the
+conclusion does not change.
+
+```{r negbin}
+nll_nb <- function(par) -sum(dnbinom(y, mu = exp(par[1]), size = exp(par[2]), log = TRUE))
+fit_nb <- fit_mle(nll_nb, start = c(log(mean(y)), 0))
+c(mu_hat = exp(fit_nb$par[1]), k_hat = exp(fit_nb$par[2]), loglik_nb = fit_nb$loglik,
+  loglik_pois = loglik(mean(y)))
+LR <- 2 * (fit_nb$loglik - loglik(mean(y)))
+c(LR = LR, p_value = pchisq(LR, df = 1, lower.tail = FALSE))
+```

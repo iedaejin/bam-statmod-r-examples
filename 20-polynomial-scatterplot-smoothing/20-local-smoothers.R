@@ -1,0 +1,130 @@
+#' ---
+#' title: "Session 20 — Local smoothers: bins, neighbours, kernels and LOESS"
+#' subtitle: "Statistical Modelling (BAM), Spring 2027"
+#' author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+#' output: html_document
+#' ---
+#' 
+
+#' 
+## ----data---------------------------------------------------------------------
+library(MASS)
+data(mcycle)
+x <- mcycle$times
+y <- mcycle$accel
+n <- length(y)
+
+#' 
+#' Every smoother below estimates $f$ in $y_i = f(x_i) + \varepsilon_i$ by a
+#' weighted average of the responses, $\hat f(x) = \sum_j w_j(x)\, y_j$. The weights
+#' depend on the $x$'s and on a tuning constant, never on the $y$'s, so each
+#' smoother is **linear**: $\hat f = S y$ for an $n \times n$ matrix $S$.
+#' 
+#' ## 1. Bin smoother
+#' 
+#' Cut the $x$ axis into intervals and average $y$ within each interval.
+#' 
+## ----bin----------------------------------------------------------------------
+breaks <- seq(0, 60, by = 5)
+bin <- cut(x, breaks, include.lowest = TRUE)
+f_bin <- ave(y, bin)              # fitted value = mean of the bin
+plot(x, y, pch = 16, col = "grey60", xlab = "Time (ms)", ylab = "Acceleration (g)")
+lines(x, f_bin, type = "s", lwd = 2, col = "navy")
+
+#' 
+#' ## 2. Running mean and k nearest neighbours
+#' 
+#' The k-nearest-neighbour (kNN) running mean averages the $k$ responses whose
+#' $x$ values are closest to the target point. Row $i$ of $S$ has $k$ entries
+#' equal to $1/k$.
+#' 
+## ----knn----------------------------------------------------------------------
+knn_S <- function(x0, x, k) {
+  t(sapply(x0, function(u) {
+    w <- numeric(length(x))
+    w[order(abs(x - u))[1:k]] <- 1 / k
+    w
+  }))
+}
+S_knn <- knn_S(x, x, k = 10)
+range(rowSums(S_knn))             # each row sums to one
+f_knn <- drop(S_knn %*% y)
+
+#' 
+#' ## 3. Nadaraya–Watson kernel smoother
+#' 
+#' With kernel $K$ and bandwidth $h$, $K_h(u) = K(u/h)/h$ and
+#' $$\hat f(x) = \frac{\sum_j K_h(x - x_j)\, y_j}{\sum_j K_h(x - x_j)}.$$
+#' The responses carry the summation index $j$; $x$ is the target point.
+#' 
+## ----nw-----------------------------------------------------------------------
+nw_S <- function(x0, x, h) {
+  K <- dnorm(outer(x0, x, "-") / h)   # Gaussian kernel; the 1/h cancels
+  K / rowSums(K)
+}
+f_nw <- drop(nw_S(x, x, h = 2) %*% y)
+
+#' 
+#' Base R's `ksmooth()` gives the same fit, but its `bandwidth` is **not** the
+#' standard deviation $h$ of the Gaussian kernel: `ksmooth` scales the kernel so
+#' that its quartiles sit at $\pm 0.25 \times$ `bandwidth`. Hence
+#' $h = 0.25\,\text{bandwidth}/z_{0.75} \approx 0.3706\,\text{bandwidth}$.
+#' 
+## ----ksmooth------------------------------------------------------------------
+bw <- 2 / (0.25 / qnorm(0.75))     # bandwidth argument that gives h = 2
+ks <- ksmooth(x, y, kernel = "normal", bandwidth = bw, x.points = x)
+max(abs(ks$y - f_nw))              # small: ksmooth truncates the kernel tails
+
+#' 
+#' ## 4. Local linear regression
+#' 
+#' At each target $x_0$ fit a weighted straight line with weights
+#' $K_h(x_j - x_0)$ and keep its intercept. This removes the design bias of
+#' Nadaraya–Watson and behaves much better at the boundaries.
+#' 
+## ----loclin-------------------------------------------------------------------
+ll_S <- function(x0, x, h) {
+  t(sapply(x0, function(u) {
+    w <- dnorm((x - u) / h)
+    X <- cbind(1, x - u)
+    solve(crossprod(X, w * X), t(X * w))[1, ]   # first row: the intercept at u
+  }))
+}
+f_ll <- drop(ll_S(x, x, h = 2) %*% y)
+c(left_end_NW = f_nw[1], left_end_LL = f_ll[1], mean_first_5_y = mean(y[1:5]))
+
+#' 
+#' ## 5. LOESS
+#' 
+#' `loess()` fits a local polynomial (degree 1 or 2) in a nearest-neighbour
+#' window that contains a fraction `span` of the data, with tricube weights
+#' $w_j = (1 - |x_j - x_0|^3/\Delta^3)^3$, where $\Delta$ is the distance from
+#' $x_0$ to the farthest point in the window. The trace of its smoother matrix is
+#' stored as `trace.hat`; `enp` is a different, rounded quantity.
+#' 
+## ----loess--------------------------------------------------------------------
+lo <- loess(accel ~ times, data = mcycle, span = 0.3, degree = 2)
+c(trace_S = lo$trace.hat, enp = lo$enp)
+
+#' 
+#' `lowess()` is the older, robust version (iteratively down-weights large
+#' residuals; default `f = 2/3`). There is no function called `lowess.smooth()`.
+#' 
+## ----lowess-------------------------------------------------------------------
+lw <- lowess(x, y, f = 0.2)
+
+#' 
+#' ## 6. All fits together
+#' 
+## ----all-plot-----------------------------------------------------------------
+plot(x, y, pch = 16, col = "grey70", xlab = "Time (ms)", ylab = "Acceleration (g)")
+lines(x, f_knn, col = "darkgreen", lwd = 2)
+lines(x, f_nw, col = "red", lwd = 2)
+lines(x, f_ll, col = "navy", lwd = 2)
+lines(x, fitted(lo), col = "orange", lwd = 2, lty = 2)
+lines(lw, col = "purple", lwd = 2, lty = 3)
+legend("bottomright", bty = "n", lwd = 2, cex = 0.8,
+       col = c("darkgreen", "red", "navy", "orange", "purple"), lty = c(1, 1, 1, 2, 3),
+       legend = c("kNN, k = 10", "NW, h = 2", "local linear, h = 2",
+                  "LOESS, span 0.3", "lowess, f = 0.2"))
+

@@ -1,0 +1,77 @@
+# Session 1 — Matrix algebra for linear models
+# Statistical Modelling (BAM), IE University --- Prof. Dae-Jin Lee (daelee@faculty.ie.edu)
+# Plain-script version of 01-matrix-algebra.Rmd (same code). Run from r-examples/:  Rscript 01-matrix-algebra.R
+
+# The matrix operations we use all term, applied to one regression: `mpg` on `wt` and `hp` in the built-in `mtcars` data. Notation: $X$ is the $n \times p$ design matrix **including** the intercept column, so here $n = 32$ and $p = 3$.
+
+# ---- Design matrix and response ----
+y <- mtcars$mpg
+X <- cbind(1, mtcars$wt, mtcars$hp)
+colnames(X) <- c("(Intercept)", "wt", "hp")
+dim(X)        # n x p
+head(X, 3)
+
+# ---- Normal equations and their solution ----
+# Minimising $\mathrm{RSS}(\beta) = (y - X\beta)^\top (y - X\beta)$ gives the gradient $-2X^\top(y - X\beta)$. Setting it to zero gives the **normal equations**
+# $$X^\top X \beta = X^\top y .$$
+# When $X$ has full column rank, their unique **solution** is $\hat\beta = (X^\top X)^{-1} X^\top y$.
+# In code, use `solve(A, b)` to solve the system. Do not compute the inverse.
+XtX <- crossprod(X)          # t(X) %*% X, a p x p matrix
+Xty <- crossprod(X, y)       # t(X) %*% y, a p x 1 vector
+XtX
+beta_hat <- solve(XtX, Xty)
+drop(beta_hat)
+
+coef(lm(mpg ~ wt + hp, data = mtcars))   # same numbers
+
+# At $\hat\beta$ the gradient is zero: the residuals are orthogonal to every column of $X$.
+res <- y - drop(X %*% beta_hat)
+drop(crossprod(X, res))      # X^T (y - X beta_hat), zero up to rounding
+
+# ---- Rank and invertibility ----
+# $X^\top X$ is invertible if and only if $X$ has full column rank $p$. A column that is a linear combination of the others breaks this. Example: add a dummy for manual cars *and* one for automatic cars next to the intercept (the "dummy trap").
+qr(X)$rank == ncol(X)                  # full column rank
+
+X_bad <- cbind(X, manual = mtcars$am, automatic = 1 - mtcars$am)
+c(columns = ncol(X_bad), rank = qr(X_bad)$rank)
+min(abs(eigen(crossprod(X_bad))$values))  # smallest eigenvalue ~ 0: singular
+coef(lm(mpg ~ wt + hp + am + I(1 - am), data = mtcars))  # lm drops one: NA
+
+# ---- Positive definiteness ----
+# $X^\top X$ is symmetric. It is positive definite when $X$ has full column rank, so all its eigenvalues are positive. A $2 \times 2$ example and the two tests (eigenvalues; leading principal minors):
+isSymmetric(XtX)
+eigen(XtX)$values
+
+M <- matrix(c(2, 1,
+              1, 3), nrow = 2)
+eigen(M)$values                         # both positive
+c(minor1 = M[1, 1], minor2 = det(M))    # both positive: Sylvester's criterion
+
+# The condition number (ratio of the largest to the smallest singular value of $X$) warns about near-collinearity. We return to it with the VIF in sessions 6–7.
+d <- svd(X)$d
+d
+max(d) / min(d)
+
+# The number is large here mostly because `hp` is on a much larger scale than `wt`. Scale the columns first, then compare.
+d_s <- svd(cbind(1, scale(X[, -1])))$d
+max(d_s) / min(d_s)
+
+# ---- Linear transformations: the variance of $\hat\beta$ ----
+# $\hat\beta = A y$ with $A = (X^\top X)^{-1}X^\top$. If $\mathrm{Var}(y) = \sigma^2 I_n$, then $\mathrm{Var}(\hat\beta) = A(\sigma^2 I_n)A^\top = \sigma^2 (X^\top X)^{-1}$. With $\hat\sigma^2 = \mathrm{RSS}/(n - p)$ this is what `vcov()` reports (session 5).
+n <- nrow(X); p <- ncol(X)
+sigma2_hat <- sum(res^2) / (n - p)
+V <- sigma2_hat * solve(XtX)
+sqrt(diag(V))
+sqrt(diag(vcov(lm(mpg ~ wt + hp, data = mtcars))))
+
+# ---- The hat matrix ----
+# $H = X (X^\top X)^{-1} X^\top$ maps $y$ to the fitted values. It is symmetric and idempotent, and its trace equals $p$, the number of columns of $X$: $\operatorname{tr}(H) = \operatorname{tr}\{(X^\top X)^{-1}X^\top X\} = \operatorname{tr}(I_p) = p$.
+H <- X %*% solve(XtX) %*% t(X)
+all.equal(H %*% H, H)
+all.equal(H, t(H))
+sum(diag(H))                       # trace = p = 3
+all.equal(drop(H %*% y), unname(fitted(lm(mpg ~ wt + hp, data = mtcars))))
+
+# ---- A stable alternative: QR ----
+# `lm()` does not use the normal equations. It uses a QR decomposition $X = QR$, which avoids forming $X^\top X$.
+qr.coef(qr(X), y)

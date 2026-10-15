@@ -1,0 +1,92 @@
+---
+title: "Session 28 — Likelihood with right censoring: the exponential model"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+With right censoring each subject contributes $f(y_i)^{\delta_i} S(y_i)^{1-\delta_i}$.
+For $T \sim \text{Exp}(\lambda)$, $f(t) = \lambda e^{-\lambda t}$ and $S(t) = e^{-\lambda t}$, so
+$$\ell(\lambda) = d \log \lambda - \lambda \sum_i y_i, \qquad d = \sum_i \delta_i .$$
+Then $S(\lambda) = d/\lambda - \sum y_i$, $\hat\lambda = d/\sum y_i$, $I(\lambda) = d/\lambda^2$
+and $\mathrm{se}(\hat\lambda) = I(\hat\lambda)^{-1/2} = \hat\lambda/\sqrt d$ (Session 3).
+
+```{r data}
+library(survival)
+vet <- survival::veteran
+vet$trt <- factor(vet$trt, levels = 1:2, labels = c("standard", "test"))
+```
+
+## 1. Closed form
+
+```{r closed-form}
+d   <- sum(vet$status)          # 128 deaths
+tot <- sum(vet$time)            # 16663 person-days at risk
+lam <- d / tot
+se  <- lam / sqrt(d)
+c(lambda = lam, se = se, mean_days = 1 / lam, median_days = log(2) / lam)
+# 95% Wald interval on the log scale (stays positive)
+lam * exp(c(-1, 1) * 1.96 / sqrt(d))
+```
+
+Wrong alternatives: dropping the censored patients, or treating censored times as deaths.
+
+```{r wrong}
+c(correct = lam,
+  drop_censored = sum(vet$status) / sum(vet$time[vet$status == 1]),
+  censored_as_deaths = nrow(vet) / tot)
+```
+
+## 2. Numerical check with `optim()`
+
+```{r optim}
+negll <- function(loglam) -(d * loglam - exp(loglam) * tot)
+opt <- optim(log(0.01), negll, method = "BFGS", hessian = TRUE)
+exp(opt$par)                       # same as lam
+sqrt(1 / opt$hessian)              # se of log(lambda) = 1/sqrt(d)
+1 / sqrt(d)
+```
+
+## 3. `survreg()` and the two parametrisations
+
+`survreg()` fits $\log T = \beta_0 + \sigma W$; for the exponential model $\sigma = 1$
+and $\lambda = e^{-\beta_0}$.
+
+```{r survreg}
+e0 <- survreg(Surv(time, status) ~ 1, data = vet, dist = "exponential")
+summary(e0)
+exp(-coef(e0))                     # = 128 / 16663
+logLik(e0)
+d * log(lam) - lam * tot           # same log-likelihood
+```
+
+By treatment: rates $64/7945$ and $64/8718$ per day.
+
+```{r by-trt}
+e1 <- survreg(Surv(time, status) ~ trt, data = vet, dist = "exponential")
+coef(e1)
+exp(-coef(e1)[2])   # hazard ratio test / standard under the exponential model
+tapply(vet$status, vet$trt, sum) / tapply(vet$time, vet$trt, sum)
+```
+
+## 4. Is the exponential adequate? Compare with Kaplan–Meier and a Weibull
+
+```{r check, fig.width = 7, fig.height = 4.5}
+km <- survfit(Surv(time, status) ~ 1, data = vet)
+w0 <- survreg(Surv(time, status) ~ 1, data = vet, dist = "weibull")
+w0$scale                           # 1.17 > 1: hazard decreases with time
+anova(e0, w0)                      # LR = 6.26 on 1 df, p = 0.012
+plot(km, conf.int = FALSE, xlab = "Days", ylab = "S(t)", xlim = c(0, 600))
+curve(exp(-lam * x), add = TRUE, col = "firebrick", lwd = 2)
+curve(1 - psurvreg(x, coef(w0), w0$scale, distribution = "weibull"),
+      add = TRUE, col = "royalblue", lwd = 2, lty = 2)
+legend("topright", c("Kaplan-Meier", "exponential", "Weibull"),
+       col = c("black", "firebrick", "royalblue"), lty = c(1, 1, 2), lwd = 2, bty = "n")
+```
+
+The exponential model overestimates survival over the first 150 days (at 30 days:
+KM 0.70, exponential 0.79), and the KM median is 80 days against $\log 2/\hat\lambda = 90$ days. The Weibull shape
+$1/\hat\sigma = 0.85 < 1$ means the hazard falls with time since randomisation.

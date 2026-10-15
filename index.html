@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R examples — Statistical Modelling</title>
+<style>
+  body { font: 18px/1.5 Georgia, serif; margin: 0; color: #1a1a1a; background: #fff; }
+  a { color: #002c8b; }
+  code, pre { font-family: ui-monospace, Menlo, monospace; font-size: 0.9rem; }
+  pre { background: #f4f6f8; padding: 0.8rem 1rem; overflow: auto; }
+  .layout { display: flex; align-items: flex-start; }
+  nav { position: sticky; top: 0; width: 19rem; flex: none; max-height: 100vh; overflow: auto; padding: 1.25rem 1rem 2rem; border-right: 1px solid #d8dee6; background: #f7f9fb; font-size: 0.95rem; line-height: 1.35; }
+  nav h2 { font-size: 1rem; margin: 0 0 0.6rem; }
+  nav ol { margin: 0; padding-left: 1.2rem; }
+  nav li { margin: 0.35rem 0; }
+  main { padding: 1.5rem 2rem 3rem; max-width: 44rem; }
+  h1 { font-size: 1.8rem; line-height: 1.2; }
+  main h2 { font-size: 1.25rem; margin-top: 2rem; }
+  @media (max-width: 800px) {
+    .layout { display: block; }
+    nav { position: static; width: auto; max-height: none; border-right: 0; border-bottom: 1px solid #d8dee6; }
+    main { padding: 1rem 16px 2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+<nav>
+<h2>Contents</h2>
+<ol>
+<li><a href="#01-course-overview-prerequisites">Session 1 — Course Introduction \\ and Prerequisite Review</a></li>
+<li><a href="#02-intro-statistical-modelling">Session 2 — Introduction to Statistical Modelling</a></li>
+<li><a href="#03-maximum-likelihood">Session 3 — Maximum Likelihood Estimation</a></li>
+<li><a href="#04-lab-maximum-likelihood">Session 4 — Lab 01 –- MLE in R</a></li>
+<li><a href="#05-linear-models-theory">Session 5 — Linear Models in Theory</a></li>
+<li><a href="#06-linear-models-practice-model-selection">Session 6 — Linear Models in Practice and Model Selection</a></li>
+<li><a href="#07-lab-linear-models-diagnostics">Session 7 — Computer Lab –- Linear Models and Diagnostics in R</a></li>
+<li><a href="#09-glm-intro">Session 9 — Introduction to Generalized Linear Models</a></li>
+<li><a href="#10-glm-fitting">Session 10 — Fitting Generalized Linear Models</a></li>
+<li><a href="#11-lab-glm">Session 11 — Computer Lab –- GLMs in R</a></li>
+<li><a href="#15-linear-mixed-models">Session 15 — Linear Mixed Models</a></li>
+<li><a href="#16-lmm-estimation-inference">Session 16 — Estimation and Inference for LMMs</a></li>
+<li><a href="#17-glmm">Session 17 — Generalized Linear Mixed Models</a></li>
+<li><a href="#18-lab-mixed-models">Session 18 — Computer Lab –- Mixed Models in R</a></li>
+<li><a href="#20-polynomial-scatterplot-smoothing">Session 20 — Polynomial Regression and Scatterplot Smoothing</a></li>
+<li><a href="#21-splines">Session 21 — Splines</a></li>
+<li><a href="#22-lab-smoothing-splines">Session 22 — Computer Lab –- Smoothing and Splines</a></li>
+<li><a href="#23-gams-intro">Session 23 — Introduction to Generalized Additive Models</a></li>
+<li><a href="#24-gams-theory">Session 24 — GAM Theory</a></li>
+<li><a href="#25-gams-advanced">Session 25 — Advanced GAMs</a></li>
+<li><a href="#26-lab-gams">Session 26 — Computer Lab –- GAMs with \texttt{mgcv}</a></li>
+<li><a href="#27-gamms">Session 27 — Generalized Additive Mixed Models</a></li>
+<li><a href="#28-survival">Session 28 — Censored and Survival Data</a></li>
+<li><a href="#29-group-project-workshop">Session 29 — Group-Project Workshop</a></li>
+<li><a href="#30-group-project-presentations">Session 30 — Group-Project Presentations</a></li>
+</ol>
+</nav>
+<main>
+<h1>R examples</h1>
+<p>Statistical Modelling, Bachelor in Applied Mathematics (BAM), IE University, Spring 2027.</p>
+<p>Prof. Dae-Jin Lee, <a href="mailto:daelee@faculty.ie.edu">daelee@faculty.ie.edu</a>, IE University — School of Science and Technology.</p>
+<p>Each session is one folder, matching the slides. Open the folder in RStudio and knit the <code>.Rmd</code> files, or source the matching <code>.R</code> script. Work from inside the folder so that <code>data/...</code> paths resolve.</p>
+<h2>Once, before the first knit</h2>
+<pre>install.packages(c("rmarkdown", "knitr", "tidyverse", "MASS", "faraway", "car",
+                   "glmnet", "nlme", "lme4", "mgcv", "gamm4", "survival"))</pre>
+<p>The graded computer labs are in <a href="https://github.com/iedaejin/bam-statmod">github.com/iedaejin/bam-statmod</a>. Source of this page: <a href="https://github.com/iedaejin/bam-statmod-r-examples">github.com/iedaejin/bam-statmod-r-examples</a>.</p>
+<section id="01-course-overview-prerequisites">
+<h2>Session 1 — Course Introduction \\ and Prerequisite Review</h2>
+
+<ul>
+<li><a href="01-course-overview-prerequisites/01-calculus-optimization.R">01-calculus-optimization.R</a> — Same code as a plain script</li>
+<li><a href="01-course-overview-prerequisites/01-calculus-optimization.Rmd">01-calculus-optimization.Rmd</a> — Derivatives and optimization</li>
+<li><a href="01-course-overview-prerequisites/01-distributions.R">01-distributions.R</a> — Same code as a plain script</li>
+<li><a href="01-course-overview-prerequisites/01-distributions.Rmd">01-distributions.Rmd</a> — Probability distributions in R</li>
+<li><a href="01-course-overview-prerequisites/01-matrix-algebra.R">01-matrix-algebra.R</a> — Same code as a plain script</li>
+<li><a href="01-course-overview-prerequisites/01-matrix-algebra.Rmd">01-matrix-algebra.Rmd</a> — Matrix algebra for linear models</li>
+<li><a href="01-course-overview-prerequisites/01-review.R">01-review.R</a> — Same code as a plain script</li>
+<li><a href="01-course-overview-prerequisites/01-setup.R">01-setup.R</a> — Same code as a plain script</li>
+<li><a href="01-course-overview-prerequisites/01-setup.Rmd">01-setup.Rmd</a> — Setup</li>
+</ul>
+</section>
+<section id="02-intro-statistical-modelling">
+<h2>Session 2 — Introduction to Statistical Modelling</h2>
+<p>Reads the CSV files in <code>data/</code> in this folder.</p>
+<ul>
+<li><a href="02-intro-statistical-modelling/02-data-quality.R">02-data-quality.R</a> — Same code as a plain script</li>
+<li><a href="02-intro-statistical-modelling/02-data-quality.Rmd">02-data-quality.Rmd</a> — Data quality: missingness, selection and measurement error</li>
+<li><a href="02-intro-statistical-modelling/02-nhtemp-two-models.R">02-nhtemp-two-models.R</a> — Same code as a plain script</li>
+<li><a href="02-intro-statistical-modelling/02-nhtemp-two-models.Rmd">02-nhtemp-two-models.Rmd</a> — Two models for the New Haven temperatures</li>
+<li><a href="02-intro-statistical-modelling/02-reproducible-workflow.R">02-reproducible-workflow.R</a> — Same code as a plain script</li>
+<li><a href="02-intro-statistical-modelling/02-reproducible-workflow.Rmd">02-reproducible-workflow.Rmd</a> — A reproducible workflow in R</li>
+<li><a href="02-intro-statistical-modelling/02-simulate-from-model.R">02-simulate-from-model.R</a> — Same code as a plain script</li>
+<li><a href="02-intro-statistical-modelling/02-simulate-from-model.Rmd">02-simulate-from-model.Rmd</a> — Simulating from a fitted model</li>
+</ul>
+</section>
+<section id="03-maximum-likelihood">
+<h2>Session 3 — Maximum Likelihood Estimation</h2>
+
+<ul>
+<li><a href="03-maximum-likelihood/03-likelihood-basics.R">03-likelihood-basics.R</a> — Same code as a plain script</li>
+<li><a href="03-maximum-likelihood/03-likelihood-basics.Rmd">03-likelihood-basics.Rmd</a> — Likelihood, score and information</li>
+<li><a href="03-maximum-likelihood/03-numerical-optimization.R">03-numerical-optimization.R</a> — Same code as a plain script</li>
+<li><a href="03-maximum-likelihood/03-numerical-optimization.Rmd">03-numerical-optimization.Rmd</a> — Numerical maximum likelihood</li>
+<li><a href="03-maximum-likelihood/03-wald-score-lr.R">03-wald-score-lr.R</a> — Same code as a plain script</li>
+<li><a href="03-maximum-likelihood/03-wald-score-lr.Rmd">03-wald-score-lr.Rmd</a> — Wald, score and likelihood-ratio tests and intervals</li>
+</ul>
+</section>
+<section id="04-lab-maximum-likelihood">
+<h2>Session 4 — Lab 01 –- MLE in R</h2>
+
+<ul>
+<li><a href="04-lab-maximum-likelihood/04-mixture-starts.R">04-mixture-starts.R</a> — Same code as a plain script</li>
+<li><a href="04-lab-maximum-likelihood/04-mixture-starts.Rmd">04-mixture-starts.Rmd</a> — Mixtures, starting values and identifiability</li>
+<li><a href="04-lab-maximum-likelihood/04-mle-toolkit.R">04-mle-toolkit.R</a> — Same code as a plain script</li>
+<li><a href="04-lab-maximum-likelihood/04-mle-toolkit.Rmd">04-mle-toolkit.Rmd</a> — A small toolkit for numerical MLE</li>
+</ul>
+</section>
+<section id="05-linear-models-theory">
+<h2>Session 5 — Linear Models in Theory</h2>
+
+<ul>
+<li><a href="05-linear-models-theory/05-diagnostics-prediction.R">05-diagnostics-prediction.R</a> — Same code as a plain script</li>
+<li><a href="05-linear-models-theory/05-diagnostics-prediction.Rmd">05-diagnostics-prediction.Rmd</a> — Diagnostics and prediction</li>
+<li><a href="05-linear-models-theory/05-inference.R">05-inference.R</a> — Same code as a plain script</li>
+<li><a href="05-linear-models-theory/05-inference.Rmd">05-inference.Rmd</a> — Inference for linear-model coefficients</li>
+<li><a href="05-linear-models-theory/05-least-squares.R">05-least-squares.R</a> — Same code as a plain script</li>
+<li><a href="05-linear-models-theory/05-least-squares.Rmd">05-least-squares.Rmd</a> — Least squares in matrix form</li>
+<li><a href="05-linear-models-theory/README.Rmd">README.Rmd</a> — Session 5: Linear Models in Theory — R examples</li>
+</ul>
+</section>
+<section id="06-linear-models-practice-model-selection">
+<h2>Session 6 — Linear Models in Practice and Model Selection</h2>
+
+<ul>
+<li><a href="06-linear-models-practice-model-selection/06-categorical-interactions.R">06-categorical-interactions.R</a> — Same code as a plain script</li>
+<li><a href="06-linear-models-practice-model-selection/06-categorical-interactions.Rmd">06-categorical-interactions.Rmd</a> — Categorical predictors, interactions and the hierarchical principle</li>
+<li><a href="06-linear-models-practice-model-selection/06-confounding.R">06-confounding.R</a> — Same code as a plain script</li>
+<li><a href="06-linear-models-practice-model-selection/06-confounding.Rmd">06-confounding.Rmd</a> — Confounding, omitted-variable bias and collinearity</li>
+<li><a href="06-linear-models-practice-model-selection/06-model-selection.R">06-model-selection.R</a> — Same code as a plain script</li>
+<li><a href="06-linear-models-practice-model-selection/06-model-selection.Rmd">06-model-selection.Rmd</a> — Model selection with AIC, BIC and Mallows&#x27; Cp</li>
+<li><a href="06-linear-models-practice-model-selection/06-regularization.R">06-regularization.R</a> — Same code as a plain script</li>
+<li><a href="06-linear-models-practice-model-selection/06-regularization.Rmd">06-regularization.Rmd</a> — Ridge, lasso and elastic net with glmnet</li>
+<li><a href="06-linear-models-practice-model-selection/README.Rmd">README.Rmd</a> — Session 6: Linear Models in Practice and Model Selection — R examples</li>
+</ul>
+</section>
+<section id="07-lab-linear-models-diagnostics">
+<h2>Session 7 — Computer Lab –- Linear Models and Diagnostics in R</h2>
+<p>Reads the CSV files in <code>data/</code> in this folder.</p>
+<ul>
+<li><a href="07-lab-linear-models-diagnostics/07-lab-part1-savings.R">07-lab-part1-savings.R</a> — Same code as a plain script</li>
+<li><a href="07-lab-linear-models-diagnostics/07-lab-part1-savings.Rmd">07-lab-part1-savings.Rmd</a> — Lab 02 walk-through, Part 1: inference and diagnostics</li>
+<li><a href="07-lab-linear-models-diagnostics/07-lab-part2-prostate.R">07-lab-part2-prostate.R</a> — Same code as a plain script</li>
+<li><a href="07-lab-linear-models-diagnostics/07-lab-part2-prostate.Rmd">07-lab-part2-prostate.Rmd</a> — Lab 02 walk-through, Part 2: selection and the lasso</li>
+<li><a href="07-lab-linear-models-diagnostics/README.Rmd">README.Rmd</a> — Session 7: Computer Lab — Linear Models and Diagnostics in R — R examples</li>
+</ul>
+</section>
+<section id="09-glm-intro">
+<h2>Session 9 — Introduction to Generalized Linear Models</h2>
+
+<ul>
+<li><a href="09-glm-intro/09-classification-pima.R">09-classification-pima.R</a> — Same code as a plain script</li>
+<li><a href="09-glm-intro/09-classification-pima.Rmd">09-classification-pima.Rmd</a> — From probabilities to decisions</li>
+<li><a href="09-glm-intro/09-exponential-family.R">09-exponential-family.R</a> — Same code as a plain script</li>
+<li><a href="09-glm-intro/09-exponential-family.Rmd">09-exponential-family.Rmd</a> — The exponential family in R</li>
+<li><a href="09-glm-intro/09-logistic-birthwt.R">09-logistic-birthwt.R</a> — Same code as a plain script</li>
+<li><a href="09-glm-intro/09-logistic-birthwt.Rmd">09-logistic-birthwt.Rmd</a> — Logistic regression: low birth weight</li>
+<li><a href="09-glm-intro/09-poisson-ships.R">09-poisson-ships.R</a> — Same code as a plain script</li>
+<li><a href="09-glm-intro/09-poisson-ships.Rmd">09-poisson-ships.Rmd</a> — Poisson regression with an offset: ship damage</li>
+<li><a href="09-glm-intro/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="10-glm-fitting">
+<h2>Session 10 — Fitting Generalized Linear Models</h2>
+
+<ul>
+<li><a href="10-glm-fitting/10-deviance-inference.R">10-deviance-inference.R</a> — Same code as a plain script</li>
+<li><a href="10-glm-fitting/10-deviance-inference.Rmd">10-deviance-inference.Rmd</a> — Likelihood inference and deviance</li>
+<li><a href="10-glm-fitting/10-irls-by-hand.R">10-irls-by-hand.R</a> — Same code as a plain script</li>
+<li><a href="10-glm-fitting/10-irls-by-hand.Rmd">10-irls-by-hand.Rmd</a> — IRLS by hand</li>
+<li><a href="10-glm-fitting/10-overdispersion-quine.R">10-overdispersion-quine.R</a> — Same code as a plain script</li>
+<li><a href="10-glm-fitting/10-overdispersion-quine.Rmd">10-overdispersion-quine.Rmd</a> — Overdispersion: school absences</li>
+<li><a href="10-glm-fitting/10-residuals.R">10-residuals.R</a> — Same code as a plain script</li>
+<li><a href="10-glm-fitting/10-residuals.Rmd">10-residuals.Rmd</a> — Residuals for GLMs</li>
+<li><a href="10-glm-fitting/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="11-lab-glm">
+<h2>Session 11 — Computer Lab –- GLMs in R</h2>
+
+<ul>
+<li><a href="11-lab-glm/11-binary-toolkit.R">11-binary-toolkit.R</a> — Same code as a plain script</li>
+<li><a href="11-lab-glm/11-binary-toolkit.Rmd">11-binary-toolkit.Rmd</a> — A toolkit for binary GLMs</li>
+<li><a href="11-lab-glm/11-count-toolkit.R">11-count-toolkit.R</a> — Same code as a plain script</li>
+<li><a href="11-lab-glm/11-count-toolkit.Rmd">11-count-toolkit.Rmd</a> — A toolkit for count GLMs</li>
+<li><a href="11-lab-glm/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="15-linear-mixed-models">
+<h2>Session 15 — Linear Mixed Models</h2>
+
+<ul>
+<li><a href="15-linear-mixed-models/15-pooling.R">15-pooling.R</a> — Same code as a plain script</li>
+<li><a href="15-linear-mixed-models/15-pooling.Rmd">15-pooling.Rmd</a> — Complete, no and partial pooling (sleepstudy)</li>
+<li><a href="15-linear-mixed-models/15-random-intercept-slope.R">15-random-intercept-slope.R</a> — Same code as a plain script</li>
+<li><a href="15-linear-mixed-models/15-random-intercept-slope.Rmd">15-random-intercept-slope.Rmd</a> — Random intercepts, random slopes and the implied covariance</li>
+<li><a href="15-linear-mixed-models/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="16-lmm-estimation-inference">
+<h2>Session 16 — Estimation and Inference for LMMs</h2>
+
+<ul>
+<li><a href="16-lmm-estimation-inference/16-blup-shrinkage.R">16-blup-shrinkage.R</a> — Same code as a plain script</li>
+<li><a href="16-lmm-estimation-inference/16-blup-shrinkage.Rmd">16-blup-shrinkage.Rmd</a> — BLUPs and shrinkage</li>
+<li><a href="16-lmm-estimation-inference/16-gls-ml-reml.R">16-gls-ml-reml.R</a> — Same code as a plain script</li>
+<li><a href="16-lmm-estimation-inference/16-gls-ml-reml.Rmd">16-gls-ml-reml.Rmd</a> — GLS, ML and REML by hand</li>
+<li><a href="16-lmm-estimation-inference/16-inference-diagnostics.R">16-inference-diagnostics.R</a> — Same code as a plain script</li>
+<li><a href="16-lmm-estimation-inference/16-inference-diagnostics.Rmd">16-inference-diagnostics.Rmd</a> — Inference and diagnostics for LMMs</li>
+<li><a href="16-lmm-estimation-inference/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="17-glmm">
+<h2>Session 17 — Generalized Linear Mixed Models</h2>
+
+<ul>
+<li><a href="17-glmm/17-cbpp-glmm.R">17-cbpp-glmm.R</a> — Same code as a plain script</li>
+<li><a href="17-glmm/17-cbpp-glmm.Rmd">17-cbpp-glmm.Rmd</a> — A binomial GLMM: cbpp</li>
+<li><a href="17-glmm/17-marginal-vs-conditional.R">17-marginal-vs-conditional.R</a> — Same code as a plain script</li>
+<li><a href="17-glmm/17-marginal-vs-conditional.Rmd">17-marginal-vs-conditional.Rmd</a> — Conditional vs marginal effects in a logistic GLMM</li>
+<li><a href="17-glmm/17-poisson-olre.R">17-poisson-olre.R</a> — Same code as a plain script</li>
+<li><a href="17-glmm/17-poisson-olre.Rmd">17-poisson-olre.Rmd</a> — Poisson GLMM with an observation-level random effect</li>
+<li><a href="17-glmm/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="18-lab-mixed-models">
+<h2>Session 18 — Computer Lab –- Mixed Models in R</h2>
+
+<ul>
+<li><a href="18-lab-mixed-models/18-lab-walkthrough.R">18-lab-walkthrough.R</a> — Same code as a plain script</li>
+<li><a href="18-lab-mixed-models/18-lab-walkthrough.Rmd">18-lab-walkthrough.Rmd</a> — Lab 04 walk-through: lmer, lme and glmer</li>
+<li><a href="18-lab-mixed-models/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="20-polynomial-scatterplot-smoothing">
+<h2>Session 20 — Polynomial Regression and Scatterplot Smoothing</h2>
+
+<ul>
+<li><a href="20-polynomial-scatterplot-smoothing/20-local-smoothers.R">20-local-smoothers.R</a> — Same code as a plain script</li>
+<li><a href="20-polynomial-scatterplot-smoothing/20-local-smoothers.Rmd">20-local-smoothers.Rmd</a> — Local smoothers: bins, neighbours, kernels and LOESS</li>
+<li><a href="20-polynomial-scatterplot-smoothing/20-polynomial-regression.R">20-polynomial-regression.R</a> — Same code as a plain script</li>
+<li><a href="20-polynomial-scatterplot-smoothing/20-polynomial-regression.Rmd">20-polynomial-regression.Rmd</a> — Polynomial regression on the motorcycle data</li>
+<li><a href="20-polynomial-scatterplot-smoothing/20-smoother-matrix-cv.R">20-smoother-matrix-cv.R</a> — Same code as a plain script</li>
+<li><a href="20-polynomial-scatterplot-smoothing/20-smoother-matrix-cv.Rmd">20-smoother-matrix-cv.Rmd</a> — Smoother matrices, effective df and cross-validation</li>
+<li><a href="20-polynomial-scatterplot-smoothing/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="21-splines">
+<h2>Session 21 — Splines</h2>
+
+<ul>
+<li><a href="21-splines/21-bsplines-psplines.R">21-bsplines-psplines.R</a> — Same code as a plain script</li>
+<li><a href="21-splines/21-bsplines-psplines.Rmd">21-bsplines-psplines.Rmd</a> — B-splines and P-splines from scratch</li>
+<li><a href="21-splines/21-regression-splines.R">21-regression-splines.R</a> — Same code as a plain script</li>
+<li><a href="21-splines/21-regression-splines.Rmd">21-regression-splines.Rmd</a> — Regression splines: truncated powers, bs() and ns()</li>
+<li><a href="21-splines/21-smoothing-splines.R">21-smoothing-splines.R</a> — Same code as a plain script</li>
+<li><a href="21-splines/21-smoothing-splines.Rmd">21-smoothing-splines.Rmd</a> — Smoothing splines and penalized truncated power splines</li>
+<li><a href="21-splines/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="22-lab-smoothing-splines">
+<h2>Session 22 — Computer Lab –- Smoothing and Splines</h2>
+
+<ul>
+<li><a href="22-lab-smoothing-splines/22-cv-pitfalls.R">22-cv-pitfalls.R</a> — Same code as a plain script</li>
+<li><a href="22-lab-smoothing-splines/22-cv-pitfalls.Rmd">22-cv-pitfalls.Rmd</a> — Cross-validating a smoother: three pitfalls</li>
+<li><a href="22-lab-smoothing-splines/22-heteroscedasticity.R">22-heteroscedasticity.R</a> — Same code as a plain script</li>
+<li><a href="22-lab-smoothing-splines/22-heteroscedasticity.Rmd">22-heteroscedasticity.Rmd</a> — Non-constant variance in the motorcycle data</li>
+<li><a href="22-lab-smoothing-splines/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="23-gams-intro">
+<h2>Session 23 — Introduction to Generalized Additive Models</h2>
+
+<ul>
+<li><a href="23-gams-intro/23-backfitting.R">23-backfitting.R</a> — Same code as a plain script</li>
+<li><a href="23-gams-intro/23-backfitting.Rmd">23-backfitting.Rmd</a> — Backfitting an additive model by hand</li>
+<li><a href="23-gams-intro/23-first-gams.R">23-first-gams.R</a> — Same code as a plain script</li>
+<li><a href="23-gams-intro/23-first-gams.Rmd">23-first-gams.Rmd</a> — First GAMs with mgcv: Gaussian, Gamma and binomial</li>
+<li><a href="23-gams-intro/23-gam-motivation.R">23-gam-motivation.R</a> — Same code as a plain script</li>
+<li><a href="23-gams-intro/23-gam-motivation.Rmd">23-gam-motivation.Rmd</a> — Why additive models? LM residuals on airquality</li>
+<li><a href="23-gams-intro/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="24-gams-theory">
+<h2>Session 24 — GAM Theory</h2>
+
+<ul>
+<li><a href="24-gams-theory/24-penalized-fitting.R">24-penalized-fitting.R</a> — Same code as a plain script</li>
+<li><a href="24-gams-theory/24-penalized-fitting.Rmd">24-penalized-fitting.Rmd</a> — Bases, penalties, identifiability, PIRLS and edf</li>
+<li><a href="24-gams-theory/24-smoothing-selection.R">24-smoothing-selection.R</a> — Same code as a plain script</li>
+<li><a href="24-gams-theory/24-smoothing-selection.Rmd">24-smoothing-selection.Rmd</a> — Choosing smoothing parameters, k, and inference</li>
+<li><a href="24-gams-theory/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="25-gams-advanced">
+<h2>Session 25 — Advanced GAMs</h2>
+
+<ul>
+<li><a href="25-gams-advanced/25-concurvity-selection.R">25-concurvity-selection.R</a> — Same code as a plain script</li>
+<li><a href="25-gams-advanced/25-concurvity-selection.Rmd">25-concurvity-selection.Rmd</a> — Concurvity and term selection</li>
+<li><a href="25-gams-advanced/25-diagnostics-visualization.R">25-diagnostics-visualization.R</a> — Same code as a plain script</li>
+<li><a href="25-gams-advanced/25-diagnostics-visualization.Rmd">25-diagnostics-visualization.Rmd</a> — Residual diagnostics, interpretation and visualisation</li>
+<li><a href="25-gams-advanced/25-tensor-anova.R">25-tensor-anova.R</a> — Same code as a plain script</li>
+<li><a href="25-gams-advanced/25-tensor-anova.Rmd">25-tensor-anova.Rmd</a> — Tensor products, ANOVA decompositions and model comparison</li>
+<li><a href="25-gams-advanced/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="26-lab-gams">
+<h2>Session 26 — Computer Lab –- GAMs with \texttt{mgcv}</h2>
+
+<ul>
+<li><a href="26-lab-gams/26-lab06-extensions.R">26-lab06-extensions.R</a> — Same code as a plain script</li>
+<li><a href="26-lab-gams/26-lab06-extensions.Rmd">26-lab06-extensions.Rmd</a> — Lab 06 extensions: Gamma family, shrinkage and a parametric month effect</li>
+<li><a href="26-lab-gams/26-lab06-walkthrough.R">26-lab06-walkthrough.R</a> — Same code as a plain script</li>
+<li><a href="26-lab-gams/26-lab06-walkthrough.Rmd">26-lab06-walkthrough.Rmd</a> — Lab 06 walk-through: from LM to GAM on airquality</li>
+<li><a href="26-lab-gams/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="27-gamms">
+<h2>Session 27 — Generalized Additive Mixed Models</h2>
+
+<ul>
+<li><a href="27-gamms/27-gamm-correlation.R">27-gamm-correlation.R</a> — Same code as a plain script</li>
+<li><a href="27-gamms/27-gamm-correlation.Rmd">27-gamm-correlation.Rmd</a> — gamm(): the $gam and $lme parts, and correlated residuals</li>
+<li><a href="27-gamms/27-random-effects-gam.R">27-random-effects-gam.R</a> — Same code as a plain script</li>
+<li><a href="27-gamms/27-random-effects-gam.Rmd">27-random-effects-gam.Rmd</a> — Random effects inside GAMs: Oxboys growth curves</li>
+<li><a href="27-gamms/27-smoother-mixed-model.R">27-smoother-mixed-model.R</a> — Same code as a plain script</li>
+<li><a href="27-gamms/27-smoother-mixed-model.Rmd">27-smoother-mixed-model.Rmd</a> — A penalized spline is a mixed model</li>
+<li><a href="27-gamms/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="28-survival">
+<h2>Session 28 — Censored and Survival Data</h2>
+
+<ul>
+<li><a href="28-survival/28-cox-model.R">28-cox-model.R</a> — Same code as a plain script</li>
+<li><a href="28-survival/28-cox-model.Rmd">28-cox-model.Rmd</a> — Cox proportional hazards model</li>
+<li><a href="28-survival/28-exponential-likelihood.R">28-exponential-likelihood.R</a> — Same code as a plain script</li>
+<li><a href="28-survival/28-exponential-likelihood.Rmd">28-exponential-likelihood.Rmd</a> — Likelihood with right censoring: the exponential model</li>
+<li><a href="28-survival/28-kaplan-meier.R">28-kaplan-meier.R</a> — Same code as a plain script</li>
+<li><a href="28-survival/28-kaplan-meier.Rmd">28-kaplan-meier.Rmd</a> — Kaplan–Meier and the log-rank test</li>
+<li><a href="28-survival/28-ph-diagnostics.R">28-ph-diagnostics.R</a> — Same code as a plain script</li>
+<li><a href="28-survival/28-ph-diagnostics.Rmd">28-ph-diagnostics.Rmd</a> — Checking proportional hazards and fixing a violation</li>
+<li><a href="28-survival/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="29-group-project-workshop">
+<h2>Session 29 — Group-Project Workshop</h2>
+
+<ul>
+<li><a href="29-group-project-workshop/29-workflow-template.R">29-workflow-template.R</a> — Same code as a plain script</li>
+<li><a href="29-group-project-workshop/29-workflow-template.Rmd">29-workflow-template.Rmd</a> — A modelling workflow from question to communication</li>
+<li><a href="29-group-project-workshop/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+<section id="30-group-project-presentations">
+<h2>Session 30 — Group-Project Presentations</h2>
+
+<ul>
+<li><a href="30-group-project-presentations/README.Rmd">README.Rmd</a> — R examples index</li>
+</ul>
+</section>
+</main>
+</div>
+</body>
+</html>

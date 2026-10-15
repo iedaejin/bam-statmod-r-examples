@@ -1,0 +1,28 @@
+savings.csv
+  Source: R package 'faraway' (Julian Faraway), version 1.0.9, object 'savings': savings rates in
+  50 countries, averaged over 1960-1970. The same data are 'LifeCycleSavings' in R's 'datasets' package.
+  Columns: country (row name in the package), sr (personal saving divided by disposable income, %),
+  pop15 (% population under 15), pop75 (% population over 75), dpi (per-capita disposable income,
+  US dollars), ddpi (% growth rate of dpi).
+  Original reference: Belsley, D. A., Kuh, E. and Welsch, R. E. (1980) Regression Diagnostics.
+  Wiley. Also used in Faraway, J. J. (2014) Linear Models with R, 2nd ed., CRC Press.
+  Values unchanged; written with
+  write.csv(data.frame(country = rownames(savings), savings, row.names = NULL), row.names = FALSE).
+
+prostate.csv
+  Source: R package 'faraway' (Julian Faraway), version 1.0.9, object 'prostate': 97 men with
+  prostate cancer who were due to receive a radical prostatectomy.
+  Columns: lcavol (log cancer volume), lweight (log prostate weight), age, lbph (log benign
+  prostatic hyperplasia amount), svi (seminal vesicle invasion, 0/1), lcp (log capsular
+  penetration), gleason (Gleason score), pgg45 (percentage Gleason scores 4 or 5),
+  lpsa (log prostate-specific antigen).
+  Source given in the package: Andrews, D. F. and Herzberg, A. M. (1985) Data. Springer-Verlag.
+  Original study: Stamey, T. A. et al. (1989) Prostate specific antigen in the diagnosis and
+  treatment of adenocarcinoma of the prostate. II. Radical prostatectomy treated patients.
+  Journal of Urology 141, 1076-1083.
+  Values unchanged; written with write.csv(prostate, row.names = FALSE).
+
+License: the 'faraway' package is distributed under the GNU General Public License (GPL), as stated
+in its DESCRIPTION file.
+
+The lab text is course material for Statistical Modelling (BAM), IE University. It is not a work of the dataset authors.

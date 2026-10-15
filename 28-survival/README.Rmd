@@ -1,0 +1,15 @@
+---
+title: "Session 28 — R examples index"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+Censored and survival data. Data: `survival::veteran` (Veterans' Administration lung
+cancer trial; Kalbfleisch & Prentice 1980), loaded from the `survival` package.
+
+1. [`28-kaplan-meier.Rmd`](28-kaplan-meier.Rmd) — **in class**: `Surv()`, a Kaplan–Meier table by hand, Greenwood, medians, log-rank by hand. Script: `28-kaplan-meier.R`
+2. [`28-exponential-likelihood.Rmd`](28-exponential-likelihood.Rmd) — **in class**: likelihood with right censoring, $\hat\lambda = \sum\delta_i/\sum y_i$, `optim()`, `survreg()`, exponential vs Weibull. Script: `28-exponential-likelihood.R`
+3. [`28-cox-model.Rmd`](28-cox-model.Rmd) — **in class**: partial likelihood by hand, `coxph()`, hazard ratios, ties, score test vs log-rank. Script: `28-cox-model.R`
+4. [`28-ph-diagnostics.Rmd`](28-ph-diagnostics.Rmd) — **in class**: `cox.zph()`, log(−log S) plot, stratification, time-varying coefficients. Script: `28-ph-diagnostics.R`
+
+Lab: `Lab_08_Survival`.

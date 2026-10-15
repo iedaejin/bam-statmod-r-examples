@@ -1,0 +1,115 @@
+# 16-gls-ml-reml.R --- plain-script version of 16-gls-ml-reml.Rmd
+# Statistical Modelling (BAM), IE University --- Prof. Dae-Jin Lee (daelee@faculty.ie.edu)
+# Run from the r-examples/ folder:  Rscript 16-gls-ml-reml.R
+
+#' ---
+#' title: "Session 16 — GLS, ML and REML by hand"
+#' author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+#' output: html_document
+#' ---
+#' 
+
+#' 
+#' We use the random-intercept model for `sleepstudy`,
+#' $y_{ij} = \beta_0 + \beta_1\,\mathrm{Days}_{ij} + b_{0i} + \varepsilon_{ij}$,
+#' so the variance parameters are $\theta = (\sigma_b^2, \sigma^2)$ and
+#' $V(\theta) = \sigma_b^2 ZZ^\top + \sigma^2 I$.
+#' 
+## ----data---------------------------------------------------------------------
+library(lme4)
+data(sleepstudy)
+y <- sleepstudy$Reaction
+X <- model.matrix(~ Days, data = sleepstudy)          # n x p, with intercept
+Z <- model.matrix(~ 0 + Subject, data = sleepstudy)   # n x m indicators
+n <- nrow(X); p <- ncol(X)
+
+#' 
+#' ## Building blocks: V, GLS and the residual quadratic form
+#' 
+## ----blocks-------------------------------------------------------------------
+V_of <- function(sb2, s2) sb2 * tcrossprod(Z) + s2 * diag(n)
+
+gls_beta <- function(V) {
+  Vi <- solve(V)
+  solve(t(X) %*% Vi %*% X, t(X) %*% Vi %*% y)          # (X'V^-1 X)^-1 X'V^-1 y
+}
+
+# ML profile log-likelihood l_P(theta) and REML log-likelihood l_R(theta)
+loglik_P <- function(sb2, s2) {
+  V <- V_of(sb2, s2); Vi <- solve(V)
+  r <- y - X %*% gls_beta(V)
+  -0.5 * (n * log(2 * pi) + determinant(V)$modulus + t(r) %*% Vi %*% r)[1]
+}
+loglik_R <- function(sb2, s2) {
+  V <- V_of(sb2, s2); Vi <- solve(V)
+  r <- y - X %*% gls_beta(V)
+  -0.5 * ((n - p) * log(2 * pi) + determinant(V)$modulus +
+            determinant(t(X) %*% Vi %*% X)$modulus + t(r) %*% Vi %*% r)[1]
+}
+
+#' 
+#' ## Maximise both criteria numerically
+#' 
+#' We optimise over log-variances so that the variances stay positive.
+#' 
+## ----optimise-----------------------------------------------------------------
+fit_ML   <- optim(c(log(1000), log(1000)), function(t) -loglik_P(exp(t[1]), exp(t[2])),
+                  control = list(reltol = 1e-12))
+fit_REML <- optim(c(log(1000), log(1000)), function(t) -loglik_R(exp(t[1]), exp(t[2])),
+                  control = list(reltol = 1e-12))
+rbind(ML = exp(fit_ML$par), REML = exp(fit_REML$par))   # (sigma_b^2, sigma^2)
+
+#' 
+#' ## Compare with lmer
+#' 
+## ----compare------------------------------------------------------------------
+m_reml <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)               # REML (default)
+m_ml   <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy, REML = FALSE)
+rbind(ML   = as.data.frame(VarCorr(m_ml))$vcov,
+      REML = as.data.frame(VarCorr(m_reml))$vcov)
+
+# The REML log-likelihood with the (n - p) log(2 pi) constant is exactly lme4's
+vc <- as.data.frame(VarCorr(m_reml))$vcov
+c(by_hand = loglik_R(vc[1], vc[2]), lmer = as.numeric(logLik(m_reml)))
+c(by_hand = -2 * loglik_R(vc[1], vc[2]), REMLcrit = REMLcrit(m_reml))
+
+#' 
+#' ## GLS reproduces the fixed effects and their standard errors
+#' 
+## ----gls----------------------------------------------------------------------
+V  <- V_of(vc[1], vc[2])
+Vi <- solve(V)
+beta_hat <- gls_beta(V)
+cbind(by_hand = beta_hat, lmer = fixef(m_reml))
+cbind(by_hand = sqrt(diag(solve(t(X) %*% Vi %*% X))),
+      lmer    = sqrt(diag(vcov(m_reml))))
+
+#' 
+#' ## REML intuition in the ordinary linear model
+#' 
+#' With $V = \sigma^2 I$ the ML estimate of $\sigma^2$ is $\mathrm{RSS}/n$ and the REML
+#' estimate is $\mathrm{RSS}/(n-p)$.
+#' 
+## ----lm-case------------------------------------------------------------------
+fit_lm <- lm(Reaction ~ Days, data = sleepstudy)
+RSS <- sum(resid(fit_lm)^2)
+c(ML = RSS / n, REML = RSS / (n - p), lm_sigma2 = sigma(fit_lm)^2)
+
+#' 
+#' ## A small simulation: ML is biased down, REML much less
+#' 
+#' Six groups of four observations, one covariate, $\sigma_b^2 = \sigma^2 = 1$.
+#' 
+## ----simulation---------------------------------------------------------------
+set.seed(2027)
+m <- 6; ni <- 4
+g <- factor(rep(1:m, each = ni)); x <- rep(1:ni, m)
+est <- t(replicate(500, {
+  yy <- 1 + 0.5 * x + rnorm(m)[g] + rnorm(m * ni)
+  d  <- data.frame(yy, x, g)
+  ml   <- suppressMessages(lmer(yy ~ x + (1 | g), d, REML = FALSE))  # silence "singular fit"
+  reml <- suppressMessages(lmer(yy ~ x + (1 | g), d))
+  c(ML = as.data.frame(VarCorr(ml))$vcov[1], REML = as.data.frame(VarCorr(reml))$vcov[1])
+}))
+colMeans(est)          # true value 1
+

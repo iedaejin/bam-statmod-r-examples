@@ -1,0 +1,17 @@
+---
+title: "Session 23 — R examples index"
+subtitle: "Statistical Modelling (BAM)"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+date: "Spring 2027"
+output:
+  html_document:
+    theme: flatly
+---
+
+## Files
+
+1. [`23-gam-motivation.Rmd`](23-gam-motivation.Rmd) / [`.R`](23-gam-motivation.R) — LM residuals on `airquality`, the first additive model.
+2. [`23-backfitting.Rmd`](23-backfitting.Rmd) / [`.R`](23-backfitting.R) — backfitting by hand with $\beta_0$ and centring; exact agreement with `gam()`.
+3. [`23-first-gams.Rmd`](23-first-gams.Rmd) / [`.R`](23-first-gams.R) — reading `summary()` and `plot()`; Gamma GAM; AIC on a common scale; binomial GAM for `Pima`.
+
+Earlier material is kept in `../extras/legacy-r-examples/`.

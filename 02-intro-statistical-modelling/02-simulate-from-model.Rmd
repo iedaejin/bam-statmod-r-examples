@@ -1,0 +1,92 @@
+---
+title: "Session 02 — Simulating from a fitted model"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 7, fig.height = 4)
+```
+
+A fitted statistical model is a **data-generating process**: given $\hat\theta$, it can produce new data sets. If the model is adequate, simulated data should look like the observed data.
+
+```{r fit}
+data(nhtemp)
+nh <- data.frame(year = as.numeric(time(nhtemp)), temp = as.numeric(nhtemp))
+n  <- nrow(nh)
+m1 <- lm(temp ~ 1, data = nh)
+m2 <- lm(temp ~ year, data = nh)
+sig1 <- summary(m1)$sigma
+sig2 <- summary(m2)$sigma
+```
+
+## 1. One simulated series from model 2
+
+$y_i^\ast = \hat\beta_0 + \hat\beta_1 t_i + \varepsilon_i^\ast$, $\varepsilon_i^\ast \sim N(0,\hat\sigma^2)$.
+
+```{r one}
+set.seed(2027)                                   # makes the draw reproducible
+y_star <- fitted(m2) + rnorm(n, mean = 0, sd = sig2)
+plot(nh$year, nh$temp, type = "l", lwd = 2, xlab = "Year", ylab = "deg F",
+     ylim = range(nh$temp, y_star))
+lines(nh$year, y_star, col = "red")
+legend("topleft", c("observed", "simulated from model 2"),
+       col = c("black", "red"), lwd = c(2, 1), bty = "n")
+```
+
+## 2. A line-up
+
+Can you spot the real series among eight simulated ones?
+
+```{r lineup, fig.height=5}
+set.seed(2027)
+pos <- sample(1:9, 1)
+op <- par(mfrow = c(3, 3), mar = c(2, 2, 1.5, 0.5))
+for (k in 1:9) {
+  yk <- if (k == pos) nh$temp else fitted(m2) + rnorm(n, 0, sig2)
+  plot(nh$year, yk, type = "l", main = paste("Panel", k), xlab = "", ylab = "")
+}
+par(op)
+pos                                              # reveal after the discussion
+```
+
+## 3. Distribution of the fitted slope under each model
+
+```{r slopes}
+set.seed(2027)
+B <- 1000
+slope_m1 <- replicate(B, coef(lm(rnorm(n, coef(m1), sig1) ~ nh$year))[2])
+slope_m2 <- replicate(B, coef(lm(fitted(m2) + rnorm(n, 0, sig2) ~ nh$year))[2])
+b1_obs <- unname(coef(m2)[2])
+c(observed = b1_obs, max_under_m1 = max(slope_m1),
+  share_m1_at_least_obs = mean(slope_m1 >= b1_obs))
+c(mean_m2 = mean(slope_m2), sd_m2 = sd(slope_m2),
+  se_from_lm = summary(m2)$coefficients["year", "Std. Error"])
+
+hist(10 * slope_m1, breaks = 40, xlim = 10 * range(slope_m1, slope_m2),
+     col = rgb(0.8, 0.3, 0.2, 0.6), main = "", xlab = "Slope (deg F per decade)")
+hist(10 * slope_m2, breaks = 40, col = rgb(0, 0.2, 0.55, 0.6), add = TRUE)
+abline(v = 10 * b1_obs, lwd = 3)
+```
+
+None of the 1000 series simulated from model 1 (no trend) produces a slope as large as the observed one. The SD of the slopes simulated from model 2 is close to the standard error reported by `lm()`.
+
+## 4. Variability vs uncertainty
+
+*Variability* is the spread of the data ($\sigma$); it does not shrink with $n$. *Uncertainty* about $\mu$ is the spread of $\bar y$ over repeated samples ($\sigma/\sqrt n$); it does.
+
+```{r varunc}
+set.seed(2027)
+mu  <- mean(nh$temp)
+sig <- sd(nh$temp)
+ns  <- c(10, 30, 100, 300, 1000)
+vu <- t(sapply(ns, function(nn) {
+  sims <- replicate(500, { z <- rnorm(nn, mu, sig); c(mean(z), sd(z)) })
+  c(n = nn,
+    variability = mean(sims[2, ]),               # average sample SD: stays near sigma
+    uncertainty = sd(sims[1, ]),                 # SD of the 500 sample means
+    sigma_over_sqrt_n = sig / sqrt(nn))
+}))
+round(vu, 3)
+```

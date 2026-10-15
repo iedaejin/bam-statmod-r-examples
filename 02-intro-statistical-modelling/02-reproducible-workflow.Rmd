@@ -1,0 +1,63 @@
+---
+title: "Session 02 — A reproducible workflow in R"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+A reproducible analysis lives in one project folder, reads its data with **relative paths**, fixes the random seed, and records the software it used. This document knits from the `r-examples/` folder. It never calls `setwd()`.
+
+## 1. Read the data with a relative path
+
+`data/nhtemp.csv` was written once from the package with
+
+```r
+write.csv(data.frame(year = as.numeric(time(nhtemp)),
+                     temp = as.numeric(nhtemp)),
+          "data/nhtemp.csv", row.names = FALSE)
+```
+
+```{r read}
+nh <- read.csv("data/nhtemp.csv")
+str(nh)
+stopifnot(nrow(nh) == 60, all(names(nh) == c("year", "temp")))
+```
+
+## 2. Check that the file is the package dataset
+
+```{r check}
+data(nhtemp)
+all.equal(nh$temp, as.numeric(nhtemp))          # TRUE
+all.equal(nh$year, as.numeric(time(nhtemp)))    # TRUE
+```
+
+## 3. Random numbers: same seed, same numbers
+
+```{r seed}
+set.seed(2027); a <- rnorm(3)
+set.seed(2027); b <- rnorm(3)
+identical(a, b)                                 # TRUE
+d <- rnorm(3)                                   # no reset: different numbers
+identical(a, d)                                 # FALSE
+RNGkind()                                       # the generator is part of the record
+```
+
+## 4. One analysis, end to end
+
+```{r analysis}
+fit <- lm(temp ~ year, data = nh)
+round(coef(fit), 4)
+set.seed(2027)
+sim <- simulate(fit, nsim = 20)                 # 20 series from the fitted model
+dim(sim)                                        # 60 x 20
+round(summary(apply(sim, 2, function(y) coef(lm(y ~ nh$year))[2])), 4)
+```
+
+## 5. Record the software
+
+```{r session}
+sessionInfo()
+```

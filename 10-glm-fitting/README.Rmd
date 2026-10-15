@@ -1,0 +1,16 @@
+---
+title: "Session 10 — R examples index"
+subtitle: "Statistical Modelling (BAM)"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+date: "Spring 2027"
+output:
+  html_document:
+    theme: flatly
+---
+
+## Files
+
+- `10-irls-by-hand.Rmd` / `.R` — IRLS coded from scratch (returns the final $\hat\beta$, correct convergence flag); matches `glm()` for `birthwt` (logit) and `ships` (Poisson with offset); observed vs expected information under logit and probit links.
+- `10-deviance-inference.Rmd` / `.R` — Wald tests and intervals, deviance by hand, LR tests for a block, AIC, McFadden pseudo-$R^2$, Poisson goodness of fit, Pearson dispersion and quasi-Poisson $F$ tests.
+- `10-residuals.Rmd` / `.R` — Pearson and deviance residuals by hand; randomized quantile residuals coded by hand (no DHARMa).
+- `10-overdispersion-quine.Rmd` / `.R` — `MASS::quine`: dispersion statistic, Cameron–Trivedi test by hand, quasi-Poisson, negative binomial (`glm.nb`, size $k$), mean–variance plot, expected zeros, residual QQ plots.

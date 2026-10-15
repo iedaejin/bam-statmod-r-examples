@@ -1,0 +1,62 @@
+# Session 10 — Likelihood inference and deviance
+# Statistical Modelling (BAM), IE University
+# Prof. Dae-Jin Lee (daelee@faculty.ie.edu)
+# Same code as 10-deviance-inference.Rmd. Run from this folder.
+
+# ---- data ----
+library(MASS)
+bw <- with(birthwt, data.frame(low = low, age = age, lwt = lwt,
+  race = factor(race, labels = c("white", "black", "other")),
+  smoke = smoke, ptd = as.integer(ptl > 0), ht = ht, ui = ui))
+fit  <- glm(low ~ age + lwt + race + smoke + ptd + ht + ui, family = binomial, data = bw)
+fit0 <- update(fit, . ~ . - race)                    # nested: drop the race block
+
+# ---- wald ----
+b  <- coef(fit)["smoke"]; se <- sqrt(vcov(fit)["smoke", "smoke"])
+z  <- b / se
+c(z = unname(z), p = 2 * pnorm(-abs(unname(z))))
+exp(b + c(-1, 1) * qnorm(0.975) * se)              # Wald CI for the odds ratio
+exp(confint(fit, "smoke"))                          # profile-likelihood CI
+
+# ---- deviance ----
+mu <- fitted(fit); y <- bw$low
+D  <- -2 * sum(y * log(mu) + (1 - y) * log(1 - mu))
+c(by_hand = D, glm = deviance(fit), minus2loglik = -2 * as.numeric(logLik(fit)))
+c(null_deviance = fit$null.deviance, df = fit$df.null)
+
+# ---- lrt ----
+LR <- deviance(fit0) - deviance(fit)               # D0 - D1
+df <- df.residual(fit0) - df.residual(fit)
+c(LR = LR, df = df, p = pchisq(LR, df, lower.tail = FALSE))
+anova(fit0, fit, test = "Chisq")                   # same test
+drop1(fit, test = "Chisq")                          # one LR test per term
+
+# ---- aic ----
+p <- length(coef(fit))
+c(AIC_by_hand = -2 * as.numeric(logLik(fit)) + 2 * p, AIC = AIC(fit))
+AIC(fit0, fit)
+# McFadden: proportional reduction in deviance relative to the null model.
+# It is NOT a share of explained variance.
+1 - deviance(fit) / fit$null.deviance
+
+# ---- ships ----
+sh <- subset(ships, service > 0)
+sh$year <- factor(sh$year); sh$period <- factor(sh$period)
+fs <- glm(incidents ~ type + year + period + offset(log(service)),
+          family = poisson, data = sh)
+y <- sh$incidents; mu <- fitted(fs)
+D  <- 2 * sum(ifelse(y > 0, y * log(y / mu), 0) - (y - mu))
+X2 <- sum((y - mu)^2 / mu)                           # Pearson statistic
+n_p <- df.residual(fs)
+c(D = D, X2 = X2, df = n_p,
+  p_deviance = pchisq(D, n_p, lower.tail = FALSE),
+  phi_pearson = X2 / n_p, phi_deviance = D / n_p)
+
+# ---- quasi ----
+fq <- update(fs, family = quasipoisson)
+summary(fq)$dispersion
+# Standard errors are inflated by sqrt(phi); estimates are unchanged
+cbind(poisson = sqrt(diag(vcov(fs))), quasi = sqrt(diag(vcov(fq))),
+      ratio = sqrt(diag(vcov(fq))) / sqrt(diag(vcov(fs))))[1:4, ]
+anova(update(fq, . ~ . - type), fq, test = "F")      # F test when phi is estimated
+

@@ -1,0 +1,124 @@
+#' ---
+#' title: "Session 20 — Polynomial regression on the motorcycle data"
+#' subtitle: "Statistical Modelling (BAM), Spring 2027"
+#' author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+#' output: html_document
+#' ---
+#' 
+
+#' 
+#' The running dataset for Sessions 20–22 is `MASS::mcycle`: head acceleration
+#' (`accel`, in g) of a crash-test dummy measured at `times` milliseconds after a
+#' simulated motorcycle impact (Silverman, 1985). There are $n = 133$ observations
+#' at only 94 distinct times, so some $x$ values are tied.
+#' 
+## ----data---------------------------------------------------------------------
+library(MASS)
+data(mcycle)
+x <- mcycle$times
+y <- mcycle$accel
+n <- length(y)
+c(n = n, distinct_times = length(unique(x)))
+plot(accel ~ times, data = mcycle, pch = 16, col = "grey40",
+     xlab = "Time after impact (ms)", ylab = "Head acceleration (g)")
+
+#' 
+#' ## 1. Global polynomial fits of increasing degree
+#' 
+#' A polynomial of degree $q$ is still a linear model,
+#' $y_i = \beta_0 + \beta_1 x_i + \dots + \beta_q x_i^q + \varepsilon_i$,
+#' with $q+1$ columns in the design matrix.
+#' 
+## ----degrees------------------------------------------------------------------
+degrees <- c(1, 3, 5, 8, 12, 20)
+fits <- lapply(degrees, function(q) lm(accel ~ poly(times, q), data = mcycle))
+data.frame(degree = degrees,
+           RSS = sapply(fits, function(f) round(sum(resid(f)^2))),
+           R2 = sapply(fits, function(f) round(summary(f)$r.squared, 3)),
+           AIC = sapply(fits, function(f) round(AIC(f), 1)))
+
+#' 
+#' The residual sum of squares keeps falling with the degree, but the curves
+#' oscillate near the ends of the data, where a polynomial has no neighbours on one
+#' side to hold it down.
+#' 
+## ----degree-plot--------------------------------------------------------------
+grid <- data.frame(times = seq(min(x), max(x), length.out = 400))
+plot(accel ~ times, data = mcycle, pch = 16, col = "grey60",
+     ylim = c(-160, 110), xlab = "Time (ms)", ylab = "Acceleration (g)")
+cols <- c("black", "red", "blue", "darkgreen", "orange", "purple")
+for (k in seq_along(degrees)) {
+  lines(grid$times, predict(fits[[k]], grid), col = cols[k], lwd = 2)
+}
+legend("bottomright", legend = paste("degree", degrees), col = cols,
+       lwd = 2, bty = "n", cex = 0.8)
+
+#' 
+#' ## 2. Raw powers are ill-conditioned
+#' 
+#' The condition number $\kappa(X)$ of the raw design $[1, x, \dots, x^q]$ grows
+#' explosively with $q$. With $q = 15$, `lm()` silently drops columns.
+#' 
+## ----conditioning-------------------------------------------------------------
+kappa_raw <- sapply(c(3, 5, 8, 10, 12), function(q) kappa(outer(x, 0:q, `^`), exact = TRUE))
+signif(kappa_raw, 3)
+fit_raw15 <- lm(accel ~ poly(times, 15, raw = TRUE), data = mcycle)
+sum(is.na(coef(fit_raw15)))   # coefficients lm() could not estimate
+
+#' 
+#' ## 3. Orthogonal polynomials with `poly()`
+#' 
+#' `poly(x, q)` returns columns $Q_1, \dots, Q_q$ that are polynomials of degree
+#' $1, \dots, q$ in $x$, have mean zero and are mutually orthogonal with unit
+#' norm: $Q^\top Q = I_q$. Because they have mean zero, they are also
+#' uncorrelated. They are **not** statistically independent random variables:
+#' $Q_2$ is a deterministic function of $Q_1$.
+#' 
+## ----orthogonal---------------------------------------------------------------
+Q <- poly(x, 3)
+round(crossprod(Q), 12)     # identity: orthonormal columns
+round(colMeans(Q), 12)      # mean zero, so also uncorrelated
+
+#' 
+#' ## 4. From orthogonal to raw coefficients: an exact conversion
+#' 
+#' Each column of $[1, Q]$ is a polynomial of degree at most 3, so
+#' $[1, Q] = X_{\text{raw}} A$ for an upper-triangular $4 \times 4$ matrix $A$.
+#' Then $[1, Q]\gamma = X_{\text{raw}} (A\gamma)$, and the raw coefficients are
+#' exactly $\beta = A\gamma$. No refitting on a grid is needed.
+#' 
+## ----convert------------------------------------------------------------------
+Xraw <- cbind(1, x, x^2, x^3)
+A <- solve(crossprod(Xraw), crossprod(Xraw, cbind(1, Q)))  # solves Xraw A = [1, Q]
+max(abs(Xraw %*% A - cbind(1, Q)))                           # zero up to rounding
+fit_orth <- lm(y ~ poly(x, 3))
+fit_raw  <- lm(y ~ poly(x, 3, raw = TRUE))
+cbind(converted = drop(A %*% coef(fit_orth)), raw_fit = coef(fit_raw))
+max(abs(fitted(fit_orth) - fitted(fit_raw)))                 # same fitted curve
+
+#' 
+#' ## 5. Choosing the degree by 5-fold cross-validation
+#' 
+#' The data are sorted by time. Folds must be **shuffled**: contiguous folds on
+#' sorted $x$ ask the model to extrapolate over a whole block of time.
+#' 
+## ----cv-degree----------------------------------------------------------------
+set.seed(2027)
+folds <- sample(rep(1:5, length.out = n))
+cv_degree <- function(q, folds) {
+  sse <- 0
+  for (k in unique(folds)) {
+    train <- folds != k
+    m <- lm(accel ~ poly(times, q), data = mcycle[train, ])
+    sse <- sse + sum((mcycle$accel[!train] - predict(m, mcycle[!train, ]))^2)
+  }
+  sse / n
+}
+cv <- sapply(1:15, cv_degree, folds = folds)
+round(cv, 1)
+which.min(cv)
+
+#' 
+#' Even the best polynomial leaves structured residuals: the fit is global, so the
+#' flat stretch before 14 ms and the sharp dip at about 20 ms compete for the same
+#' coefficients. Local methods (next file) remove this coupling.

@@ -1,0 +1,17 @@
+---
+title: "Session 17 — R examples index"
+subtitle: "Statistical Modelling (BAM)"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+date: "Spring 2027"
+output:
+  html_document:
+    theme: flatly
+---
+
+## Generalized linear mixed models
+
+- `17-cbpp-glmm.Rmd` (plain script: `17-cbpp-glmm.R`)
+- `17-marginal-vs-conditional.Rmd` (plain script: `17-marginal-vs-conditional.R`)
+- `17-poisson-olre.Rmd` (plain script: `17-poisson-olre.R`)
+
+Run each script from this folder. Data are loaded from R packages (`lme4`, `nlme`, `MASS`).

@@ -1,0 +1,101 @@
+# 15-random-intercept-slope.R --- plain-script version of 15-random-intercept-slope.Rmd
+# Statistical Modelling (BAM), IE University --- Prof. Dae-Jin Lee (daelee@faculty.ie.edu)
+# Run from the r-examples/ folder:  Rscript 15-random-intercept-slope.R
+
+#' ---
+#' title: "Session 15 — Random intercepts, random slopes and the implied covariance"
+#' author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+#' output: html_document
+#' ---
+#' 
+
+#' 
+#' Model notation (course table): groups $i = 1,\dots,m$, observations
+#' $j = 1,\dots,n_i$,
+#' $y_{ij} = \beta_0 + b_{0i} + (\beta_1 + b_{1i})x_{ij} + \varepsilon_{ij}$,
+#' $b \sim N(0, G)$, $\varepsilon \sim N(0, \sigma^2 I)$,
+#' $V = ZGZ^\top + \sigma^2 I$.
+#' 
+## ----data---------------------------------------------------------------------
+library(lme4)
+data(sleepstudy)
+
+#' 
+#' ## Random-intercept model
+#' 
+#' $y_{ij} = \beta_0 + \beta_1\,\mathrm{Days}_{ij} + b_{0i} + \varepsilon_{ij}$,
+#' $b_{0i} \sim N(0, \sigma_b^2)$.
+#' 
+## ----ri-----------------------------------------------------------------------
+m_ri <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+summary(m_ri)
+vc <- as.data.frame(VarCorr(m_ri))
+sigma_b2 <- vc$vcov[1]            # between-subject variance of intercepts
+sigma2   <- vc$vcov[2]            # within-subject (residual) variance
+c(sigma_b2 = sigma_b2, sigma2 = sigma2)
+ICC <- sigma_b2 / (sigma_b2 + sigma2)
+ICC
+
+#' 
+#' ### Compound symmetry: the implied covariance of one subject
+#' 
+#' For subject $i$, $Z_i = \mathbf 1_{10}$, so
+#' $V_i = \sigma_b^2 \mathbf 1 \mathbf 1^\top + \sigma^2 I_{10}$.
+#' 
+## ----cs-----------------------------------------------------------------------
+ni  <- 10
+V_i <- sigma_b2 * matrix(1, ni, ni) + sigma2 * diag(ni)
+round(V_i[1:4, 1:4], 1)
+round(cov2cor(V_i)[1:4, 1:4], 3)    # every off-diagonal entry equals the ICC
+
+#' 
+#' ## Random intercept and random slope
+#' 
+#' $y_{ij} = \beta_0 + b_{0i} + (\beta_1 + b_{1i})\,\mathrm{Days}_{ij} + \varepsilon_{ij}$,
+#' $(b_{0i}, b_{1i})^\top \sim N(0, G)$ with a 2 x 2 matrix $G$.
+#' 
+## ----ris----------------------------------------------------------------------
+m_ris <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+print(VarCorr(m_ris), comp = c("Variance", "Std.Dev."))
+G <- unclass(VarCorr(m_ris)$Subject)[1:2, 1:2]   # 2 x 2 covariance matrix of (b0i, b1i)
+G
+sigma2_ris <- sigma(m_ris)^2
+
+#' 
+#' ### Implied variance and correlation of one subject's measurements
+#' 
+#' $V_i = Z_i G Z_i^\top + \sigma^2 I$ with $Z_i = [\mathbf 1, \mathrm{Days}]$.
+#' 
+## ----ris-v--------------------------------------------------------------------
+Z_i  <- cbind(1, 0:9)
+V_i2 <- Z_i %*% G %*% t(Z_i) + sigma2_ris * diag(10)
+round(diag(V_i2), 0)              # variance grows (quadratically) with Days
+round(cov2cor(V_i2)[c(1, 5, 10), c(1, 5, 10)], 3)
+
+#' 
+#' ### Interpreting the variance components on the data scale
+#' 
+## ----interpret----------------------------------------------------------------
+beta  <- fixef(m_ris)
+sd_b1 <- sqrt(G[2, 2])
+# about 95% of subjects have a slope in this range (ms per day):
+beta["Days"] + c(-1.96, 1.96) * sd_b1
+
+#' 
+#' ## The design matrices lme4 builds
+#' 
+## ----design-------------------------------------------------------------------
+X <- getME(m_ris, "X")
+Z <- getME(m_ris, "Z")            # sparse, 180 x 36 (intercept and slope for 18 subjects)
+dim(X); dim(Z)
+as.matrix(Z[1:3, 1:4])
+
+#' 
+#' ## The same model in nlme
+#' 
+## ----nlme---------------------------------------------------------------------
+library(nlme)
+m_lme <- lme(Reaction ~ Days, random = ~ Days | Subject, data = sleepstudy)
+fixef(m_lme)
+VarCorr(m_lme)
+

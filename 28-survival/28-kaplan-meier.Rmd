@@ -1,0 +1,104 @@
+---
+title: "Session 28 — Kaplan–Meier and the log-rank test"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+Data: `survival::veteran`, the Veterans' Administration lung cancer trial
+(Kalbfleisch & Prentice 1980). 137 men with advanced inoperable lung cancer were
+randomised to a standard or a test chemotherapy. `time` is days from
+randomisation, `status` is 1 for death and 0 for censored.
+
+```{r data}
+library(survival)
+vet <- survival::veteran
+vet$trt <- factor(vet$trt, levels = 1:2, labels = c("standard", "test"))
+str(vet)
+table(vet$status)          # 128 deaths, 9 censored
+```
+
+## 1. Survival objects
+
+`Surv(time, status)` stores the pair $(y_i, \delta_i)$; censored times print with a `+`.
+
+```{r surv}
+head(Surv(vet$time, vet$status), 15)
+```
+
+## 2. Kaplan–Meier by hand for ten patients
+
+Rows 6–15 are ten squamous-cell patients on the standard treatment.
+
+```{r km-hand}
+sub10 <- vet[6:15, c("time", "status")]
+sub10[order(sub10$time), ]
+
+# event times, numbers at risk and deaths
+ev  <- sort(unique(sub10$time[sub10$status == 1]))
+n_j <- sapply(ev, function(t) sum(sub10$time >= t))
+d_j <- sapply(ev, function(t) sum(sub10$time == t & sub10$status == 1))
+S   <- cumprod(1 - d_j / n_j)
+gw  <- cumsum(d_j / (n_j * (n_j - d_j)))      # Greenwood sum
+data.frame(t = ev, n = n_j, d = d_j, S = round(S, 4),
+           se = round(S * sqrt(gw), 4))
+```
+
+The same numbers from `survfit()`:
+
+```{r km-check}
+km10 <- survfit(Surv(time, status) ~ 1, data = sub10)
+summary(km10)
+km10        # median = 82 days: first time with S(t) <= 0.5
+```
+
+## 3. Kaplan–Meier by treatment and by cell type
+
+```{r km-groups}
+km_trt <- survfit(Surv(time, status) ~ trt, data = vet)
+km_trt                                   # medians with 95% CIs
+summary(km_trt, times = c(90, 180, 365)) # survival at fixed times
+
+km_cell <- survfit(Surv(time, status) ~ celltype, data = vet)
+km_cell
+```
+
+```{r km-plot, fig.width = 7, fig.height = 4.5}
+plot(km_trt, col = c("navy", "firebrick"), lwd = 2, conf.int = TRUE, mark.time = TRUE,
+     xlab = "Days", ylab = "Estimated S(t)")
+legend("topright", c("standard", "test"), col = c("navy", "firebrick"), lwd = 2, bty = "n")
+```
+
+## 4. Log-rank test
+
+At each event time the test compares the observed deaths in a group with the deaths
+expected if both groups had the same hazard, $E_{1j} = n_{1j} d_j / n_j$, and adds
+the hypergeometric variances.
+
+```{r logrank}
+survdiff(Surv(time, status) ~ trt, data = vet)       # chi-sq = 0.008, p = 0.93
+survdiff(Surv(time, status) ~ celltype, data = vet)  # chi-sq = 25.4 on 3 df
+```
+
+The same statistic by hand for treatment:
+
+```{r logrank-hand}
+tj <- sort(unique(vet$time[vet$status == 1]))
+parts <- t(sapply(tj, function(t) {
+  at_risk <- vet$time >= t
+  n  <- sum(at_risk); n1 <- sum(at_risk & vet$trt == "standard")
+  d  <- sum(vet$time == t & vet$status == 1)
+  d1 <- sum(vet$time == t & vet$status == 1 & vet$trt == "standard")
+  c(O = d1, E = n1 * d / n,
+    V = if (n > 1) n1 * (n - n1) * d * (n - d) / (n^2 * (n - 1)) else 0)
+}))
+O <- sum(parts[, "O"]); E <- sum(parts[, "E"]); V <- sum(parts[, "V"])
+c(O = O, E = E, V = V, chisq = (O - E)^2 / V)
+```
+
+**Reading.** The two treatment curves cross and the log-rank test finds no difference
+($\chi^2_1 = 0.008$, $p = 0.93$). Cell type matters: median survival is about 51 days
+for small-cell and adeno tumours and 118–156 days for squamous and large-cell tumours.

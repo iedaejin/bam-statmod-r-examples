@@ -1,0 +1,88 @@
+#' ---
+#' title: "Session 27 — gamm(): the $gam and $lme parts, and correlated residuals"
+#' subtitle: "Statistical Modelling (BAM), IE University"
+#' author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+#' date: "Spring 2027"
+#' output: html_document
+#' ---
+#' 
+## ----setup, include = FALSE---------------------------------------------------
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 7, fig.height = 4)
+
+#' 
+## ----packages-----------------------------------------------------------------
+library(mgcv)
+library(nlme)
+
+#' 
+#' ## 1. What `gamm()` returns
+#' 
+## ----components---------------------------------------------------------------
+ox <- as.data.frame(nlme::Oxboys)
+ox$Subject <- factor(as.character(ox$Subject))
+g2 <- gamm(height ~ s(age), random = list(Subject = ~ 1 + age), data = ox, method = "REML")
+names(g2)
+class(g2$gam); class(g2$lme)
+summary(g2$gam)$s.table          # smooth terms: use $gam
+VarCorr(g2$lme)                  # variance components: use $lme
+logLik(g2$lme)                   # likelihood-based comparisons: use $lme
+
+#' 
+#' In `VarCorr(g2$lme)` the smooth `s(age)` appears as the block `Xr` of a
+#' dummy group `g`: its penalized coefficients are random effects with one
+#' common variance.
+#' 
+#' ## 2. Serial correlation in daily ozone: `corAR1`
+#' 
+## ----ar1----------------------------------------------------------------------
+aq <- airquality
+aq$day <- seq_len(nrow(aq))      # day of season, 1 = 1 May
+aq <- na.omit(aq)
+f <- log(Ozone) ~ s(Solar.R) + s(Wind) + s(Temp)
+m0  <- gamm(f, data = aq, method = "REML")
+mar <- gamm(f, data = aq, method = "REML", correlation = corAR1(form = ~ day))
+mar$lme$modelStruct$corStruct
+anova(m0$lme, mar$lme)
+round(rbind(independent = summary(m0$gam)$edf, AR1 = summary(mar$gam)$edf), 3)
+
+#' 
+#' `corAR1(form = ~ day)` uses the integer day: two observations
+#' $\Delta$ days apart have correlation $\phi^{|\Delta|}$, so gaps from missing
+#' days are handled.
+#' 
+## ----gaps---------------------------------------------------------------------
+cs <- Initialize(corAR1(0.5, form = ~ day), data = aq[1:6, ])
+aq$day[1:6]
+round(corMatrix(cs), 3)
+
+#' 
+#' Here $\hat\phi = 0.13$ and the likelihood-ratio test gives $p = 0.21$: the
+#' weather covariates explain most of the day-to-day dependence.
+#' 
+#' ## 3. Normalised residuals
+#' 
+## ----resid--------------------------------------------------------------------
+r <- residuals(mar$lme, type = "normalized")
+ok <- diff(aq$day) == 1
+c(lag1_raw = cor(residuals(m0$lme, type = "normalized")[-nrow(aq)][ok],
+                 residuals(m0$lme, type = "normalized")[-1][ok]),
+  lag1_ar1 = cor(r[-length(r)][ok], r[-1][ok]))
+plot(fitted(mar$lme), r, xlab = "fitted", ylab = "normalized residual"); abline(h = 0, lty = 2)
+
+#' 
+#' ## 4. A warning: random effects and AR(1) can compete
+#' 
+## ----compete------------------------------------------------------------------
+ox$occ <- as.integer(ox$Occasion)
+gc1 <- gamm(height ~ s(age), random = list(Subject = ~ 1),
+            correlation = corAR1(form = ~ occ | Subject), data = ox, method = "REML")
+gc1$lme$modelStruct$corStruct
+VarCorr(gc1$lme)[c("(Intercept)", "Residual"), ]
+
+#' 
+#' With only a random intercept, the AR(1) parameter goes to $\hat\phi\approx1$
+#' and the random-intercept variance to almost 0: a nearly constant
+#' correlation within a boy can be explained by either. Prefer the structure
+#' that matches the design (here random intercepts and slopes) and compare
+#' alternatives by AIC from `$lme`.

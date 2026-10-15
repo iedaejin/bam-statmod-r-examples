@@ -1,0 +1,73 @@
+# 17-marginal-vs-conditional.R --- plain-script version of 17-marginal-vs-conditional.Rmd
+# Statistical Modelling (BAM), IE University --- Prof. Dae-Jin Lee (daelee@faculty.ie.edu)
+# Run from the r-examples/ folder:  Rscript 17-marginal-vs-conditional.R
+
+#' ---
+#' title: "Session 17 — Conditional vs marginal effects in a logistic GLMM"
+#' author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+#' output: html_document
+#' ---
+#' 
+
+#' 
+#' In a logistic random-intercept model the coefficient $\beta_C$ describes the
+#' change in log-odds **for a given cluster** (conditional, subject-specific).
+#' The population-averaged (marginal) curve
+#' $P(y=1\mid x) = \int \mathrm{expit}(\beta_0 + \beta_C x + b)\,\phi(b;0,\sigma_b^2)\,db$
+#' is flatter. Approximation (Zeger, Liang and Albert, 1988):
+#' $\beta_M \approx \beta_C/\sqrt{1 + c^2\sigma_b^2}$, $c^2 = (16\sqrt3/(15\pi))^2 \approx 0.346$.
+#' 
+## ----constant-----------------------------------------------------------------
+(16 * sqrt(3) / (15 * pi))^2
+
+#' 
+#' ## Simulate clustered binary data
+#' 
+## ----simulate-----------------------------------------------------------------
+library(lme4)
+set.seed(2027)
+m <- 2000; n_i <- 10                      # 2000 clusters of 10
+beta0 <- -1; betaC <- 1; sigma_b <- 2
+id <- rep(1:m, each = n_i)
+x  <- rnorm(m * n_i)
+b  <- rnorm(m, 0, sigma_b)[id]
+y  <- rbinom(m * n_i, 1, plogis(beta0 + betaC * x + b))
+d  <- data.frame(y, x, id = factor(id))
+
+#' 
+#' ## Fit the GLMM (conditional) and a GLM (marginal)
+#' 
+#' The ordinary `glm()` ignoring clusters estimates the marginal coefficients
+#' consistently (it is the GEE estimator with an independence working
+#' correlation); only its standard errors are wrong.
+#' 
+## ----fits---------------------------------------------------------------------
+fit_glmm <- glmer(y ~ x + (1 | id), family = binomial, data = d)
+fit_glm  <- glm(y ~ x, family = binomial, data = d)
+rbind(true_conditional = c(beta0, betaC),
+      glmer            = fixef(fit_glmm),
+      glm_marginal     = coef(fit_glm),
+      approximation    = c(beta0, betaC) / sqrt(1 + 0.346 * sigma_b^2))
+
+#' 
+#' ## The exact marginal curve by numerical integration
+#' 
+## ----curve--------------------------------------------------------------------
+xs <- seq(-3, 3, by = 0.05)
+p_marg <- sapply(xs, function(x0)
+  integrate(function(bb) plogis(beta0 + betaC * x0 + bb) * dnorm(bb, 0, sigma_b),
+            -Inf, Inf)$value)
+coef(lm(qlogis(p_marg) ~ xs))      # the marginal curve is close to a logistic one
+plot(xs, plogis(beta0 + betaC * xs), type = "l", lwd = 2, ylim = c(0, 1),
+     xlab = "x", ylab = "P(y = 1 | x)")
+lines(xs, p_marg, lwd = 2, lty = 2)
+legend("topleft", c("typical cluster (b = 0)", "population average"),
+       lwd = 2, lty = 1:2, bty = "n")
+
+#' 
+#' ## How the attenuation depends on $\sigma_b$
+#' 
+## ----factor-------------------------------------------------------------------
+sig <- c(0.5, 1, 2, 3)
+cbind(sigma_b = sig, factor = 1 / sqrt(1 + 0.346 * sig^2))
+

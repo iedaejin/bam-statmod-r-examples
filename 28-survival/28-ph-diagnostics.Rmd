@@ -1,0 +1,84 @@
+---
+title: "Session 28 — Checking proportional hazards and fixing a violation"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+```{r data}
+library(survival)
+vet <- survival::veteran
+vet$trt <- factor(vet$trt, levels = 1:2, labels = c("standard", "test"))
+fit <- coxph(Surv(time, status) ~ trt + karno + celltype + age, data = vet)
+```
+
+## 1. Scaled Schoenfeld residuals: `cox.zph()`
+
+If $\beta_k$ is really $\beta_k(t)$, the scaled Schoenfeld residuals plus $\hat\beta_k$
+track $\beta_k(t)$ (Grambsch & Therneau 1994). `cox.zph()` tests for a slope in time
+(default time scale: the Kaplan–Meier transform).
+
+```{r zph, fig.width = 7, fig.height = 4.5}
+zp <- cox.zph(fit)
+zp                                  # karno p = 0.0003, celltype p = 0.002
+plot(zp[2], resid = TRUE, se = TRUE, lwd = 2)
+abline(h = coef(fit)["karno"], col = "firebrick", lty = 2)
+```
+
+## 2. Graphical check: $\log\{-\log \hat S(t)\}$ against $\log t$
+
+Under PH, $\log H(t \mid x) = \log H_0(t) + x^\top\beta$: the curves for groups are
+parallel (vertical shift $\beta$).
+
+```{r loglog, fig.width = 7, fig.height = 4.5}
+vet$kgrp <- cut(vet$karno, c(0, 40, 60, 100), labels = c("10-40", "50-60", "70-99"))
+km_k <- survfit(Surv(time, status) ~ kgrp, data = vet)
+plot(km_k, fun = "cloglog", col = c("navy", "firebrick", "royalblue"), lwd = 2,
+     xlab = "Days (log scale)", ylab = "log(-log S(t))")
+legend("topleft", levels(vet$kgrp), col = c("navy", "firebrick", "royalblue"), lwd = 2, bty = "n")
+```
+
+## 3. Remedy A: stratify on Karnofsky group
+
+Each stratum gets its own baseline hazard; no coefficient is estimated for karno.
+
+```{r strata}
+fit_s <- coxph(Surv(time, status) ~ trt + celltype + age + strata(kgrp), data = vet)
+summary(fit_s)$coefficients
+cox.zph(fit_s)
+```
+
+## 4. Remedy B: a time-varying coefficient (step function)
+
+Split follow-up at 90 and 180 days and let karno have one coefficient per interval.
+
+```{r step}
+vs <- survSplit(Surv(time, status) ~ ., data = vet, cut = c(90, 180),
+                episode = "tgroup", id = "id")
+fit_t <- coxph(Surv(tstart, time, status) ~ trt + celltype + age + karno:strata(tgroup),
+               data = vs)
+round(summary(fit_t)$coefficients, 4)
+cox.zph(fit_t)
+AIC(fit, fit_t)        # same risk sets, so the partial likelihoods are comparable
+```
+
+## 5. Remedy C: a smooth time-varying coefficient with `tt()`
+
+$\beta_{\text{karno}}(t) = a + b \log(t + 20)$.
+
+```{r tt}
+fit_tt <- coxph(Surv(time, status) ~ trt + celltype + age + karno + tt(karno), data = vet,
+                tt = function(x, t, ...) x * log(t + 20))
+b <- coef(fit_tt)
+round(summary(fit_tt)$coefficients, 4)
+sapply(c(30, 90, 180, 365), function(t) b["karno"] + b["tt(karno)"] * log(t + 20))
+```
+
+**Reading.** The Karnofsky score strongly predicts early deaths (coefficient about
+$-0.048$ per point in the first 90 days, HR per 10 points $e^{-0.48} = 0.62$) but has
+essentially no effect after 90 days. A single constant HR (0.72 per 10 points) averages
+these two regimes. Cell type is also flagged by `cox.zph()`; stratifying on it as well
+is a reasonable next step (exercise).

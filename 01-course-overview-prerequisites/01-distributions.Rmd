@@ -1,0 +1,114 @@
+---
+title: "Session 1 — Probability distributions in R"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+Every distribution in R has four functions: `d` (density or mass), `p` (CDF), `q` (quantile) and `r` (random draws). The distributions below come back all term: the binomial and Poisson in GLMs (sessions 9–12), the normal in linear and mixed models (sessions 5–8 and 15–19), the exponential and gamma in GLMs and survival (session 28).
+
+```{r setup, include=FALSE, purl=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## d, p, q, r
+
+```{r dpqr}
+dnorm(0)                      # density of N(0, 1) at 0 = 1/sqrt(2 pi)
+pnorm(1.96) - pnorm(-1.96)    # P(|Z| < 1.96)
+qnorm(0.975)                  # the 1.96 itself
+
+dbinom(3, size = 10, prob = 0.2)   # P(Y = 3), Y ~ Bin(10, 0.2)
+ppois(2, lambda = 4)               # P(Y <= 2), Y ~ Poisson(4)
+qexp(0.5, rate = 1/3)              # median of Exp(mean 3) = 3 log 2
+pgamma(2, shape = 2, rate = 1)     # P(Y <= 2), Y ~ Gamma(shape 2, rate 1)
+```
+
+## Mean and variance by simulation
+
+| Distribution | Mean | Variance |
+|---|---|---|
+| Bernoulli($\pi$) | $\pi$ | $\pi(1-\pi)$ |
+| Bin($m$, $\pi$) | $m\pi$ | $m\pi(1-\pi)$ |
+| Poisson($\lambda$) | $\lambda$ | $\lambda$ |
+| Exponential(rate $\lambda$) | $1/\lambda$ | $1/\lambda^2$ |
+| Gamma(shape $\alpha$, rate $\lambda$) | $\alpha/\lambda$ | $\alpha/\lambda^2$ |
+
+```{r moments}
+set.seed(2027)
+B <- 1e5
+sims <- list(
+  bernoulli   = rbinom(B, size = 1, prob = 0.3),
+  binomial    = rbinom(B, size = 10, prob = 0.2),
+  poisson     = rpois(B, lambda = 4),
+  exponential = rexp(B, rate = 1/3),
+  gamma       = rgamma(B, shape = 2, rate = 0.5)
+)
+theory <- rbind(c(0.3, 0.21), c(2, 1.6), c(4, 4), c(3, 9), c(4, 8))
+sim <- t(sapply(sims, function(s) c(mean(s), var(s))))
+out <- round(cbind(sim, theory), 2)
+colnames(out) <- c("sim mean", "sim var", "mean", "var")
+out
+```
+
+The exponential is the gamma with shape $\alpha = 1$. For the gamma the variance is $\mu^2/\alpha$, so it grows with the square of the mean. That is the mean–variance relationship of the Gamma GLM (session 9).
+
+## Real counts: great discoveries per year
+
+`discoveries` (package `datasets`) counts the "great" inventions and scientific discoveries in each year from 1860 to 1959 ($n = 100$). If the counts were Poisson, the mean and the variance would be close.
+
+```{r discoveries}
+y <- as.numeric(discoveries)
+c(n = length(y), mean = mean(y), var = var(y), ratio = var(y) / mean(y))
+
+obs <- table(factor(y, levels = 0:12))
+expected <- length(y) * dpois(0:12, lambda = mean(y))
+round(rbind(observed = obs, poisson = expected), 1)
+```
+
+The variance (5.08) is larger than the mean (3.1), and the Poisson fit expects 4.5 years with no discovery where 9 were observed. Variance larger than the mean is overdispersion; we model it in session 10.
+
+## Random vectors: $\mathbb E[AY] = A\mu$ and $\mathrm{Var}(AY) = A\Sigma A^\top$
+
+Simulate a bivariate normal with `MASS::mvrnorm()` and check the two rules. Take $\mu = (1, 2)^\top$, $\Sigma = \begin{pmatrix} 4 & 2\\ 2 & 3\end{pmatrix}$ and $A = \begin{pmatrix} 1 & 1\\ 1 & -1\end{pmatrix}$, so $AY = (Y_1 + Y_2,\ Y_1 - Y_2)^\top$.
+
+```{r mvn}
+library(MASS)
+mu    <- c(1, 2)
+Sigma <- matrix(c(4, 2,
+                  2, 3), nrow = 2)
+A     <- matrix(c(1,  1,
+                  1, -1), nrow = 2, byrow = TRUE)
+
+drop(A %*% mu)             # theory: E[AY]
+A %*% Sigma %*% t(A)       # theory: Var(AY)
+
+set.seed(2027)
+Y  <- mvrnorm(1e5, mu = mu, Sigma = Sigma)   # n x 2, one draw per row
+AY <- Y %*% t(A)                             # each row is (A y_i)^T
+round(colMeans(AY), 2)
+round(var(AY), 2)
+```
+
+Note the transpose: draws are stored as rows, so the transformation is `Y %*% t(A)`.
+
+## Law of large numbers
+
+```{r lln, fig.height=3.5, fig.width=6}
+set.seed(2027)
+x <- rexp(5000, rate = 1/3)
+plot(cumsum(x) / seq_along(x), type = "l", log = "x",
+     xlab = "n", ylab = "running mean")
+abline(h = 3, lty = 2)
+```
+
+## Central limit theorem
+
+Means of $n = 30$ draws from a skewed exponential are close to normal, with standard deviation $\sigma/\sqrt n$.
+
+```{r clt, fig.height=3.5, fig.width=6}
+set.seed(2027)
+means <- replicate(10000, mean(rexp(30, rate = 1/3)))
+hist(means, breaks = 50, freq = FALSE, main = "", xlab = "sample mean (n = 30)")
+curve(dnorm(x, mean = 3, sd = 3 / sqrt(30)), add = TRUE, lwd = 2)
+c(sd_sim = sd(means), sd_theory = 3 / sqrt(30))
+```

@@ -1,0 +1,81 @@
+---
+title: "Session 06 — Model selection with AIC, BIC and Mallows' Cp"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+`faraway::prostate`: 97 men about to undergo radical prostatectomy. Response
+`lpsa` = log prostate-specific antigen; eight clinical predictors.
+
+```{r data}
+library(faraway)
+data(prostate)
+full <- lm(lpsa ~ ., data = prostate)
+n <- nrow(prostate)
+```
+
+## AIC() vs extractAIC()
+
+`AIC()` uses the full Gaussian log-likelihood and counts $\sigma^2$ as a parameter.
+`extractAIC()` (used by `step()`) drops constants: $n\log(\mathrm{RSS}/n)+2p$.
+Differences between models fitted to the same data are identical.
+
+```{r aic-versions}
+k <- length(coef(full)) + 1                      # 9 betas + sigma^2
+c(AIC = AIC(full),
+  by_hand = -2 * as.numeric(logLik(full)) + 2 * k,
+  extractAIC = extractAIC(full)[2],
+  by_hand2 = n * log(deviance(full) / n) + 2 * length(coef(full)))
+AIC(full) - extractAIC(full)[2]                  # constant n log(2 pi) + n + 2
+n * log(2 * pi) + n + 2
+```
+
+## Backward stepwise selection
+
+```{r step}
+m_aic <- step(full, trace = 0)                   # penalty 2 per parameter
+m_bic <- step(full, trace = 0, k = log(n))       # penalty log(n) = 4.57
+formula(m_aic); formula(m_bic)
+c(AIC_full = AIC(full), AIC_sel = AIC(m_aic), BIC_full = BIC(full), BIC_sel = BIC(m_bic))
+```
+
+## Best subsets and Mallows' Cp
+
+`leaps::regsubsets()` reports `rsq`, `rss`, `adjr2`, `cp` and `bic` (no AIC).
+Its $C_p = \mathrm{RSS}_p/\hat\sigma^2_{\text{full}} - n + 2p$ counts the intercept in $p$.
+
+```{r regsubsets}
+library(leaps)
+rs <- regsubsets(lpsa ~ ., data = prostate, nvmax = 8)
+ss <- summary(rs)
+names(ss)
+p <- 2:9                                          # columns incl. intercept
+sigma2_full <- deviance(full) / (n - 9)
+round(cbind(p = p, rss = ss$rss, cp = ss$cp,
+            cp_by_hand = ss$rss / sigma2_full - n + 2 * p,
+            bic = ss$bic, adjr2 = ss$adjr2), 3)
+ss$which[which.min(ss$cp), ]
+```
+
+## Why p-values after selection mislead
+
+Pure noise: $y$ is unrelated to 20 predictors. Select by AIC, then look at the
+"significant" survivors.
+
+```{r post-selection}
+set.seed(66)
+nsim <- 200
+out <- replicate(nsim, {
+  d <- as.data.frame(matrix(rnorm(100 * 21), 100, 21))
+  names(d)[1] <- "y"
+  sel <- step(lm(y ~ ., data = d), trace = 0)
+  pv <- coef(summary(sel))[-1, 4, drop = FALSE]
+  c(n_kept = nrow(pv), n_sig = sum(pv < 0.05))
+})
+rowMeans(out)            # on average several noise variables kept, many with p < 0.05
+mean(out["n_sig", ] > 0) # share of data sets with at least one "significant" noise term
+```

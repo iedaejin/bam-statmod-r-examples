@@ -1,0 +1,77 @@
+---
+title: "Session 05 — Least squares in matrix form"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+We use the `savings` data from `faraway` throughout the linear-model block:
+50 countries, 1960–1970 averages. Response `sr` is aggregate personal savings
+as a percentage of disposable income.
+
+```{r data}
+library(faraway)
+data(savings)
+head(savings, 3)
+dim(savings)
+```
+
+## Design matrix and normal equations
+
+`model.matrix()` builds $X$ ($n \times p$, including the column of ones).
+We solve the normal equations $X^\top X\beta = X^\top y$ directly.
+
+```{r normal-equations}
+fit <- lm(sr ~ pop15 + pop75 + dpi + ddpi, data = savings)
+X <- model.matrix(fit)          # 50 x 5
+y <- savings$sr
+n <- nrow(X); p <- ncol(X)
+XtX <- crossprod(X)             # X'X, cost O(n p^2)
+Xty <- crossprod(X, y)          # X'y
+beta_hat <- solve(XtX, Xty)     # solves the system; never use solve(XtX) %*% Xty
+cbind(normal_eq = drop(beta_hat), lm = coef(fit))
+```
+
+## The hat matrix
+
+$H = X(X^\top X)^{-1}X^\top$ maps $y$ to the fitted values: $\hat y = Hy$.
+
+```{r hat-matrix}
+H <- X %*% solve(XtX, t(X))
+max(abs(H - t(H)))              # symmetric
+max(abs(H %*% H - H))           # idempotent
+sum(diag(H))                    # trace = p = 5
+max(abs(H %*% y - fitted(fit))) # fitted values are H y
+e <- resid(fit)
+max(abs(crossprod(X, e)))       # residuals orthogonal to every column of X
+sum(e)                          # so they sum to zero (intercept column)
+```
+
+## Computation with the QR decomposition
+
+`lm()` never forms $X^\top X$. It factorizes $X = QR$ and solves $R\beta = Q^\top y$
+by back-substitution. The condition number of $X^\top X$ is the square of that of $X$.
+
+```{r qr}
+qrX <- qr(X)
+R <- qr.R(qrX); Q <- qr.Q(qrX)
+beta_qr <- backsolve(R, crossprod(Q, y))
+drop(beta_qr)
+kappa(X, exact = TRUE)^2
+kappa(XtX, exact = TRUE)
+```
+
+## Rank deficiency
+
+If one column is a linear combination of others, $X^\top X$ is singular and
+$\beta$ is not identifiable. The fitted values are still unique.
+
+```{r rank-deficient}
+savings$pop_rest <- 100 - savings$pop15 - savings$pop75   # % aged 15--75
+fit_bad <- lm(sr ~ pop15 + pop75 + pop_rest + dpi + ddpi, data = savings)
+coef(fit_bad)                                  # one coefficient is NA
+max(abs(fitted(fit_bad) - fitted(fit)))         # same fitted values
+```

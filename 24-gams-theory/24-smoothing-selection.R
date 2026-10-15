@@ -1,0 +1,131 @@
+#' ---
+#' title: "Session 24 — Choosing smoothing parameters, k, and inference"
+#' subtitle: "Statistical Modelling (BAM), IE University"
+#' author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+#' date: "Spring 2027"
+#' output: html_document
+#' ---
+#' 
+## ----setup, include = FALSE---------------------------------------------------
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 7, fig.height = 4)
+
+#' 
+## ----packages-----------------------------------------------------------------
+library(mgcv)
+aq <- na.omit(airquality[, c("Ozone", "Solar.R", "Wind", "Temp")])
+aq$ly <- log(aq$Ozone)
+n <- nrow(aq)
+
+#' 
+#' ## 1. GCV, REML and ML give different amounts of smoothing
+#' 
+#' `mgcv`'s default is `method = "GCV.Cp"` (GCV when the scale is unknown,
+#' UBRE/$C_p$ when it is known).
+#' 
+## ----methods------------------------------------------------------------------
+f <- ly ~ s(Solar.R) + s(Wind) + s(Temp)
+fits <- list(GCV  = gam(f, data = aq),                  # default GCV.Cp
+             REML = gam(f, data = aq, method = "REML"),
+             ML   = gam(f, data = aq, method = "ML"))
+fits$GCV$method
+sapply(fits, function(m) round(summary(m)$edf, 2))
+sapply(fits, function(m) round(sum(m$edf), 2))          # total edf incl. intercept
+sapply(fits, function(m) signif(m$sp, 3))
+
+#' 
+#' ML gives the **smoothest** fit (largest $\lambda$, smallest edf). GCV gives
+#' the wiggliest `s(Temp)`. REML sits in between.
+#' 
+#' ## 2. The criteria as functions of $\lambda$ (single smooth)
+#' 
+## ----curves-------------------------------------------------------------------
+f0 <- gam(ly ~ s(Temp), data = aq, method = "REML")
+X <- model.matrix(f0); S <- f0$smooth[[1]]$S[[1]]; p <- ncol(X); y <- aq$ly
+crit <- t(sapply(seq(-7, 12, by = 0.1), function(L) {
+  Sl <- matrix(0, p, p); Sl[2:p, 2:p] <- exp(L) * S
+  M <- crossprod(X) + Sl; b <- solve(M, crossprod(X, y))
+  rss <- sum((y - X %*% b)^2); trA <- sum(diag(solve(M, crossprod(X))))
+  c(L = L, edf = trA - 1, GCV = n * rss / (n - trA)^2)
+}))
+crit[which.min(crit[, "GCV"]), ]
+gam(ly ~ s(Temp), data = aq)$sp |> log()          # mgcv's GCV optimum
+plot(crit[, "L"], crit[, "GCV"], type = "l", xlab = "log(lambda)", ylab = "GCV")
+
+#' 
+#' ## 3. GCV for any linear smoother: use the trace
+#' 
+#' $\mathcal V_g=n\,\text{RSS}/\{n-\operatorname{tr}(A)\}^2$. For `loess`, the
+#' trace of the smoother matrix is `fit$trace.hat`. The component `fit$enp`
+#' ("equivalent number of parameters") is a different quantity and must not be
+#' used in GCV.
+#' 
+## ----loess--------------------------------------------------------------------
+gcv_loess <- function(span, use = c("trace.hat", "enp")) {
+  use <- match.arg(use)
+  lo <- loess(ly ~ Temp, data = aq, span = span)
+  n * sum(resid(lo)^2) / (n - lo[[use]])^2
+}
+spans <- seq(0.2, 1, by = 0.05)
+tab <- data.frame(span = spans,
+                  trace.hat = sapply(spans, gcv_loess, use = "trace.hat"),
+                  enp = sapply(spans, gcv_loess, use = "enp"))
+head(round(tab, 5))
+lo <- loess(ly ~ Temp, data = aq, span = 0.5)
+c(trace.hat = lo$trace.hat, enp = lo$enp)
+
+#' 
+#' ## 4. The basis dimension k and `gam.check()`
+#' 
+## ----kcheck-------------------------------------------------------------------
+set.seed(24)
+xs <- runif(200); ys <- 2 * sin(4 * pi * xs) + rnorm(200, sd = 0.5)
+ds <- data.frame(x = xs, y = ys)
+k5  <- gam(y ~ s(x, k = 5),  data = ds, method = "REML")
+k20 <- gam(y ~ s(x, k = 20), data = ds, method = "REML")
+set.seed(1); k.check(k5)     # edf close to k' = 4, k-index far below 1
+set.seed(1); k.check(k20)    # k-index about 1: k is large enough
+
+#' 
+#' On the airquality model:
+#' 
+## ----gamcheck, fig.height = 6-------------------------------------------------
+g <- fits$REML
+set.seed(1)
+gam.check(g)
+
+#' 
+#' The $p$-values of the k-index come from a permutation test, hence the
+#' `set.seed()`.
+#' 
+#' ## 5. Posterior simulation and credible intervals
+#' 
+#' $\boldsymbol\beta\mid\boldsymbol y\approx N(\hat{\boldsymbol\beta},V_\beta)$ with
+#' `V_beta = vcov(g)`.
+#' 
+## ----posterior----------------------------------------------------------------
+wg <- seq(min(aq$Wind), max(aq$Wind), length.out = 100)
+nd <- data.frame(Solar.R = 207, Wind = wg, Temp = 79)
+Xp <- predict(g, nd, type = "lpmatrix")
+idx <- g$smooth[[2]]$first.para:g$smooth[[2]]$last.para
+set.seed(2024)
+br <- rmvn(1000, coef(g), vcov(g))
+fsim <- Xp[, idx] %*% t(br[, idx])
+fhat <- drop(Xp[, idx] %*% coef(g)[idx])
+se <- sqrt(rowSums((Xp[, idx] %*% vcov(g)[idx, idx]) * Xp[, idx]))
+inside <- abs(fsim - fhat) <= 1.96 * se
+c(pointwise = mean(inside), whole_curve = mean(apply(inside, 2, all)))
+
+#' 
+#' About 95% of the draws are inside the band at each $x$, but only about 71% of
+#' whole curves stay inside everywhere: the band is pointwise, not simultaneous.
+#' 
+#' ## 6. Approximate p-values and smoothing-parameter uncertainty
+#' 
+## ----pvals--------------------------------------------------------------------
+summary(g)$s.table
+# Standard errors conditional on lambda-hat vs corrected for its uncertainty
+idx <- g$smooth[[2]]$first.para:g$smooth[[2]]$last.para
+round(cbind(conditional = sqrt(diag(vcov(g)))[idx],
+            unconditional = sqrt(diag(vcov(g, unconditional = TRUE)))[idx]), 4)[1:4, ]
+

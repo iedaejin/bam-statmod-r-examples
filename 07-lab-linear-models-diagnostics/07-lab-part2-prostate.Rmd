@@ -1,0 +1,61 @@
+---
+title: "Session 07 — Lab 02 walk-through, Part 2: selection and the lasso"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+The guided code of Lab 02, Part 2 (`prostate`). Data: `data/prostate.csv` (from `faraway::prostate`).
+
+## Split first
+
+```{r split}
+library(glmnet)
+prostate <- read.csv("data/prostate.csv")
+set.seed(2027)
+test_id <- sample(nrow(prostate), 30)       # positions in 1:97
+train <- prostate[-test_id, ]
+test  <- prostate[test_id, ]
+stopifnot(length(intersect(rownames(train), rownames(test))) == 0)
+```
+
+## Stepwise selection on the training data
+
+```{r step}
+full_tr <- lm(lpsa ~ ., data = train)
+m_aic <- step(full_tr, trace = 0)
+formula(m_aic)
+```
+
+## Lasso with fixed folds
+
+```{r lasso, fig.width=9, fig.height=4}
+x_tr <- as.matrix(train[, names(train) != "lpsa"])
+x_te <- as.matrix(test[, names(test) != "lpsa"])
+set.seed(2028)
+foldid <- sample(rep(1:10, length.out = nrow(train)))
+cv <- cv.glmnet(x_tr, train$lpsa, alpha = 1, foldid = foldid)
+c(lambda_min = cv$lambda.min, lambda_1se = cv$lambda.1se)
+par(mfrow = c(1, 2))
+plot(cv)
+plot(cv$glmnet.fit, xvar = "lambda", label = TRUE)
+```
+
+## Test error, and what leakage does
+
+```{r test}
+mse <- function(pred) mean((test$lpsa - pred)^2)
+round(c(null      = mse(mean(train$lpsa)),
+        ols_full  = mse(predict(full_tr, test)),
+        step_aic  = mse(predict(m_aic, test)),
+        lasso_min = mse(predict(cv, x_te, s = "lambda.min")),
+        lasso_1se = mse(predict(cv, x_te, s = "lambda.1se"))), 3)
+x_all <- as.matrix(prostate[, names(prostate) != "lpsa"])
+set.seed(2028)
+cv_leaky <- cv.glmnet(x_all, prostate$lpsa, alpha = 1,
+                      foldid = sample(rep(1:10, length.out = nrow(prostate))))
+mse(predict(cv_leaky, x_te, s = "lambda.min"))   # too optimistic: test rows were used
+```

@@ -1,0 +1,87 @@
+#' ---
+#' title: "Session 23 — First GAMs with mgcv: Gaussian, Gamma and binomial"
+#' subtitle: "Statistical Modelling (BAM), IE University"
+#' author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+#' date: "Spring 2027"
+#' output: html_document
+#' ---
+#' 
+## ----setup, include = FALSE---------------------------------------------------
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 8, fig.height = 3.6)
+
+#' 
+## ----packages-----------------------------------------------------------------
+library(mgcv)
+library(MASS)     # Pima.tr, Pima.te
+aq <- na.omit(airquality[, c("Ozone", "Solar.R", "Wind", "Temp")])
+
+#' 
+#' ## 1. Gaussian GAM for log(Ozone): reading `summary()`
+#' 
+## ----gauss--------------------------------------------------------------------
+m_log <- gam(log(Ozone) ~ s(Solar.R) + s(Wind) + s(Temp),
+             data = aq, method = "REML")
+summary(m_log)
+
+#' 
+#' * `edf`: effective degrees of freedom of each smooth (1 = straight line).
+#' * `Ref.df`, `F`, `p-value`: an approximate test of $H_0: f_j \equiv 0$.
+#' * `R-sq.(adj)`, `Deviance explained`, `-REML` score and `Scale est.`
+#'   ($\hat\sigma^2$ on the log scale).
+#' 
+#' ## 2. Partial-effect plots
+#' 
+## ----plot-gauss---------------------------------------------------------------
+par(mfrow = c(1, 3))
+plot(m_log, shade = TRUE, residuals = TRUE, pch = 16, cex = 0.5,
+     seWithMean = TRUE)
+
+#' 
+#' `seWithMean = TRUE` adds the uncertainty of the intercept to the band.
+#' The same plots with `gratia`:
+#' 
+## ----gratia, fig.height = 3.2-------------------------------------------------
+gratia::draw(m_log, residuals = TRUE)
+
+#' 
+#' ## 3. Gamma GAM with a log link for Ozone
+#' 
+#' Instead of transforming $y$, model $\log \mathrm{E}(\text{Ozone}) = \beta_0 + \sum_j f_j$
+#' with $\mathrm{Var}(y) = \phi\mu^2$.
+#' 
+## ----gamma--------------------------------------------------------------------
+m_gam <- gam(Ozone ~ s(Solar.R) + s(Wind) + s(Temp),
+             family = Gamma(link = "log"), data = aq, method = "REML")
+summary(m_gam)
+
+#' 
+#' AIC on the scale of `Ozone`. The log-response model's density must be
+#' transformed: $f_Y(y) = f_{\log Y}(\log y)/y$, so
+#' $\text{AIC}_Y = \text{AIC}_{\log Y} + 2\sum_i \log y_i$.
+#' 
+## ----aic----------------------------------------------------------------------
+m_id <- gam(Ozone ~ s(Solar.R) + s(Wind) + s(Temp), data = aq, method = "REML")
+c(gaussian_identity = AIC(m_id),
+  gaussian_on_log   = AIC(m_log) + 2 * sum(log(aq$Ozone)),
+  gamma_log_link    = AIC(m_gam))
+
+#' 
+#' ## 4. A binomial GAM: diabetes in Pima women
+#' 
+## ----pima---------------------------------------------------------------------
+pima <- rbind(Pima.tr, Pima.te)     # 532 women, complete cases
+m_glm <- glm(type ~ glu + bmi + age + ped, family = binomial, data = pima)
+m_bin <- gam(type ~ s(glu) + s(bmi) + s(age) + s(ped),
+             family = binomial, data = pima, method = "REML")
+summary(m_bin)
+AIC(m_glm, m_bin)
+par(mfrow = c(1, 2))
+plot(m_bin, select = 1, shade = TRUE, ylab = "effect on logit")
+plot(m_bin, select = 3, shade = TRUE, ylab = "effect on logit")
+
+#' 
+#' `glu` gets edf = 1: the data choose a straight line on the logit scale.
+#' `age` gets edf ≈ 3.6: the log-odds rise until about 48 years and then
+#' fall, which a linear logistic model cannot represent. Only 5% of the women
+#' are older than 54, so the decline at older ages has a wide band.

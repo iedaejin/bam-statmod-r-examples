@@ -1,0 +1,94 @@
+---
+title: "Session 28 — Cox proportional hazards model"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+Model: $h(t \mid x) = h_0(t) \exp(x^\top \beta)$, with no intercept (it is absorbed
+in the baseline hazard $h_0$). $\beta$ is estimated by maximising the partial likelihood
+$$L_p(\beta) = \prod_{i:\,\delta_i = 1} \frac{\exp(x_i^\top \beta)}{\sum_{k \in R(y_i)} \exp(x_k^\top \beta)} .$$
+
+```{r data}
+library(survival)
+vet <- survival::veteran
+vet$trt <- factor(vet$trt, levels = 1:2, labels = c("standard", "test"))
+```
+
+## 1. Partial likelihood by hand (toy data)
+
+Five subjects, one binary covariate. Risk sets: $\{1,\dots,5\}$ at $t=2$, $\{3,4,5\}$ at $t=4$,
+$\{4,5\}$ at $t=6$ and $\{5\}$ at $t=8$, so
+$L_p(\beta) = e^{2\beta} / [(2e^\beta + 3)(e^\beta + 2)(e^\beta + 1)]$.
+
+```{r toy}
+toy <- data.frame(time = c(2, 3, 4, 6, 8), status = c(1, 0, 1, 1, 1), x = c(1, 0, 0, 1, 0))
+lp <- function(b) 2 * b - log(2 * exp(b) + 3) - log(exp(b) + 2) - log(exp(b) + 1)
+score <- function(b) 2 - 2 * exp(b) / (2 * exp(b) + 3) - exp(b) / (exp(b) + 2) - exp(b) / (exp(b) + 1)
+info <- function(b) {
+  p <- c(2 * exp(b) / (2 * exp(b) + 3), exp(b) / (exp(b) + 2), exp(b) / (exp(b) + 1))
+  sum(p * (1 - p))          # variance of x within each risk set
+}
+b <- 0
+for (it in 1:5) b <- b + score(b) / info(b)   # Newton-Raphson
+c(beta = b, se = 1 / sqrt(info(b)), HR = exp(b))
+coef(coxph(Surv(time, status) ~ x, data = toy))
+```
+
+## 2. Cox model for the veteran trial
+
+```{r cox}
+fit <- coxph(Surv(time, status) ~ trt + karno + celltype + age, data = vet)
+summary(fit)
+```
+
+Hazard ratios with 95% intervals, and the Karnofsky score per 10 points:
+
+```{r hr}
+round(cbind(HR = exp(coef(fit)), exp(confint(fit))), 3)
+exp(10 * coef(fit)["karno"])            # 0.72
+exp(10 * confint(fit)["karno", ])       # (0.65, 0.80)
+```
+
+**Reading.** Holding treatment, cell type and age fixed, a patient whose Karnofsky score
+is 10 points higher has an estimated hazard of death 0.72 times as large (95% CI 0.65 to 0.80)
+at every time $t$, if the PH assumption holds. Adeno-carcinoma patients have about 3.3 times the
+hazard of squamous-cell patients with the same covariates. The test treatment has HR 1.35
+(0.90 to 2.03): no evidence of a benefit.
+
+## 3. Likelihood ratio tests between nested Cox models
+
+```{r lrt}
+fit0 <- coxph(Surv(time, status) ~ trt + karno + age, data = vet)
+anova(fit0, fit)                       # does cell type add to the model?
+```
+
+## 4. Ties: Efron (default) and Breslow
+
+```{r ties}
+fit_b <- update(fit, ties = "breslow")
+round(cbind(efron = coef(fit), breslow = coef(fit_b)), 4)
+```
+
+## 5. Score test and log-rank test
+
+With one binary covariate the Cox score test is the log-rank test
+(they coincide exactly when there are no tied death times).
+
+```{r score}
+f1 <- coxph(Surv(time, status) ~ trt, data = vet)
+summary(f1)$sctest
+survdiff(Surv(time, status) ~ trt, data = vet)$chisq
+```
+
+## 6. Predicted survival curves
+
+```{r pred, fig.width = 7, fig.height = 4.5}
+nd <- data.frame(trt = "standard", karno = c(40, 80), celltype = "squamous", age = 60)
+sf <- survfit(fit, newdata = nd)
+plot(sf, col = c("firebrick", "navy"), lwd = 2, xlab = "Days", ylab = "Predicted S(t)")
+legend("topright", c("karno = 40", "karno = 80"), col = c("firebrick", "navy"), lwd = 2, bty = "n")
+```

@@ -1,0 +1,162 @@
+---
+title: "Session 20 — Smoother matrices, effective df and cross-validation"
+subtitle: "Statistical Modelling (BAM), Spring 2027"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+```{r setup, include=FALSE, purl=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.width = 7, fig.height = 4.2)
+```
+
+```{r data}
+library(MASS)
+data(mcycle)
+x <- mcycle$times
+y <- mcycle$accel
+n <- length(y)
+nw_S <- function(x0, x, h) {
+  K <- dnorm(outer(x0, x, "-") / h)
+  K / rowSums(K)
+}
+ll_S <- function(x0, x, h) {
+  t(sapply(x0, function(u) {
+    w <- dnorm((x - u) / h)
+    X <- cbind(1, x - u)
+    solve(crossprod(X, w * X), t(X * w))[1, ]
+  }))
+}
+```
+
+## 1. A hand-sized example
+
+Five points, triangular kernel $K(u) = (1 - |u|)_+$, bandwidth $h = 2$.
+Neighbours at distance 0, 1, 2 get weights 1, 1/2, 0.
+
+```{r toy}
+xt <- 1:5
+yt <- c(2, 4, 3, 7, 9)
+Kt <- pmax(1 - abs(outer(xt, xt, "-")) / 2, 0)
+St <- Kt / rowSums(Kt)
+St
+ft <- drop(St %*% yt)
+rt <- yt - ft
+c(edf = sum(diag(St)), RSS = sum(rt^2))
+cbind(fitted = ft, resid = rt, loo_resid = rt / (1 - diag(St)))
+c(LOOCV = mean((rt / (1 - diag(St)))^2),
+  GCV = 5 * sum(rt^2) / (5 - sum(diag(St)))^2)
+```
+
+## 2. Leave-one-out CV without refitting
+
+For Nadaraya–Watson, local polynomials with a fixed bandwidth and penalized
+least squares, the leave-one-out residual is exactly
+$(y_i - \hat f_i)/(1 - S_{ii})$. Check it by brute force for $h = 2$.
+
+```{r loo-check}
+h <- 2
+S <- nw_S(x, x, h)
+r <- y - drop(S %*% y)
+shortcut <- mean((r / (1 - diag(S)))^2)
+brute <- mean(sapply(1:n, function(i) {
+  w <- dnorm((x[-i] - x[i]) / h)
+  (y[i] - sum(w * y[-i]) / sum(w))^2
+}))
+c(shortcut = shortcut, brute_force = brute)
+```
+
+## 3. Choosing h by LOOCV and GCV
+
+$\mathrm{GCV}(h) = n\,\mathrm{RSS}(h) / (n - \mathrm{tr}\,S_h)^2$ replaces each
+$S_{ii}$ by the average $\mathrm{tr}(S_h)/n$.
+
+```{r choose-h}
+crit <- function(S) {
+  f <- drop(S %*% y); r <- y - f; edf <- sum(diag(S))
+  c(edf = edf, LOOCV = mean((r / (1 - diag(S)))^2),
+    GCV = n * sum(r^2) / (n - edf)^2)
+}
+hs <- seq(0.5, 5, by = 0.01)
+tab_nw <- t(sapply(hs, function(h) crit(nw_S(x, x, h))))
+tab_ll <- t(sapply(hs, function(h) crit(ll_S(x, x, h))))
+best <- function(tab, col) c(h = hs[which.min(tab[, col])], tab[which.min(tab[, col]), ])
+rbind(NW_LOOCV = best(tab_nw, "LOOCV"), NW_GCV = best(tab_nw, "GCV"),
+      LL_LOOCV = best(tab_ll, "LOOCV"), LL_GCV = best(tab_ll, "GCV"))
+plot(hs, tab_ll[, "LOOCV"], type = "l", lwd = 2, col = "navy",
+     xlab = "bandwidth h", ylab = "criterion", ylim = c(550, 1000))
+lines(hs, tab_ll[, "GCV"], lwd = 2, lty = 2, col = "navy")
+lines(hs, tab_nw[, "LOOCV"], lwd = 2, col = "red")
+legend("topleft", bty = "n", lwd = 2, col = c("navy", "navy", "red"), lty = c(1, 2, 1),
+       legend = c("local linear LOOCV", "local linear GCV", "NW LOOCV"))
+```
+
+## 4. Bias and variance as functions of h
+
+Take a smooth "truth" $f$ (here a heavily smoothed fit to the data, used only
+as a test function) and constant $\sigma = 23$. For a linear smoother,
+$\mathbb E(\hat f) = S f$ and $\mathrm{Var}(\hat f) = \sigma^2 S S^\top$, so the
+average squared bias and variance can be computed exactly, without simulation.
+
+```{r bias-variance}
+f_true <- drop(ll_S(x, x, 2.5) %*% y)   # test function, not an estimate of anything
+sigma <- 23
+bv <- t(sapply(hs, function(h) {
+  S <- nw_S(x, x, h)
+  c(bias2 = mean((S %*% f_true - f_true)^2),
+    var = sigma^2 * mean(rowSums(S^2)))      # diag(S S') = row sums of squares
+}))
+mse <- rowSums(bv)
+c(h_opt = hs[which.min(mse)], min_MSE = min(mse))
+matplot(hs, cbind(bv, mse), type = "l", lty = c(2, 3, 1), lwd = 2,
+        col = c("red", "navy", "black"), xlab = "bandwidth h", ylab = "average")
+legend("top", bty = "n", lwd = 2, lty = c(2, 3, 1), col = c("red", "navy", "black"),
+       legend = c("squared bias", "variance", "MSE"))
+```
+
+## 5. Comparing smoothers fairly: equal effective df
+
+A bandwidth of 2 means different things for different smoothers. Match them on
+$\mathrm{edf} = \mathrm{tr}(S)$ instead. Here every fit uses 12 effective df.
+
+```{r equal-edf}
+target <- 12
+h_nw <- uniroot(function(h) sum(diag(nw_S(x, x, h))) - target, c(0.5, 5))$root
+h_ll <- uniroot(function(h) sum(diag(ll_S(x, x, h))) - target, c(0.5, 5))$root
+span <- uniroot(function(s) loess(accel ~ times, mcycle, span = s)$trace.hat - target,
+                c(0.2, 0.5))$root
+f_nw <- drop(nw_S(x, x, h_nw) %*% y)
+f_ll <- drop(ll_S(x, x, h_ll) %*% y)
+lo <- loess(accel ~ times, mcycle, span = span)
+ss <- smooth.spline(x, y, df = target)
+rss <- c(NW = sum((y - f_nw)^2), local_linear = sum((y - f_ll)^2),
+         LOESS_quadratic = sum(resid(lo)^2),
+         smoothing_spline = sum((y - predict(ss, x)$y)^2))
+round(cbind(RSS = rss, GCV = n * rss / (n - target)^2), 1)
+round(c(h_nw = h_nw, h_ll = h_ll, span = span), 3)
+```
+
+At the same complexity Nadaraya–Watson has the largest residual sum of squares.
+Both kernel fits are shallower at the minimum near 20 ms (about −104 g and
+−100 g) than LOESS and the smoothing spline (about −115 g): a local constant or
+local line has bias proportional to $h^2 f''(x)$ where the curve bends sharply.
+Local quadratic fits and splines are close to each other.
+
+## 6. A band of ±2 sd(residuals) is not a confidence band
+
+`sd(resid)` estimates the spread of a **new observation** around $f$; it is
+nearly constant in $x$ and ignores the uncertainty of $\hat f$. A pointwise
+standard error for $\hat f(x_i)$ under constant variance is
+$\hat\sigma\sqrt{(SS^\top)_{ii}}$, which is much narrower and varies with $x$.
+
+```{r bands}
+S <- ll_S(x, x, h_ll)
+f <- drop(S %*% y)
+sigma_hat <- sqrt(sum((y - f)^2) / (n - sum(diag(S))))
+se_f <- sigma_hat * sqrt(rowSums(S^2))
+c(sigma_hat = sigma_hat, se_f_min = min(se_f), se_f_max = max(se_f))
+```
+
+These standard errors still assume constant variance, which the motorcycle
+data clearly violate (look at the residuals before 14 ms and between 15 and
+40 ms). We return to that in the lab.

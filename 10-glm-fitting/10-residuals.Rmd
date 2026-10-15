@@ -1,0 +1,68 @@
+---
+title: "Session 10 — Residuals for GLMs"
+author: "Prof. Dae-Jin Lee (daelee@faculty.ie.edu)"
+output: html_document
+---
+
+Pearson and deviance residuals computed by hand, and randomized quantile residuals (Dunn and Smyth, 1996) coded by hand.
+(The DHARMa package computes simulation-based versions of the same idea; we do not need it.)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Pearson and deviance residuals
+
+```{r pearson-deviance}
+library(MASS)
+sh <- subset(ships, service > 0)
+sh$year <- factor(sh$year); sh$period <- factor(sh$period)
+fs <- glm(incidents ~ type + year + period + offset(log(service)),
+          family = poisson, data = sh)
+y <- sh$incidents; mu <- fitted(fs)
+r_P <- (y - mu) / sqrt(mu)                                    # Pearson
+d_i <- 2 * (ifelse(y > 0, y * log(y / mu), 0) - (y - mu))     # deviance contributions
+r_D <- sign(y - mu) * sqrt(d_i)                               # deviance residual
+c(max(abs(r_P - residuals(fs, type = "pearson"))),
+  max(abs(r_D - residuals(fs, type = "deviance"))))
+c(sum_rP2 = sum(r_P^2), sum_rD2 = sum(r_D^2), deviance = deviance(fs))
+```
+
+## Randomized quantile residuals
+
+If $F$ is the fitted CDF of $Y_i$, draw $u_i\sim U\bigl(F(y_i-1),\,F(y_i)\bigr)$ and set $r_i=\Phi^{-1}(u_i)$.
+If the model is right, $r_i\sim N(0,1)$ exactly (not only for large counts).
+
+```{r rqr}
+# F is the fitted CDF (ppois, pnbinom, pbinom, ...); its parameters go in "..."
+rqr <- function(y, F, ...) {
+  lo <- F(y - 1, ...); hi <- F(y, ...)
+  u  <- runif(length(y))
+  # far in the upper tail lo and hi round to 1: work with upper-tail probabilities
+  up_lo <- F(y, ..., lower.tail = FALSE); up_hi <- F(y - 1, ..., lower.tail = FALSE)
+  ifelse(lo < 0.5, qnorm(lo + u * (hi - lo)),
+         qnorm(up_lo + u * (up_hi - up_lo), lower.tail = FALSE))
+}
+set.seed(2027)
+r_Q <- rqr(y, ppois, lambda = mu)
+shapiro.test(r_Q)
+```
+
+## Binary data: why Pearson residuals are hard to read
+
+```{r binary, fig.width=8, fig.height=4}
+bw <- with(birthwt, data.frame(low = low, age = age, lwt = lwt,
+  race = factor(race, labels = c("white", "black", "other")),
+  smoke = smoke, ptd = as.integer(ptl > 0), ht = ht, ui = ui))
+fb <- glm(low ~ age + lwt + race + smoke + ptd + ht + ui, family = binomial, data = bw)
+set.seed(2027)
+op <- par(mfrow = c(1, 2))
+plot(fitted(fb), residuals(fb, type = "pearson"), col = bw$low + 1,
+     xlab = "fitted probability", ylab = "Pearson residual", main = "Two bands")
+r_b <- rqr(bw$low, pbinom, size = 1, prob = fitted(fb))
+qqnorm(r_b, main = "Randomized quantile residuals"); qqline(r_b)
+par(op)
+```
+
+The two bands (one for $y=0$, one for $y=1$) are forced by the data, not a sign of misfit.
+The randomized quantile residuals remove the discreteness; use them for QQ plots.
