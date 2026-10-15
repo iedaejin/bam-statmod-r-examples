@@ -10,7 +10,7 @@
 #' 
 
 #' 
-#' The key code of Lab 04 (`R Labs/bam-statmod/Lab_04_Mixed_Models/`), with the
+#' The key code of Lab 04 (`R Labs/bam-statmod-labs/Lab_04_Mixed_Models/`), with the
 #' data loaded from `lme4` instead of the lab's CSV files.
 #' 
 ## ----data---------------------------------------------------------------------

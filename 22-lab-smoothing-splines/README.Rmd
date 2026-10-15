@@ -15,4 +15,4 @@ Running dataset: `MASS::mcycle` (Silverman, 1985).
 1. [`22-cv-pitfalls.Rmd`](22-cv-pitfalls.Rmd) (script: [`22-cv-pitfalls.R`](22-cv-pitfalls.R))
 2. [`22-heteroscedasticity.Rmd`](22-heteroscedasticity.Rmd) (script: [`22-heteroscedasticity.R`](22-heteroscedasticity.R))
 
-Lab: `R Labs/bam-statmod/Lab_05_Smoothing_Splines/` (public repo `iedaejin/bam-statmod`).
+Lab: `R Labs/bam-statmod-labs/Lab_05_Smoothing_Splines/` (public repo `iedaejin/bam-statmod-labs`).
