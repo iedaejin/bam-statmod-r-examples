@@ -63,8 +63,12 @@ summary(g4$gam)$s.table
 #' ## 3. Subject-specific smooth curves: factor-smooth interaction `bs = "fs"`
 #' 
 ## ----fs-----------------------------------------------------------------------
-m3 <- gam(height ~ s(age, k = 5) + s(age, Subject, bs = "fs", k = 5),
-          data = ox, method = "REML")
+# The shared population smooth and the factor smooth both use age. mgcv emits
+# a known repeated-smooth warning for this intentional decomposition.
+m3 <- suppressWarnings(
+  gam(height ~ s(age, k = 5) + s(age, Subject, bs = "fs", k = 5),
+      data = ox, method = "REML")
+)
 summary(m3)$s.table
 AIC(m1, m2, m3)
 
