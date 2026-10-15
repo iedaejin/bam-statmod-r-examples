@@ -1,0 +1,31 @@
+# Session 5 — Linear Models in Theory
+
+Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
+
+## By the end of this session you should be able to
+
+1. **Derive** the normal equations and the least-squares estimator $\hat\beta=(X^\top X)^{-1}X^\top y$.
+2. **Prove** that $H=X(X^\top X)^{-1}X^\top$ is a symmetric idempotent projection with $\operatorname{tr}H=p$, and use it to show $E[\mathrm{RSS}]=\sigma^2(n-p)$.
+3. **Compute** standard errors, $t$ statistics, confidence intervals and nested-model $F$ tests from RSS and $(X^\top X)^{-1}$.
+4. **Diagnose** a fitted model with residual plots, leverage, studentized residuals and Cook's distance.
+5. **Distinguish** a confidence interval for the mean response from a prediction interval.
+
+## How to follow this session
+
+1. **Before class:** read the required texts in [readings.md](readings.md).
+2. **In class:** open this folder in RStudio (or Positron) and run the scripts below in order. When a slide says *Follow: r-examples/…*, run the matching chunk and compare the output.
+3. **Lab:** [Lab_02_Linear_Models](https://github.com/iedaejin/bam-statmod-labs/tree/main/Lab_02_Linear_Models) — work through `lab.qmd`, then submit the `.txt` from `tutorial.Rmd` on Blackboard before the next session.
+4. **After class:** try the problems in [exercises.md](exercises.md). Solutions are discussed in class or released on Blackboard.
+
+## R scripts, in class order
+
+| Script | What it does | Used in the slides |
+|---|---|---|
+| [`05-inference.Rmd`](05-inference.Rmd) · [`.R`](05-inference.R) | Inference for linear-model coefficients | Fit in R; Standard errors by hand; $F$ test: do `pop75` and `dpi` add anything?; Minus twice the log-likelihood, and a check in R |
+| [`05-diagnostics-prediction.Rmd`](05-diagnostics-prediction.Rmd) · [`.R`](05-diagnostics-prediction.R) | Diagnostics and prediction | Savings: residual plots; Leverage, studentized residuals and influence together; Diagnostics in R; Cook's distance and what Libya changes; Worked example: a country with `pop15`=35, `pop75`=2, `dpi`=1000, `ddpi`=3 |
+| [`05-least-squares.Rmd`](05-least-squares.Rmd) · [`.R`](05-least-squares.R) | Least squares in matrix form | Normal equations, $H$ and QR in R |
+
+Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+
+---
+[← All sessions](../README.md)

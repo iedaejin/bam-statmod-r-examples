@@ -1,0 +1,30 @@
+# Session 22 — Computer Lab — Smoothing and Splines
+
+Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
+
+## By the end of this session you should be able to
+
+1. **Fit** polynomial, kernel, LOESS, regression-spline, smoothing-spline and P-spline smoothers in R.
+2. **Choose** a smoothing parameter by shuffled $K$-fold CV and by GCV, and **explain** why fold order matters.
+3. **Implement** a P-spline from $B$, $D_d$ and $\lambda$, and **verify** it against `mgcv`.
+4. **Compare** smoothers at equal effective df.
+5. **Diagnose** non-constant variance from the residuals and **state** its consequences.
+
+## How to follow this session
+
+1. **Before class:** read the required texts in [readings.md](readings.md).
+2. **In class:** open this folder in RStudio (or Positron) and run the scripts below in order. When a slide says *Follow: r-examples/…*, run the matching chunk and compare the output.
+3. **Lab:** [Lab_05_Smoothing_Splines](https://github.com/iedaejin/bam-statmod-labs/tree/main/Lab_05_Smoothing_Splines) — work through `lab.qmd`, then submit the `.txt` from `tutorial.Rmd` on Blackboard before the next session.
+4. **After class:** try the problems in [exercises.md](exercises.md). Solutions are discussed in class or released on Blackboard.
+
+## R scripts, in class order
+
+| Script | What it does | Used in the slides |
+|---|---|---|
+| [`22-cv-pitfalls.Rmd`](22-cv-pitfalls.Rmd) · [`.R`](22-cv-pitfalls.R) | Cross-validating a smoother: three pitfalls | — |
+| [`22-heteroscedasticity.Rmd`](22-heteroscedasticity.Rmd) · [`.R`](22-heteroscedasticity.R) | Non-constant variance in the motorcycle data | — |
+
+Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+
+---
+[← All sessions](../README.md)

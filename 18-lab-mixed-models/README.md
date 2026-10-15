@@ -1,0 +1,29 @@
+# Session 18 — Computer Lab — Mixed Models in R
+
+Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
+
+## By the end of this session you should be able to
+
+1. **Fit** LMMs with `lmer()` and `lme()` and **interpret** their variance components.
+2. **Choose** REML or ML for each comparison and **test** a random slope with the boundary correction.
+3. **Compute** BLUPs and the shrinkage factor, and **draw** a shrinkage plot.
+4. **Diagnose** an LMM with residuals and predicted random effects.
+5. **Fit** a binomial GLMM and **distinguish** conditional from marginal effects.
+
+## How to follow this session
+
+1. **Before class:** read the required texts in [readings.md](readings.md).
+2. **In class:** open this folder in RStudio (or Positron) and run the scripts below in order. When a slide says *Follow: r-examples/…*, run the matching chunk and compare the output.
+3. **Lab:** [Lab_04_Mixed_Models](https://github.com/iedaejin/bam-statmod-labs/tree/main/Lab_04_Mixed_Models) — work through `lab.qmd`, then submit the `.txt` from `tutorial.Rmd` on Blackboard before the next session.
+4. **After class:** try the problems in [exercises.md](exercises.md). Solutions are discussed in class or released on Blackboard.
+
+## R scripts, in class order
+
+| Script | What it does | Used in the slides |
+|---|---|---|
+| [`18-lab-walkthrough.Rmd`](18-lab-walkthrough.Rmd) · [`.R`](18-lab-walkthrough.R) | Lab 04 walk-through: lmer, lme and glmer | Setup; Part 1: three ways to pool |
+
+Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+
+---
+[← All sessions](../README.md)

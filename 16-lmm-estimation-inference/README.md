@@ -1,0 +1,31 @@
+# Session 16 — Estimation and Inference for LMMs
+
+Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
+
+## By the end of this session you should be able to
+
+1. **Derive** the GLS estimator $\hat\beta = (X^\top V^{-1}X)^{-1}X^\top V^{-1}y$ from the marginal likelihood.
+2. **Derive** the REML criterion and **explain** why REML is less biased than ML.
+3. **Derive** the BLUP and **compute** the shrinkage factor $n_i\sigma_b^2/(n_i\sigma_b^2+\sigma^2)$.
+4. **Choose** ML or REML for a given comparison and **test** a variance component on the boundary.
+5. **Diagnose** an LMM with conditional residuals and predicted random effects.
+
+## How to follow this session
+
+1. **Before class:** read the required texts in [readings.md](readings.md).
+2. **In class:** open this folder in RStudio (or Positron) and run the scripts below in order. When a slide says *Follow: r-examples/…*, run the matching chunk and compare the output.
+3. **Lab:** [Lab_04_Mixed_Models](https://github.com/iedaejin/bam-statmod-labs/tree/main/Lab_04_Mixed_Models) — work through `lab.qmd`, then submit the `.txt` from `tutorial.Rmd` on Blackboard before the next session.
+4. **After class:** try the problems in [exercises.md](exercises.md). Solutions are discussed in class or released on Blackboard.
+
+## R scripts, in class order
+
+| Script | What it does | Used in the slides |
+|---|---|---|
+| [`16-gls-ml-reml.Rmd`](16-gls-ml-reml.Rmd) · [`.R`](16-gls-ml-reml.R) | GLS, ML and REML by hand | GLS by hand reproduces `lmer`; The criterion by hand equals `lme4`'s; ML and REML likelihoods for $\sigma_b$; A simulation: 6 groups of 4 observations |
+| [`16-blup-shrinkage.Rmd`](16-blup-shrinkage.Rmd) · [`.R`](16-blup-shrinkage.R) | BLUPs and shrinkage | Shrinkage in `sleepstudy`; Unbalanced data: keep only Days 0–1 for six subjects |
+| [`16-inference-diagnostics.Rmd`](16-inference-diagnostics.Rmd) · [`.R`](16-inference-diagnostics.R) | Inference and diagnostics for LMMs | Likelihood ratio test for a fixed effect: ML fits; The mixture by simulation; Random slope for `sleepstudy`; Diagnostics for `(Days | Subject)`; Diagnostics in R |
+
+Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+
+---
+[← All sessions](../README.md)
