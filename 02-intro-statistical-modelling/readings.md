@@ -14,7 +14,7 @@ Section and page numbers refer to Pawitan (2001), *In All Likelihood: Statistica
 | Pawitan (2001) | 1.3 Statistical uncertainty: inevitable controversies | 6–8 | **Stochastic vs inductive uncertainty**; why more data reduce one but not the other |
 | Breiman (2001), "Statistical Modeling: The Two Cultures", *Statistical Science* 16(3), 199–231 | Sections 1–5 and 12 | 199–204, 214–215 | The black box; data modelling vs algorithmic modelling; how each culture validates a model |
 
-The PDF of Breiman (2001) is in `readings/breiman2001.pdf`.
+The PDF of Breiman (2001) is in `breiman2001.pdf`.
 
 ## Optional
 
@@ -32,6 +32,13 @@ The PDF of Breiman (2001) is in `readings/breiman2001.pdf`.
 3. Pawitan distinguishes stochastic from inductive uncertainty. Which one is reduced by collecting more data of the same kind? Give an example of the other for the New Haven series.
 4. Breiman describes two cultures. Which goals (prediction, information) does each one serve best, and how does each validate a model?
 5. Breiman argues (Section 5) that goodness-of-fit tests and residual analysis have little power to reject a model, especially with more than a few variables, and recommends estimates of predictive accuracy instead. With one covariate (New Haven), what did the residual plots, the line-up and the hold-out check each tell you?
+
+## Reading summaries
+
+Study guides to the chapters above. They send you to the book; they do not replace it.
+
+- [Pawitan Ch. 1 — Introduction](../01-course-overview-prerequisites/01-pawitan-ch1-summary.md)
+- [Breiman (2001) — Statistical Modeling: The Two Cultures](02-breiman-2001-summary.md)
 
 ## Before Session 3
 

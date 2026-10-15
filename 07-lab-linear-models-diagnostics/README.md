@@ -27,5 +27,14 @@ The scripts read the CSV files in [`data/`](data/) with relative paths. Set the 
 
 Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
+## Reading summaries
+
+Study guides to the recommended readings: what each chapter says, the key results in course notation, and questions to check yourself. They point you to the book; they do not replace it.
+
+- [Faraway Ch. 6 — Diagnostics](07-faraway-ch6-summary.md)
+- [Faraway Ch. 7 — Problems with the Predictors](07-faraway-ch7-summary.md)
+- [Faraway Ch. 10 — Model Selection](../06-linear-models-practice-model-selection/06-faraway-ch10-summary.md) (Session 6)
+- [Faraway Ch. 11 — Shrinkage Methods](../06-linear-models-practice-model-selection/06-faraway-ch11-summary.md) (Session 6)
+
 ---
 [← All sessions](../README.md)

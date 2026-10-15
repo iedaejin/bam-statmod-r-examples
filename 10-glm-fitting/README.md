@@ -28,5 +28,12 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 
 Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
+## Reading summaries
+
+Study guides to the recommended readings: what each chapter says, the key results in course notation, and questions to check yourself. They point you to the book; they do not replace it.
+
+- [Wood Ch. 3 — Generalized linear models](../09-glm-intro/09-wood-ch3-summary.md)
+- [Pawitan Ch. 6 — Modelling relationships: regression models](../09-glm-intro/09-pawitan-ch6-summary.md) (§6.6–6.7: deviance and IWLS; in the Session 9 folder)
+
 ---
 [← All sessions](../README.md)

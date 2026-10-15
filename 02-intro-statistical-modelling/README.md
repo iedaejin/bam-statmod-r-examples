@@ -31,5 +31,12 @@ The scripts read the CSV files in [`data/`](data/) with relative paths. Set the 
 
 Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
+## Reading summaries
+
+Study guides to the recommended readings: what each chapter says, the key results in course notation, and questions to check yourself. They point you to the book; they do not replace it.
+
+- [Pawitan Ch. 1 — Introduction](../01-course-overview-prerequisites/01-pawitan-ch1-summary.md)
+- [Breiman (2001) — Statistical Modeling: The Two Cultures](02-breiman-2001-summary.md)
+
 ---
 [← All sessions](../README.md)

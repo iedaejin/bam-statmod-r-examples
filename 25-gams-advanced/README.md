@@ -27,5 +27,13 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 
 Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
+## Reading summaries
+
+Study guides to the recommended readings: what each chapter says, the key results in course notation, and questions to check yourself. They point you to the book; they do not replace it.
+
+- [Wood Ch. 5 — Smoothers](../21-splines/21-wood-ch5-summary.md)
+- [Wood Ch. 6 — GAM theory](../24-gams-theory/24-wood-ch6-summary.md)
+- [Wood Ch. 7 — GAMs in practice: mgcv](../26-lab-gams/26-wood-ch7-summary.md)
+
 ---
 [← All sessions](../README.md)

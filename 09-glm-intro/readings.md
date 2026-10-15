@@ -8,7 +8,7 @@
 | Text | Sections | Focus |
 |------|----------|-------|
 | Wood (2017), *Generalized Additive Models: An Introduction with R*, 2nd ed. | Ch. 3.1: the exponential-family section and the section on canonical links; skim the fitting section (Session 10) | The three components of a GLM, the exponential family, $\mathrm{E}[Y]=b'(\theta)$, $\mathrm{Var}(Y)=b''(\theta)\phi$, canonical links |
-| Pawitan (2001), *In All Likelihood* | Ch. 4: the exponential-family section; Ch. 6: logistic regression, Poisson regression and exponential-family regression models | Score identities; logistic regression and odds ratios; Poisson regression with an offset |
+| Pawitan (2001), *In All Likelihood* | Ch. 4: the exponential-family section; Ch. 6: logistic regression, Poisson regression and exponential-family regression models | Mean and variance of the exponential family as derivatives of the cumulant function (the score identities behind them are in Pawitan Ch. 8); logistic regression and odds ratios; Poisson regression with an offset |
 
 Check section numbers against the library copy; editions differ in numbering.
 
@@ -36,3 +36,9 @@ Check section numbers against the library copy; editions differ in numbering.
 ## Next
 
 **Session 10 — Fitting GLMs:** IRLS as Fisher scoring, likelihood inference, deviance, residuals and overdispersion.
+
+## Reading summaries
+
+- [Wood Ch. 3 — Generalized linear models](09-wood-ch3-summary.md)
+- [Pawitan Ch. 4 — Basic models and simple applications](09-pawitan-ch4-summary.md)
+- [Pawitan Ch. 6 — Modelling relationships: regression models](09-pawitan-ch6-summary.md)

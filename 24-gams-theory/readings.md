@@ -29,3 +29,8 @@
 ## R
 
 Knit `24-penalized-fitting.Rmd` and `24-smoothing-selection.Rmd`.
+
+## Reading summaries
+
+- [Wood Ch. 6 — GAM theory](24-wood-ch6-summary.md)
+- [Wood Ch. 5 — Smoothers](../21-splines/21-wood-ch5-summary.md)

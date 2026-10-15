@@ -31,3 +31,10 @@ Chapter numbers follow the editions listed in the syllabus. Check section number
 ## R
 
 Knit `20-polynomial-regression.Rmd`, `20-local-smoothers.Rmd` and `20-smoother-matrix-cv.Rmd` before Session 21.
+
+## Reading summaries
+
+Study guides to the chapters above. They send you to the book; they do not replace it.
+
+- [Faraway Ch. 9 — Transformation](20-faraway-ch9-summary.md)
+- [Pawitan Ch. 18 — Nonparametric smoothing](20-pawitan-ch18-summary.md)

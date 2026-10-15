@@ -17,7 +17,7 @@ against the library copy.
 ## Practice
 
 - `13-practice-problems.md` — a full mock midterm (5 problems, 100 points, 2 hours). Do it under exam conditions.
-- The exercise sessions: `08-exercises-linear-models/readings/08-exercises.md` and `12-exercises-glm/readings/12-exercises.md`.
+- The exercise sessions: `08-exercises-linear-models/08-exercises.md` and `12-exercises-glm/12-exercises.md`.
 - `13-review-practice.Rmd` — checks every number of the review deck in R (for practice only; the midterm uses no software).
 
 ## Optional

@@ -15,5 +15,11 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 1. **Before class:** read the required texts in [readings.md](readings.md).
 2. **In class:** we work the problems in [exercises.md](exercises.md) in groups, by hand first. The R scripts that check the answers are published here after the session.
 
+## Reading summaries
+
+Study guides to the recommended readings: what each chapter says, the key results in course notation, and questions to check yourself. They point you to the book; they do not replace it.
+
+- [Wood Ch. 2 — Linear mixed models](../15-linear-mixed-models/15-wood-ch2-summary.md)
+
 ---
 [← All sessions](../README.md)

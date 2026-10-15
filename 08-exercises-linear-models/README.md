@@ -15,5 +15,21 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 1. **Before class:** read the required texts in [readings.md](readings.md).
 2. **In class:** we work the problems in [exercises.md](exercises.md) in groups, by hand first. The R scripts that check the answers are published here after the session.
 
+## Reading summaries
+
+Study guides to the recommended readings: what each chapter says, the key results in course notation, and questions to check yourself. They point you to the book; they do not replace it.
+
+- [Faraway Ch. 1 — Introduction](../01-course-overview-prerequisites/01-faraway-ch1-summary.md) (Session 1)
+- [Faraway Ch. 2 — Estimation](../05-linear-models-theory/05-faraway-ch2-summary.md) (Session 5)
+- [Faraway Ch. 3 — Inference](../05-linear-models-theory/05-faraway-ch3-summary.md) (Session 5)
+- [Faraway Ch. 4 — Prediction](../05-linear-models-theory/05-faraway-ch4-summary.md) (Session 5)
+- [Faraway Ch. 5 — Explanation](../06-linear-models-practice-model-selection/06-faraway-ch5-summary.md) (Session 6)
+- [Faraway Ch. 6 — Diagnostics](../07-lab-linear-models-diagnostics/07-faraway-ch6-summary.md) (Session 7)
+- [Faraway Ch. 7 — Problems with the Predictors](../07-lab-linear-models-diagnostics/07-faraway-ch7-summary.md) (Session 7)
+- [Faraway Ch. 9 — Transformation](../20-polynomial-scatterplot-smoothing/20-faraway-ch9-summary.md) (Session 20; polynomials and splines)
+- [Faraway Ch. 10 — Model Selection](../06-linear-models-practice-model-selection/06-faraway-ch10-summary.md) (Session 6)
+- [Faraway Ch. 11 — Shrinkage Methods](../06-linear-models-practice-model-selection/06-faraway-ch11-summary.md) (Session 6)
+- [Faraway Ch. 14 — Categorical Predictors](../06-linear-models-practice-model-selection/06-faraway-ch14-summary.md) (Session 6)
+
 ---
 [← All sessions](../README.md)

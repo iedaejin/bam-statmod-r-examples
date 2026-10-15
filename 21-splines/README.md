@@ -27,5 +27,14 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 
 Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
+## Reading summaries
+
+Study guides to the recommended readings: what each chapter says, the key results in course notation, and questions to check yourself. They point you to the book; they do not replace it.
+
+- [Wood Ch. 5 — Smoothers](21-wood-ch5-summary.md)
+- [Wood Ch. 4 — Introducing GAMs](../23-gams-intro/23-wood-ch4-summary.md)
+- [Eilers & Marx (1996) — Flexible smoothing with B-splines and penalties](21-eilers-marx-1996-summary.md) (stands in for Eilers & Marx, 2021, Ch. 2–3)
+- [Pawitan Ch. 18 — Nonparametric smoothing](../20-polynomial-scatterplot-smoothing/20-pawitan-ch18-summary.md) (in the Session 20 folder)
+
 ---
 [← All sessions](../README.md)

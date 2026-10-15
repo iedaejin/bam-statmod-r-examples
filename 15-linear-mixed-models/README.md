@@ -27,5 +27,12 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 
 Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
+## Reading summaries
+
+Study guides to the recommended readings: what each chapter says, the key results in course notation, and questions to check yourself. They point you to the book; they do not replace it.
+
+- [Wood Ch. 2 — Linear mixed models](15-wood-ch2-summary.md)
+- [Pawitan Ch. 17 — Random and mixed effects models](15-pawitan-ch17-summary.md)
+
 ---
 [← All sessions](../README.md)

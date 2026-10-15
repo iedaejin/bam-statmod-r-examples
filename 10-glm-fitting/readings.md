@@ -37,3 +37,8 @@ Check section numbers against the library copy.
 ## Next
 
 **Session 11 — Lab 03 (GLMs in R):** `birthwt` (logistic regression, LR tests, a threshold evaluated on held-out data) and `ships` (Poisson with offset, overdispersion, quasi-Poisson vs NB, residuals).
+
+## Reading summaries
+
+- [Wood Ch. 3 — Generalized linear models](../09-glm-intro/09-wood-ch3-summary.md)
+- [Pawitan Ch. 6 — Modelling relationships: regression models](../09-glm-intro/09-pawitan-ch6-summary.md) (§6.6–6.7: deviance and IWLS; in the Session 9 folder)

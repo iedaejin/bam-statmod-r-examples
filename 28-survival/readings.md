@@ -43,3 +43,8 @@ Note on notation: Pawitan parametrises the exponential by its mean $\theta$; we 
 ## Next
 
 **Session 29 — Group-project workshop.** Bring your draft report (see `group-work/`).
+
+## Reading summaries
+
+- [Pawitan Ch. 11 — Complex data structure](28-pawitan-ch11-summary.md) (Sections 11.5–11.7)
+- [Pawitan Ch. 10 — Dealing with nuisance parameters](28-pawitan-ch10-summary.md) (optional; Sections 10.1–10.3, nuisance parameters — the Cox partial likelihood itself is in Ch. 11)

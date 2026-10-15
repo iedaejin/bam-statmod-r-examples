@@ -8,7 +8,7 @@
 | Text | Chapter | Focus |
 |------|---------|-------|
 | Pawitan (2001), *In All Likelihood* | Ch. 2 — Elements of likelihood inference | Likelihood intervals; the $\ell(\hat\theta)-1.92$ cut-off; LR tests |
-| Pawitan (2001) | Ch. 9 — Large-sample results | Wald vs LR; when the $\chi^2$ approximation fails (boundary, non-identifiability) |
+| Pawitan (2001) | Ch. 9 — Large-sample results | Wald vs LR; the regularity conditions behind the $\chi^2$ approximation (what happens when they fail — boundary, non-identifiability — is shown in the lab, not in the book) |
 
 Review the Session 3 slides and `03-numerical-optimization.Rmd` before the lab.
 
@@ -31,6 +31,14 @@ Review the Session 3 slides and `03-numerical-optimization.Rmd` before the lab.
 - Lab: `R Labs/bam-statmod-labs/Lab_01_Maximum_Likelihood/` — https://github.com/iedaejin/bam-statmod-labs/tree/main/Lab_01_Maximum_Likelihood
 - R examples: `04-mle-toolkit.Rmd`, `04-mixture-starts.Rmd`
 - Extension tasks: `04-exercises.md`
+
+## Reading summaries
+
+Study guides to the chapters above. They send you to the book; they do not replace it.
+
+- [Pawitan Ch. 2 — Elements of likelihood inference](../03-maximum-likelihood/03-pawitan-ch2-summary.md)
+- [Pawitan Ch. 9 — Large-sample results](../03-maximum-likelihood/03-pawitan-ch9-summary.md)
+- [Pawitan Ch. 12 — EM Algorithm](../03-maximum-likelihood/03-pawitan-ch12-summary.md) (optional, not examined)
 
 ## Next
 

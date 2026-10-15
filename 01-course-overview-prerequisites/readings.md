@@ -31,7 +31,7 @@ Chapter and section numbers follow the editions in the syllabus. Check them agai
 ## Reading questions
 
 1. Pawitan §1.2: what makes a problem *statistical* rather than purely mathematical?
-2. Pawitan §1.3: why do different schools of inference disagree, and where does the likelihood sit between them?
+2. Pawitan §1.4–1.5: why do different schools of inference disagree, and where does the likelihood sit between them?
 3. Faraway Ch. 1: list three checks you would do on a dataset before fitting any model.
 4. Why is the Poisson model a strong assumption for count data? What simple check does the `discoveries` example suggest?
 
@@ -40,6 +40,13 @@ Chapter and section numbers follow the editions in the syllabus. Check them agai
 - `01-diagnostic-review.md` — 10 ungraded questions (done in class).
 - `01-exercises.md` — 8 exercises (derivations, hand computation, R).
 - R examples: `01-setup.Rmd`, `01-distributions.Rmd`, `01-matrix-algebra.Rmd`, `01-calculus-optimization.Rmd` (each with a plain `.R` version) and the one-script summary `01-review.R`.
+
+## Reading summaries
+
+Study guides to the chapters above. They send you to the book; they do not replace it.
+
+- [Pawitan Ch. 1 — Introduction](01-pawitan-ch1-summary.md)
+- [Faraway Ch. 1 — Introduction](01-faraway-ch1-summary.md)
 
 ## Next
 

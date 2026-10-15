@@ -37,3 +37,9 @@ Section numbers follow the editions listed in the syllabus. Check them against t
 ## Next
 
 **Session 17 — GLMMs.** Read Wood Ch. 3.4.
+
+## Reading summaries
+
+- [Wood Ch. 2 — Linear mixed models](../15-linear-mixed-models/15-wood-ch2-summary.md)
+- [Pawitan Ch. 17 — Random and mixed effects models](../15-linear-mixed-models/15-pawitan-ch17-summary.md) (in the Session 15 folder)
+- [Pawitan Ch. 10 — Dealing with nuisance parameters](../28-survival/28-pawitan-ch10-summary.md) (optional: Section 10.6, Example 10.12 derives REML as a modified profile likelihood; in the Session 28 folder)

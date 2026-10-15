@@ -27,3 +27,7 @@
 ## R
 
 Knit `23-gam-motivation.Rmd`, `23-backfitting.Rmd` and `23-first-gams.Rmd`.
+
+## Reading summaries
+
+- [Wood Ch. 4 — Introducing GAMs](23-wood-ch4-summary.md)

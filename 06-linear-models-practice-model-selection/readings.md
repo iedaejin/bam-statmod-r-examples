@@ -10,7 +10,7 @@ Chapter numbers follow Faraway (2014), 2nd ed. Check section numbers against the
 | Text | Chapter | Focus |
 |------|---------|-------|
 | Faraway (2014), *Linear Models with R*, 2nd ed. | Ch. 5 (Explanation) | Interpreting coefficients, confounding, causal vs observational language |
-| | Ch. 10 (Model selection) | Hierarchical models, testing-based procedures and their problems, AIC, BIC, $C_p$, adjusted $R^2$ (prostate data) |
+| | Ch. 10 (Model selection) | Hierarchical models, testing-based procedures and their problems, AIC, BIC, $C_p$, adjusted $R^2$ (US state data; `prostate` is in the exercises) |
 | | Ch. 11 (Shrinkage methods) | Ridge regression, lasso; read the parts on ridge and lasso, skim principal components and PLS |
 | | Ch. 14 (Categorical predictors) | Factors with two and more levels, dummy coding, interactions with a factor, alternative codings |
 
@@ -31,10 +31,19 @@ Chapter numbers follow Faraway (2014), 2nd ed. Check section numbers against the
 
 ## Reading questions
 
-1. Faraway's savings example: why does the `pop75` coefficient change sign when `pop15` is added?
+1. In the class `savings` example, why does the `pop75` coefficient change sign when `pop15` is added? (Faraway Ch. 5 makes the same point with the `gala` data.)
 2. If a factor has 4 levels, how many columns does it add to $X$ under treatment coding? Why not 4?
-3. What does it mean for BIC to be "consistent", and why is AIC not?
+3. (From the slides, not in Faraway) What does it mean for BIC to be "consistent", and why is AIC not?
 4. Why can ridge regression be computed even when $X^\top X$ is singular?
+
+## Reading summaries
+
+Study guides to the chapters above. They send you to the book; they do not replace it.
+
+- [Faraway Ch. 5 — Explanation](06-faraway-ch5-summary.md)
+- [Faraway Ch. 10 — Model Selection](06-faraway-ch10-summary.md)
+- [Faraway Ch. 11 — Shrinkage Methods](06-faraway-ch11-summary.md)
+- [Faraway Ch. 14 — Categorical Predictors](06-faraway-ch14-summary.md)
 
 ## Next
 

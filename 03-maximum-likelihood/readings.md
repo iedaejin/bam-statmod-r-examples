@@ -17,7 +17,7 @@ Section numbers vary between printings; check them against the library copy.
 
 | Text | Chapter | Why |
 |------|---------|-----|
-| Pawitan (2001) | Ch. 3 — More properties of the likelihood | Invariance, profile likelihood, reparametrization |
+| Pawitan (2001) | Ch. 3 — More properties of the likelihood | Several parameters and profile likelihood (§3.3–3.4, core); sufficiency and AIC (optional). Invariance and reparametrization are in Ch. 2 (§2.8–2.9) |
 | Pawitan (2001) | Ch. 12 — EM algorithm | Only if you want the optional EM frames; not examined |
 | Wood (2017), *Generalized Additive Models*, 2nd ed. | Appendix A (maximum likelihood estimation) | A compact summary of the large-sample theory used later for GLMs and GAMs |
 
@@ -40,6 +40,16 @@ Section numbers vary between printings; check them against the library copy.
 ## R
 
 Knit `03-likelihood-basics.Rmd`, `03-wald-score-lr.Rmd` and `03-numerical-optimization.Rmd` before the lab.
+
+## Reading summaries
+
+Study guides to the chapters above. They send you to the book; they do not replace it.
+
+- [Pawitan Ch. 2 — Elements of likelihood inference](03-pawitan-ch2-summary.md)
+- [Pawitan Ch. 3 — More properties of the likelihood](03-pawitan-ch3-summary.md)
+- [Pawitan Ch. 8 — Score function and Fisher information](03-pawitan-ch8-summary.md)
+- [Pawitan Ch. 9 — Large-sample results](03-pawitan-ch9-summary.md)
+- [Pawitan Ch. 12 — EM Algorithm](03-pawitan-ch12-summary.md) (optional, not examined)
 
 ## Next
 

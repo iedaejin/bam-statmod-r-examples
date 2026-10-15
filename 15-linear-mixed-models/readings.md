@@ -36,3 +36,8 @@ Section numbers follow the editions listed in the syllabus. Check them against t
 ## Next
 
 **Session 16 — Estimation and inference for LMMs:** ML and REML, GLS, BLUPs and shrinkage, tests for fixed effects and variance components. Read Wood Ch. 2.4.
+
+## Reading summaries
+
+- [Wood Ch. 2 — Linear mixed models](15-wood-ch2-summary.md)
+- [Pawitan Ch. 17 — Random and mixed effects models](15-pawitan-ch17-summary.md)

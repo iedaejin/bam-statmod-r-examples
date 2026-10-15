@@ -33,3 +33,8 @@ Upload the `.txt` from `tutorial.Rmd` to Blackboard **before Session 19**.
 ## Next
 
 **Session 19 — Mixed-model exercises.** Revise Sessions 15–17.
+
+## Reading summaries
+
+- [Wood Ch. 2 — Linear mixed models](../15-linear-mixed-models/15-wood-ch2-summary.md)
+- [Wood Ch. 3, GLMM sections — Generalized linear mixed models](../17-glmm/17-wood-ch3-glmm-summary.md)

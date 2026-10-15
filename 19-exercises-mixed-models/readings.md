@@ -34,3 +34,7 @@
 ## Next
 
 **Session 20 — Polynomial and scatterplot smoothing** (Eilers & Marx Ch. 1; Pawitan Ch. 18; Faraway Ch. 9).
+
+## Reading summaries
+
+- [Wood Ch. 2 — Linear mixed models](../15-linear-mixed-models/15-wood-ch2-summary.md)

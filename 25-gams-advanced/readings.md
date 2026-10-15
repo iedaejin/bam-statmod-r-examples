@@ -30,3 +30,9 @@
 ## R
 
 Knit the three files in ``.
+
+## Reading summaries
+
+- [Wood Ch. 5 — Smoothers](../21-splines/21-wood-ch5-summary.md)
+- [Wood Ch. 6 — GAM theory](../24-gams-theory/24-wood-ch6-summary.md)
+- [Wood Ch. 7 — GAMs in practice: mgcv](../26-lab-gams/26-wood-ch7-summary.md)

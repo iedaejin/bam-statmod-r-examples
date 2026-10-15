@@ -33,3 +33,10 @@ Chapter numbers follow the editions listed in the syllabus. Check section number
 ## R
 
 Knit `21-regression-splines.Rmd`, `21-bsplines-psplines.Rmd` and `21-smoothing-splines.Rmd`. The lab in Session 22 assumes you can run `psfit()` from the second file.
+
+## Reading summaries
+
+- [Wood Ch. 5 — Smoothers](21-wood-ch5-summary.md)
+- [Wood Ch. 4 — Introducing GAMs](../23-gams-intro/23-wood-ch4-summary.md)
+- [Eilers & Marx (1996) — Flexible smoothing with B-splines and penalties](21-eilers-marx-1996-summary.md) (stands in for Eilers & Marx, 2021, Ch. 2–3)
+- [Pawitan Ch. 18 — Nonparametric smoothing](../20-polynomial-scatterplot-smoothing/20-pawitan-ch18-summary.md) (in the Session 20 folder)

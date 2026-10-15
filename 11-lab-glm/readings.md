@@ -30,3 +30,7 @@
 ## Next
 
 **Session 12 — GLM exercises:** distribution and link choice, likelihoods, interpretation, deviance tests from output, diagnostics, an applied problem.
+
+## Reading summaries
+
+- [Wood Ch. 3 — Generalized linear models](../09-glm-intro/09-wood-ch3-summary.md)

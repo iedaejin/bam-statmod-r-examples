@@ -28,5 +28,12 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 
 Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
+## Reading summaries
+
+Study guides to the recommended readings: what each chapter says, the key results in course notation, and questions to check yourself. They point you to the book; they do not replace it.
+
+- [Pawitan Ch. 11 — Complex data structure](28-pawitan-ch11-summary.md) (Sections 11.5–11.7)
+- [Pawitan Ch. 10 — Dealing with nuisance parameters](28-pawitan-ch10-summary.md) (optional; Sections 10.1–10.3, nuisance parameters — the Cox partial likelihood itself is in Ch. 11)
+
 ---
 [← All sessions](../README.md)

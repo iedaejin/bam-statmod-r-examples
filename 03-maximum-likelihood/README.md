@@ -27,5 +27,15 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 
 Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
+## Reading summaries
+
+Study guides to the recommended readings: what each chapter says, the key results in course notation, and questions to check yourself. They point you to the book; they do not replace it.
+
+- [Pawitan Ch. 2 — Elements of likelihood inference](03-pawitan-ch2-summary.md)
+- [Pawitan Ch. 3 — More properties of the likelihood](03-pawitan-ch3-summary.md)
+- [Pawitan Ch. 8 — Score function and Fisher information](03-pawitan-ch8-summary.md)
+- [Pawitan Ch. 9 — Large-sample results](03-pawitan-ch9-summary.md)
+- [Pawitan Ch. 12 — EM Algorithm](03-pawitan-ch12-summary.md) (optional, not examined)
+
 ---
 [← All sessions](../README.md)

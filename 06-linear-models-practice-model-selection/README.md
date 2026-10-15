@@ -28,5 +28,14 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 
 Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
+## Reading summaries
+
+Study guides to the recommended readings: what each chapter says, the key results in course notation, and questions to check yourself. They point you to the book; they do not replace it.
+
+- [Faraway Ch. 5 — Explanation](06-faraway-ch5-summary.md)
+- [Faraway Ch. 10 — Model Selection](06-faraway-ch10-summary.md)
+- [Faraway Ch. 11 — Shrinkage Methods](06-faraway-ch11-summary.md)
+- [Faraway Ch. 14 — Categorical Predictors](06-faraway-ch14-summary.md)
+
 ---
 [← All sessions](../README.md)

@@ -23,3 +23,7 @@
 2. Using `gam.check()` to ask *why* a k-index is low.
 3. Reading main effects together with a `ti()` interaction.
 4. Writing a short, numerical, non-causal interpretation.
+
+## Reading summaries
+
+- [Wood Ch. 7 — GAMs in practice: mgcv](26-wood-ch7-summary.md)

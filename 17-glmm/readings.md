@@ -37,3 +37,8 @@ Section numbers follow the editions listed in the syllabus. Check them against t
 ## Next
 
 **Session 18 — Computer lab (Lab 04).** Bring a laptop with `lme4`, `nlme` and `learnr` installed.
+
+## Reading summaries
+
+- [Wood Ch. 3, GLMM sections — Generalized linear mixed models](17-wood-ch3-glmm-summary.md)
+- [Pawitan Ch. 17 — Random and mixed effects models](../15-linear-mixed-models/15-pawitan-ch17-summary.md) (in the Session 15 folder)

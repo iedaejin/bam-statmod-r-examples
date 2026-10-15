@@ -25,3 +25,7 @@
 ## Next
 
 **Session 13 — Midterm review** (MLE, linear models, GLMs). **Session 14 — Midterm exam** (written, no software).
+
+## Reading summaries
+
+- [Wood Ch. 3 — Generalized linear models](../09-glm-intro/09-wood-ch3-summary.md)

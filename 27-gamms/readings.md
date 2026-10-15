@@ -31,3 +31,7 @@
 ## R
 
 Knit the three files in ``; complete Lab 07.
+
+## Reading summaries
+
+- [Wood Ch. 6–7, GAMM sections — Generalized additive mixed models](27-wood-gamm-summary.md)

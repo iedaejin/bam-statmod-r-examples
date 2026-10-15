@@ -29,3 +29,7 @@ Chapter numbers follow the editions listed in the syllabus. Check section number
 ## R
 
 `22-cv-pitfalls.Rmd` and `22-heteroscedasticity.Rmd` go beyond the lab; the second is needed for extension exercise 1.
+
+## Reading summaries
+
+- [Eilers & Marx (1996) — Flexible smoothing with B-splines and penalties](../21-splines/21-eilers-marx-1996-summary.md) (stands in for Eilers & Marx, 2021, Ch. 2–3; in the Session 21 folder)

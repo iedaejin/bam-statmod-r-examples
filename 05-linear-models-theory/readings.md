@@ -18,7 +18,7 @@ Chapter numbers follow the editions below. Check section numbers against the lib
 
 ## Optional
 
-- Pawitan (2001), *In All Likelihood*, Ch. 6 — the normal linear model as a likelihood problem; profile likelihood for $\sigma^2$.
+- Pawitan (2001), *In All Likelihood*, Ch. 6 — the normal linear model as a likelihood problem; profile likelihood of $\beta$ (§6.1). The $n-p$ divisor for $\sigma^2$ is justified in Example 10.11.
 - Kutner et al. (2005), Ch. 10 — more diagnostics (DFFITS, DFBETAS, added-variable plots).
 - Wood (2017), *Generalized Additive Models*, 2nd ed., Ch. 1 — a compact matrix treatment of the linear model, including the QR route to $\hat\beta$. It prepares the GAM block.
 
@@ -35,6 +35,16 @@ Chapter numbers follow the editions below. Check section numbers against the lib
 2. Which assumptions does the Gauss–Markov theorem use, and which does it not?
 3. Why do studentized residuals follow a $t_{n-p-1}$ distribution and not $t_{n-p}$?
 4. Why does a prediction interval not shrink to zero width as $n\to\infty$?
+
+## Reading summaries
+
+Study guides to the chapters above. They send you to the book; they do not replace it.
+
+- [Faraway Ch. 2 — Estimation](05-faraway-ch2-summary.md)
+- [Faraway Ch. 3 — Inference](05-faraway-ch3-summary.md)
+- [Faraway Ch. 4 — Prediction](05-faraway-ch4-summary.md)
+- [Faraway Ch. 6 — Diagnostics](../07-lab-linear-models-diagnostics/07-faraway-ch6-summary.md) (in the Session 7 folder)
+- [Pawitan Ch. 6 — Modelling relationships: regression models](../09-glm-intro/09-pawitan-ch6-summary.md) (optional; in the Session 9 folder)
 
 ## Next
 
