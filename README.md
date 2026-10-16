@@ -5,8 +5,6 @@ Prof. Dae-Jin Lee, daelee@faculty.ie.edu, IE University — School of Science an
 
 This repository follows the slides session by session. Each folder has a **session guide** (`README.md`, shown below the file list when you open the folder) with the learning objectives, the readings, the R scripts in the order we use them in class, and exercises to practise afterwards. The slides themselves are on Blackboard.
 
-Browse it as a website: <https://iedaejin.github.io/bam-statmod-r-examples/>
-
 ## Set up once
 
 1. Install R (≥ 4.3) and RStudio, or use [Posit Cloud](https://posit.cloud/) in the browser.

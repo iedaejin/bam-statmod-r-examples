@@ -1,7 +1,6 @@
 .Rhistory
 .RData
 *.html
-!index.html
 .DS_Store
 *_files/
 *_cache/
