@@ -31,5 +31,14 @@ Study guides to the recommended readings: what each chapter says, the key result
 - [Faraway Ch. 11 — Shrinkage Methods](../06-linear-models-practice-model-selection/06-faraway-ch11-summary.md) (Session 6)
 - [Faraway Ch. 14 — Categorical Predictors](../06-linear-models-practice-model-selection/06-faraway-ch14-summary.md) (Session 6)
 
+## References
+
+Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
+
+- Cook, R. D. (1977). Detection of Influential Observation in Linear Regression. *Technometrics* 19(1), 15–18. https://doi.org/10.1080/00401706.1977.10489493
+- Faraway, J. J. (2014). *Linear Models with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/b17144
+- Ide-Smith, S. G. and Lea, S. E. G. (1988). Gambling in young adolescents. *Journal of Gambling Behavior* 4(2), 110–118. https://doi.org/10.1007/bf01020107
+- Kutner, M. H., Nachtsheim, C. J., Neter, J. and Li, W. (2005). *Applied Linear Statistical Models*, 5th ed. McGraw-Hill/Irwin. ISBN 0072386886
+
 ---
 [← All sessions](../README.md)

@@ -36,5 +36,20 @@ Study guides to the recommended readings: what each chapter says, the key result
 - [Eilers & Marx (1996) — Flexible smoothing with B-splines and penalties](21-eilers-marx-1996-summary.md) (stands in for Eilers & Marx, 2021, Ch. 2–3)
 - [Pawitan Ch. 18 — Nonparametric smoothing](../20-polynomial-scatterplot-smoothing/20-pawitan-ch18-summary.md) (in the Session 20 folder)
 
+## References
+
+Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
+
+- Craven, P. and Wahba, G. (1978). Smoothing noisy data with spline functions: Estimating the correct degree of smoothing by the method of generalized cross-validation. *Numerische Mathematik* 31(4), 377–403. https://doi.org/10.1007/bf01404567
+- de Boor, C. (1978). *A Practical Guide to Splines*. Springer New York. https://doi.org/10.1007/978-1-4612-6333-3
+- Eilers, P. H. C. and Marx, B. D. (1996). Flexible smoothing with B-splines and penalties. *Statistical Science* 11(2), 89–121. https://doi.org/10.1214/ss/1038425655
+- Eilers, P. H. C. and Marx, B. D. (2021). *Practical Smoothing: The Joys of P-splines*. Cambridge University Press. https://doi.org/10.1017/9781108610247
+- Green, P. J. and Silverman, B. W. (1994). *Nonparametric Regression and Generalized Linear Models: A roughness penalty approach*. Chapman and Hall/CRC. https://doi.org/10.1201/b15710
+- Hastie, T., Tibshirani, R. and Friedman, J. (2009). *The Elements of Statistical Learning*, 2nd ed. Springer New York. https://doi.org/10.1007/978-0-387-84858-7
+- Reinsch, C. H. (1967). Smoothing by spline functions. *Numerische Mathematik* 10(3), 177–183. https://doi.org/10.1007/bf02162161
+- Ruppert, D., Wand, M. P. and Carroll, R. J. (2003). *Semiparametric Regression*. Cambridge University Press. https://doi.org/10.1017/cbo9780511755453
+- Silverman, B. W. (1985). Some Aspects of the Spline Smoothing Approach to Non-Parametric Regression Curve Fitting. *Journal of the Royal Statistical Society Series B: Statistical Methodology* 47(1), 1–21. https://doi.org/10.1111/j.2517-6161.1985.tb01327.x
+- Wood, S. N. (2017). *Generalized Additive Models: An Introduction with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/9781315370279
+
 ---
 [← All sessions](../README.md)

@@ -33,5 +33,21 @@ Study guides to the recommended readings: what each chapter says, the key result
 
 - [Wood Ch. 6–7, GAMM sections — Generalized additive mixed models](27-wood-gamm-summary.md)
 
+## References
+
+Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
+
+- Currie, I. D. and Durban, M. (2002). Flexible smoothing with P-splines: a unified approach. *Statistical Modelling* 2(4), 333–349. https://doi.org/10.1191/1471082x02st039ob
+- Eilers, P. H. C. and Marx, B. D. (1996). Flexible smoothing with B-splines and penalties. *Statistical Science* 11(2), 89–121. https://doi.org/10.1214/ss/1038425655
+- Eilers, P. H. C. and Marx, B. D. (2021). *Practical Smoothing: The Joys of P-splines*. Cambridge University Press. https://doi.org/10.1017/9781108610247
+- Lin, X. and Zhang, D. (1999). Inference in Generalized Additive Mixed Models by Using Smoothing Splines. *Journal of the Royal Statistical Society Series B: Statistical Methodology* 61(2), 381–400. https://doi.org/10.1111/1467-9868.00183
+- Pedersen, E. J., Miller, D. L., Simpson, G. L. and Ross, N. (2019). Hierarchical generalized additive models in ecology: an introduction with mgcv. *PeerJ* 7, e6876. https://doi.org/10.7717/peerj.6876
+- Rodríguez-Álvarez, M. X., Lee, D.-J., Kneib, T., et al. (2015). Fast smoothing parameter separation in multidimensional generalized P-splines: the SAP algorithm. *Statistics and Computing* 25(5), 941–957. https://doi.org/10.1007/s11222-014-9464-2
+- Ruppert, D., Wand, M. P. and Carroll, R. J. (2003). *Semiparametric Regression*. Cambridge University Press. https://doi.org/10.1017/cbo9780511755453
+- Verbyla, A. P., Cullis, B. R., Kenward, M. G. and Welham, S. J. (1999). The Analysis of Designed Experiments and Longitudinal Data by Using Smoothing Splines. *Journal of the Royal Statistical Society Series C: Applied Statistics* 48(3), 269–311. https://doi.org/10.1111/1467-9876.00154
+- Wand, M. P. (2003). Smoothing and mixed models. *Computational Statistics* 18(2), 223–249. https://doi.org/10.1007/s001800300142
+- Wood, S. N. (2011). Fast Stable Restricted Maximum Likelihood and Marginal Likelihood Estimation of Semiparametric Generalized Linear Models. *Journal of the Royal Statistical Society Series B: Statistical Methodology* 73(1), 3–36. https://doi.org/10.1111/j.1467-9868.2010.00749.x
+- Wood, S. N. (2017). *Generalized Additive Models: An Introduction with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/9781315370279
+
 ---
 [← All sessions](../README.md)

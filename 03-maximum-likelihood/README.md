@@ -37,5 +37,18 @@ Study guides to the recommended readings: what each chapter says, the key result
 - [Pawitan Ch. 9 — Large-sample results](03-pawitan-ch9-summary.md)
 - [Pawitan Ch. 12 — EM Algorithm](03-pawitan-ch12-summary.md) (optional, not examined)
 
+## References
+
+Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
+
+- Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977). Maximum Likelihood from Incomplete Data Via the EM Algorithm. *Journal of the Royal Statistical Society Series B: Statistical Methodology* 39(1), 1–22. https://doi.org/10.1111/j.2517-6161.1977.tb01600.x
+- Efron, B. and Hinkley, D. V. (1978). Assessing the accuracy of the maximum likelihood estimator: Observed versus expected Fisher information. *Biometrika* 65(3), 457–483. https://doi.org/10.1093/biomet/65.3.457
+- Fisher, R. A. (1922). On the mathematical foundations of theoretical statistics. *Philosophical Transactions of the Royal Society of London. Series A, Containing Papers of a Mathematical or Physical Character* 222(594-604), 309–368. https://doi.org/10.1098/rsta.1922.0009
+- Pawitan, Y. (2001). *In All Likelihood: Statistical Modelling and Inference Using Likelihood*. Oxford University Press. https://doi.org/10.1093/oso/9780198507659.001.0001
+- Proschan, F. (1963). Theoretical Explanation of Observed Decreasing Failure Rate. *Technometrics* 5(3), 375–383. https://doi.org/10.1080/00401706.1963.10490105
+- Rao, C. R. (1948). Large sample tests of statistical hypotheses concerning several parameters with applications to problems of estimation. *Mathematical Proceedings of the Cambridge Philosophical Society* 44(1), 50–57. https://doi.org/10.1017/s0305004100023987
+- Wald, A. (1943). Tests of statistical hypotheses concerning several parameters when the number of observations is large. *Transactions of the American Mathematical Society* 54(3), 426–482. https://doi.org/10.1090/s0002-9947-1943-0012401-3
+- Wilks, S. S. (1938). The Large-Sample Distribution of the Likelihood Ratio for Testing Composite Hypotheses. *The Annals of Mathematical Statistics* 9(1), 60–62. https://doi.org/10.1214/aoms/1177732360
+
 ---
 [← All sessions](../README.md)

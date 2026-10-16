@@ -34,5 +34,17 @@ Study guides to the recommended readings: what each chapter says, the key result
 - [Pawitan Ch. 9 — Large-sample results](../03-maximum-likelihood/03-pawitan-ch9-summary.md)
 - [Pawitan Ch. 12 — EM Algorithm](../03-maximum-likelihood/03-pawitan-ch12-summary.md) (optional, not examined)
 
+## References
+
+Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
+
+- Azzalini, A. and Bowman, A. W. (1990). A Look at Some Data on the Old Faithful Geyser. *Applied Statistics* 39(3), 357–365. https://doi.org/10.2307/2347385
+- Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977). Maximum Likelihood from Incomplete Data Via the EM Algorithm. *Journal of the Royal Statistical Society Series B: Statistical Methodology* 39(1), 1–22. https://doi.org/10.1111/j.2517-6161.1977.tb01600.x
+- Efron, B. and Hinkley, D. V. (1978). Assessing the accuracy of the maximum likelihood estimator: Observed versus expected Fisher information. *Biometrika* 65(3), 457–483. https://doi.org/10.1093/biomet/65.3.457
+- Nelder, J. A. and Mead, R. (1965). A Simplex Method for Function Minimization. *The Computer Journal* 7(4), 308–313. https://doi.org/10.1093/comjnl/7.4.308
+- Pawitan, Y. (2001). *In All Likelihood: Statistical Modelling and Inference Using Likelihood*. Oxford University Press. https://doi.org/10.1093/oso/9780198507659.001.0001
+- Self, S. G. and Liang, K.-Y. (1987). Asymptotic Properties of Maximum Likelihood Estimators and Likelihood Ratio Tests under Nonstandard Conditions. *Journal of the American Statistical Association* 82(398), 605–610. https://doi.org/10.1080/01621459.1987.10478472
+- Wilks, S. S. (1938). The Large-Sample Distribution of the Likelihood Ratio for Testing Composite Hypotheses. *The Annals of Mathematical Statistics* 9(1), 60–62. https://doi.org/10.1214/aoms/1177732360
+
 ---
 [← All sessions](../README.md)
