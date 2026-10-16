@@ -12,4 +12,4 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 
 ## Exam session
 
-The format, duration and allowed material are announced on Blackboard. Revise with the review session ([Session 13](../13-review-midterm/)) and the exercise sessions.
+The format, duration and allowed material are announced on Blackboard. Revise with the review session ([Session 13](../13-review-midterm/)) and the exercise sessions. Revise Chapters 1–10 of the [class notes](../class-notes/StatMod-class-notes.pdf).

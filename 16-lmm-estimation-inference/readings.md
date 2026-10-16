@@ -36,7 +36,7 @@ Section numbers follow the editions listed in the syllabus. Check them against t
 
 ## Next
 
-**Session 17 — GLMMs.** Read Wood Ch. 3.4.
+**Session 17 — GLMMs.** Read Wood Ch. 3.
 
 ## Reading summaries
 

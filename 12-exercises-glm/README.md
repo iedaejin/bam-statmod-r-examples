@@ -13,7 +13,9 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 ## How to follow this session
 
 1. **Before class:** read the required texts in [readings.md](readings.md).
-2. **In class:** we work the problems in [exercises.md](exercises.md) in groups, by hand first. The R scripts that check the answers are published here after the session.
+2. **Class notes:** Chapter 8, *Exponential families and generalized linear models*; Chapter 9, *Fitting and inference for GLMs*; Chapter 10, *Binary and count data in practice* in the [class notes](../class-notes/StatMod-class-notes.pdf) — full derivations, worked R examples and solved exercises.
+3. **In class:** we work the problems in [exercises.md](exercises.md) in groups, by hand first. The R scripts that check the answers are published here after the session.
+4. **Problem set of this block:** [PS3-glm](../problem-sets/PS3-glm.pdf) — theory, R and interpretation; deadline and solutions on Blackboard.
 
 ## Reading summaries
 

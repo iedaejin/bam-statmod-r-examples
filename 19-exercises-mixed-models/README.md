@@ -13,7 +13,9 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 ## How to follow this session
 
 1. **Before class:** read the required texts in [readings.md](readings.md).
-2. **In class:** we work the problems in [exercises.md](exercises.md) in groups, by hand first. The R scripts that check the answers are published here after the session.
+2. **Class notes:** Chapter 11, *Linear mixed models*; Chapter 12, *Estimation and inference for linear mixed models*; Chapter 13, *Generalized linear mixed models* in the [class notes](../class-notes/StatMod-class-notes.pdf) — full derivations, worked R examples and solved exercises.
+3. **In class:** we work the problems in [exercises.md](exercises.md) in groups, by hand first. The R scripts that check the answers are published here after the session.
+4. **Problem set of this block:** [PS4-mixed-models](../problem-sets/PS4-mixed-models.pdf) — theory, R and interpretation; deadline and solutions on Blackboard.
 
 ## Reading summaries
 

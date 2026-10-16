@@ -13,7 +13,8 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 ## How to follow this session
 
 1. **Before class:** read the required texts in [readings.md](readings.md).
-2. **In class:** we work the problems in groups, by hand first. The R scripts that check the answers are published here after the session.
+2. **Class notes:** Chapters 1–10 of the [class notes](../class-notes/StatMod-class-notes.pdf) — full derivations, worked R examples and solved exercises.
+3. **In class:** we work the problems in groups, by hand first. The R scripts that check the answers are published here after the session.
 
 ## References
 

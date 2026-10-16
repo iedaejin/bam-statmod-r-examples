@@ -13,9 +13,11 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 ## How to follow this session
 
 1. **Before class:** read the required texts in [readings.md](readings.md).
-2. **In class:** open this folder in RStudio (or Positron) and run the scripts below in order. When a slide says *Follow: r-examples/…*, run the matching chunk and compare the output.
-3. **Lab:** [Lab_06_GAMs](https://github.com/iedaejin/bam-statmod-labs/tree/main/Lab_06_GAMs) — work through `lab.qmd`, then submit the `.txt` from `tutorial.Rmd` on Blackboard before the next session.
-4. **After class:** try the problems in [exercises.md](exercises.md). Solutions are discussed in class or released on Blackboard.
+2. **Class notes:** Chapter 16, *Generalized additive models* in the [class notes](../class-notes/StatMod-class-notes.pdf) — full derivations, worked R examples and solved exercises.
+3. **In class:** open this folder in RStudio (or Positron) and run the scripts below in order. When a slide says *Follow: r-examples/…*, run the matching chunk and compare the output.
+4. **Lab:** [Lab_06_GAMs](https://github.com/iedaejin/bam-statmod-labs/tree/main/Lab_06_GAMs) — work through `lab.qmd`, then submit the `.txt` from `tutorial.Rmd` on Blackboard before the next session.
+5. **After class:** try the problems in [exercises.md](exercises.md). Solutions are discussed in class or released on Blackboard.
+6. **Problem set of this block:** [PS6-gams](../problem-sets/PS6-gams.pdf) — theory, R and interpretation; deadline and solutions on Blackboard.
 
 ## R scripts, in class order
 

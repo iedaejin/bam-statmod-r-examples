@@ -13,7 +13,9 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 ## How to follow this session
 
 1. **Before class:** read the required texts in [readings.md](readings.md).
-2. **In class:** we work the problems in [exercises.md](exercises.md) in groups, by hand first. The R scripts that check the answers are published here after the session.
+2. **Class notes:** Chapter 5, *The linear model in theory*; Chapter 6, *Diagnostics and prediction*; Chapter 7, *Linear models in practice and model selection* in the [class notes](../class-notes/StatMod-class-notes.pdf) — full derivations, worked R examples and solved exercises.
+3. **In class:** we work the problems in [exercises.md](exercises.md) in groups, by hand first. The R scripts that check the answers are published here after the session.
+4. **Problem set of this block:** [PS2-linear-models](../problem-sets/PS2-linear-models.pdf) — theory, R and interpretation; deadline and solutions on Blackboard.
 
 ## Reading summaries
 

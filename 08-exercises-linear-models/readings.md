@@ -43,4 +43,4 @@ Study guides to the chapters above. They send you to the book; they do not repla
 
 ## Next
 
-**Session 9 — Introduction to GLMs.** Read Wood (2017) Ch. 3.1; Pawitan (2001) Ch. 4 and 6.
+**Session 9 — Introduction to GLMs.** Read Wood (2017) Ch. 3; Pawitan (2001) Ch. 4 and 6.

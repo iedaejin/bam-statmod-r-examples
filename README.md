@@ -28,6 +28,21 @@ Browse it as a website: <https://iedaejin.github.io/bam-statmod-r-examples/>
 
 If you missed a class, the session guide, the slides on Blackboard and the scripts let you catch up on your own; come to office hours (on request, daelee@faculty.ie.edu) with specific questions.
 
+## Class notes and problem sets
+
+- **Class notes** — [StatMod-class-notes.pdf](class-notes/StatMod-class-notes.pdf): the course as a book (20 chapters + appendices), with every derivation, worked R examples on real data and solved exercises. Each session guide says which chapter to read.
+- **Problem sets** — one per block, combining theory, R and interpretation. Solutions are released on Blackboard after the deadline.
+
+| Problem set | Block |
+|---|---|
+| [PS1-likelihood](problem-sets/PS1-likelihood.pdf) | Sessions 1–4 |
+| [PS2-linear-models](problem-sets/PS2-linear-models.pdf) | Sessions 5–8 |
+| [PS3-glm](problem-sets/PS3-glm.pdf) | Sessions 9–12 |
+| [PS4-mixed-models](problem-sets/PS4-mixed-models.pdf) | Sessions 15–19 |
+| [PS5-smoothing](problem-sets/PS5-smoothing.pdf) | Sessions 20–22 |
+| [PS6-gams](problem-sets/PS6-gams.pdf) | Sessions 23–27 |
+| [PS7-survival](problem-sets/PS7-survival.pdf) | Session 28 |
+
 ## Sessions
 
 | # | Session | Material here | Lab |
