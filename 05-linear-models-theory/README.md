@@ -41,10 +41,16 @@ Study guides to the recommended readings: what each chapter says, the key result
 
 Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
 
-- Belsley, D. A., Kuh, E. and Welsch, R. E. (1980). *Regression Diagnostics: Identifying Influential Data and Sources of Collinearity*. Wiley. https://doi.org/10.1002/0471725153
+**Recommended reading**
+
+- Faraway, J. J. (2014). *Linear Models with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/b17144  
+  → Ch. 2 Estimation (pp. 13–31); Ch. 3 Inference (pp. 33–50); Ch. 4 Prediction (pp. 51–58)
+- Kutner, M. H., Nachtsheim, C. J., Neter, J. and Li, W. (2005). *Applied Linear Statistical Models*, 5th ed. McGraw-Hill/Irwin. ISBN 0072386886  
+  → Ch. 5; Ch. 6
+
+**Original papers** (optional: where the methods come from)
+
 - Cook, R. D. (1977). Detection of Influential Observation in Linear Regression. *Technometrics* 19(1), 15–18. https://doi.org/10.1080/00401706.1977.10489493
-- Faraway, J. J. (2014). *Linear Models with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/b17144
-- Kutner, M. H., Nachtsheim, C. J., Neter, J. and Li, W. (2005). *Applied Linear Statistical Models*, 5th ed. McGraw-Hill/Irwin. ISBN 0072386886
 
 ---
 [← All sessions](../README.md)

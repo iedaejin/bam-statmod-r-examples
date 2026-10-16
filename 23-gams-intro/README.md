@@ -37,11 +37,14 @@ Study guides to the recommended readings: what each chapter says, the key result
 
 Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
 
-- Buja, A., Hastie, T. and Tibshirani, R. (1989). Linear Smoothers and Additive Models. *The Annals of Statistics* 17(2), 453–510. https://doi.org/10.1214/aos/1176347115
+**Recommended reading**
+
+- Wood, S. N. (2017). *Generalized Additive Models: An Introduction with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/9781315370279  
+  → Ch. 4 Introducing GAMs (pp. 161–194)
+
+**Original papers** (optional: where the methods come from)
+
 - Hastie, T. and Tibshirani, R. (1986). Generalized Additive Models. *Statistical Science* 1(3), 297–310. https://doi.org/10.1214/ss/1177013604
-- Hastie, T. J. and Tibshirani, R. J. (1990). *Generalized Additive Models*. Chapman and Hall; reissued 2017, Routledge. https://doi.org/10.1201/9780203753781
-- Pedersen, E. J., Miller, D. L., Simpson, G. L. and Ross, N. (2019). Hierarchical generalized additive models in ecology: an introduction with mgcv. *PeerJ* 7, e6876. https://doi.org/10.7717/peerj.6876
-- Wood, S. N. (2017). *Generalized Additive Models: An Introduction with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/9781315370279
 
 ---
 [← All sessions](../README.md)

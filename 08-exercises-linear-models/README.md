@@ -35,10 +35,10 @@ Study guides to the recommended readings: what each chapter says, the key result
 
 Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
 
-- Cook, R. D. (1977). Detection of Influential Observation in Linear Regression. *Technometrics* 19(1), 15–18. https://doi.org/10.1080/00401706.1977.10489493
-- Faraway, J. J. (2014). *Linear Models with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/b17144
-- Ide-Smith, S. G. and Lea, S. E. G. (1988). Gambling in young adolescents. *Journal of Gambling Behavior* 4(2), 110–118. https://doi.org/10.1007/bf01020107
-- Kutner, M. H., Nachtsheim, C. J., Neter, J. and Li, W. (2005). *Applied Linear Statistical Models*, 5th ed. McGraw-Hill/Irwin. ISBN 0072386886
+**Recommended reading**
+
+- Faraway, J. J. (2014). *Linear Models with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/b17144  
+  → Ch. 2 Estimation (pp. 13–31); Ch. 3 Inference (pp. 33–50); Ch. 4 Prediction (pp. 51–58); Ch. 5 Explanation (pp. 59–71); Ch. 6 Diagnostics (pp. 73–98); Ch. 7 Problems with the predictors (pp. 99–111); Ch. 10 Model selection (pp. 149–160); Ch. 11 Shrinkage methods (pp. 161–181) — end-of-chapter exercises
 
 ---
 [← All sessions](../README.md)

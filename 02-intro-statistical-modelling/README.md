@@ -42,13 +42,16 @@ Study guides to the recommended readings: what each chapter says, the key result
 
 Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
 
+**Recommended reading**
+
+- Pawitan, Y. (2001). *In All Likelihood: Statistical Modelling and Inference Using Likelihood*. Oxford University Press. https://doi.org/10.1093/oso/9780198507659.001.0001  
+  → Ch. 1 Introduction (pp. 1–20)
+
+**Original papers** (optional: where the methods come from)
+
 - Box, G. E. P. (1976). Science and Statistics. *Journal of the American Statistical Association* 71(356), 791–799. https://doi.org/10.1080/01621459.1976.10480949
 - Breiman, L. (2001). Statistical Modeling: The Two Cultures. *Statistical Science* 16(3), 199–231. https://doi.org/10.1214/ss/1009213726
-- Pawitan, Y. (2001). *In All Likelihood: Statistical Modelling and Inference Using Likelihood*. Oxford University Press. https://doi.org/10.1093/oso/9780198507659.001.0001
-- Peng, R. D. (2011). Reproducible Research in Computational Science. *Science* 334(6060), 1226–1227. https://doi.org/10.1126/science.1213847
-- Sandve, G. K., Nekrutenko, A., Taylor, J. and Hovig, E. (2013). Ten Simple Rules for Reproducible Computational Research. *PLoS Computational Biology* 9(10), e1003285. https://doi.org/10.1371/journal.pcbi.1003285
 - Shmueli, G. (2010). To Explain or to Predict?. *Statistical Science* 25(3), 289–310. https://doi.org/10.1214/10-sts330
-- Wickham, H. (2014). Tidy Data. *Journal of Statistical Software* 59(10). https://doi.org/10.18637/jss.v059.i10
 
 ---
 [← All sessions](../README.md)

@@ -36,11 +36,10 @@ Study guides to the recommended readings: what each chapter says, the key result
 
 Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
 
-- Pedersen, E. J., Miller, D. L., Simpson, G. L. and Ross, N. (2019). Hierarchical generalized additive models in ecology: an introduction with mgcv. *PeerJ* 7, e6876. https://doi.org/10.7717/peerj.6876
-- Ramsay, T. O., Burnett, R. T. and Krewski, D. (2003). The Effect of Concurvity in Generalized Additive Models Linking Mortality to Ambient Particulate Matter. *Epidemiology* 14(1), 18–23. https://doi.org/10.1097/00001648-200301000-00009
-- Wood, S. N. (2006). Low‐Rank Scale‐Invariant Tensor Product Smooths for Generalized Additive Mixed Models. *Biometrics* 62(4), 1025–1036. https://doi.org/10.1111/j.1541-0420.2006.00574.x
-- Wood, S. N. (2011). Fast Stable Restricted Maximum Likelihood and Marginal Likelihood Estimation of Semiparametric Generalized Linear Models. *Journal of the Royal Statistical Society Series B: Statistical Methodology* 73(1), 3–36. https://doi.org/10.1111/j.1467-9868.2010.00749.x
-- Wood, S. N. (2017). *Generalized Additive Models: An Introduction with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/9781315370279
+**Recommended reading**
+
+- Wood, S. N. (2017). *Generalized Additive Models: An Introduction with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/9781315370279  
+  → Ch. 7 GAMs in practice: mgcv (pp. 325–403)
 
 ---
 [← All sessions](../README.md)

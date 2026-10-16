@@ -39,16 +39,15 @@ Study guides to the recommended readings: what each chapter says, the key result
 
 Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
 
-- Breslow, N. (1974). Covariance Analysis of Censored Survival Data. *Biometrics* 30(1), 89–99. https://doi.org/10.2307/2529620
-- Collett, D. (2015). *Modelling Survival Data in Medical Research*, 3rd ed. Chapman and Hall/CRC. https://doi.org/10.1201/b18041
+**Recommended reading**
+
+- Pawitan, Y. (2001). *In All Likelihood: Statistical Modelling and Inference Using Likelihood*. Oxford University Press. https://doi.org/10.1093/oso/9780198507659.001.0001  
+  → Ch. 11 Complex data structure (pp. 297–340); Ch. 10 Dealing with nuisance parameters (pp. 273–296) — Ch. 10 optional
+
+**Original papers** (optional: where the methods come from)
+
 - Cox, D. R. (1972). Regression Models and Life-Tables. *Journal of the Royal Statistical Society Series B: Statistical Methodology* 34(2), 187–202. https://doi.org/10.1111/j.2517-6161.1972.tb00899.x
-- Cox, D. R. (1975). Partial likelihood. *Biometrika* 62(2), 269–276. https://doi.org/10.1093/biomet/62.2.269
-- Grambsch, P. M. and Therneau, T. M. (1994). Proportional hazards tests and diagnostics based on weighted residuals. *Biometrika* 81(3), 515–526. https://doi.org/10.1093/biomet/81.3.515
-- Kalbfleisch, J. D. and Prentice, R. L. (2002). *The Statistical Analysis of Failure Time Data*, 2nd ed. Wiley. https://doi.org/10.1002/9781118032985
 - Kaplan, E. L. and Meier, P. (1958). Nonparametric Estimation from Incomplete Observations. *Journal of the American Statistical Association* 53(282), 457–481. https://doi.org/10.1080/01621459.1958.10501452
-- Pawitan, Y. (2001). *In All Likelihood: Statistical Modelling and Inference Using Likelihood*. Oxford University Press. https://doi.org/10.1093/oso/9780198507659.001.0001
-- Peto, R. and Peto, J. (1972). Asymptotically Efficient Rank Invariant Test Procedures. *Journal of the Royal Statistical Society. Series A (General)* 135(2), 185–198. https://doi.org/10.2307/2344317
-- Therneau, T. M. and Grambsch, P. M. (2000). *Modeling Survival Data: Extending the Cox Model*. Springer New York. https://doi.org/10.1007/978-1-4757-3294-8
 
 ---
 [← All sessions](../README.md)

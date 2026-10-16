@@ -17,6 +17,8 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 
 Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
 
+**Original papers** (optional: where the methods come from)
+
 - Wasserstein, R. L. and Lazar, N. A. (2016). The ASA statement on $p$-values: context, process, and purpose. *The American Statistician* 70(2), 129–133. https://doi.org/10.1080/00031305.2016.1154108
 
 ---

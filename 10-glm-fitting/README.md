@@ -39,18 +39,15 @@ Study guides to the recommended readings: what each chapter says, the key result
 
 Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
 
-- Aitkin, M. (1978). The Analysis of Unbalanced Cross-Classifications. *Journal of the Royal Statistical Society. Series A (General)* 141(2), 195–211. https://doi.org/10.2307/2344453
-- Akaike, H. (1974). A new look at the statistical model identification. *IEEE Transactions on Automatic Control* 19(6), 716–723. https://doi.org/10.1109/tac.1974.1100705
-- Cameron, A. C. and Trivedi, P. K. (1990). Regression-based tests for overdispersion in the Poisson model. *Journal of Econometrics* 46(3), 347–364. https://doi.org/10.1016/0304-4076(90)90014-k
+**Recommended reading**
+
+- Wood, S. N. (2017). *Generalized Additive Models: An Introduction with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/9781315370279  
+  → Ch. 3 Generalized linear models (pp. 101–160)
+
+**Original papers** (optional: where the methods come from)
+
 - Dunn, P. K. and Smyth, G. K. (1996). Randomized Quantile Residuals. *Journal of Computational and Graphical Statistics* 5(3), 236–244. https://doi.org/10.1080/10618600.1996.10474708
-- Faraway, J. J. (2016). *Extending the Linear Model with R: Generalized Linear, Mixed Effects and Nonparametric Regression Models*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/9781315382722
-- Lambert, D. (1992). Zero-Inflated Poisson Regression, with an Application to Defects in Manufacturing. *Technometrics* 34(1), 1–14. https://doi.org/10.2307/1269547
-- McCullagh, P. and Nelder, J. A. (1989). *Generalized Linear Models*, 2nd ed. Chapman and Hall; reissued 2019, Routledge. https://doi.org/10.1201/9780203753736
-- Mullahy, J. (1986). Specification and testing of some modified count data models. *Journal of Econometrics* 33(3), 341–365. https://doi.org/10.1016/0304-4076(86)90002-3
-- Nelder, J. A. and Wedderburn, R. W. M. (1972). Generalized Linear Models. *Journal of the Royal Statistical Society. Series A (General)* 135(3), 370. https://doi.org/10.2307/2344614
-- Venables, W. N. and Ripley, B. D. (2002). *Modern Applied Statistics with S*, 4th ed. Springer New York. https://doi.org/10.1007/978-0-387-21706-2
 - Wedderburn, R. W. M. (1974). Quasi-likelihood functions, generalized linear models, and the Gauss—Newton method. *Biometrika* 61(3), 439–447. https://doi.org/10.1093/biomet/61.3.439
-- Wood, S. N. (2017). *Generalized Additive Models: An Introduction with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/9781315370279
 
 ---
 [← All sessions](../README.md)

@@ -41,20 +41,16 @@ Study guides to the recommended readings: what each chapter says, the key result
 
 Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
 
+**Recommended reading**
+
+- Faraway, J. J. (2014). *Linear Models with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/b17144  
+  → Ch. 5 Explanation (pp. 59–71); Ch. 10 Model selection (pp. 149–160); Ch. 11 Shrinkage methods (pp. 161–181); Ch. 14 Categorical predictors (pp. 205–222)
+
+**Original papers** (optional: where the methods come from)
+
 - Akaike, H. (1974). A new look at the statistical model identification. *IEEE Transactions on Automatic Control* 19(6), 716–723. https://doi.org/10.1109/tac.1974.1100705
-- Berk, R., Brown, L., Buja, A., et al. (2013). Valid post-selection inference. *The Annals of Statistics* 41(2), 802–837. https://doi.org/10.1214/12-aos1077
-- Breiman, L. (2001). Statistical Modeling: The Two Cultures. *Statistical Science* 16(3), 199–231. https://doi.org/10.1214/ss/1009213726
-- Burnham, K. P. and Anderson, D. R. (2004). Multimodel Inference: Understanding AIC and BIC in Model Selection. *Sociological Methods & Research* 33(2), 261–304. https://doi.org/10.1177/0049124104268644
-- Faraway, J. J. (2014). *Linear Models with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/b17144
-- Friedman, J., Hastie, T. and Tibshirani, R. (2010). Regularization Paths for Generalized Linear Models via Coordinate Descent. *Journal of Statistical Software* 33(1), 1–22. https://doi.org/10.18637/jss.v033.i01
-- Hastie, T., Tibshirani, R. and Friedman, J. (2009). *The Elements of Statistical Learning*, 2nd ed. Springer New York. https://doi.org/10.1007/978-0-387-84858-7
-- Hoerl, A. E. and Kennard, R. W. (1970). Ridge Regression: Biased Estimation for Nonorthogonal Problems. *Technometrics* 12(1), 55–67. https://doi.org/10.1080/00401706.1970.10488634
-- Kutner, M. H., Nachtsheim, C. J., Neter, J. and Li, W. (2005). *Applied Linear Statistical Models*, 5th ed. McGraw-Hill/Irwin. ISBN 0072386886
-- Mallows, C. L. (1973). Some comments on $C_p$. *Technometrics* 15(4), 661–675. https://doi.org/10.1080/00401706.1973.10489103
 - Schwarz, G. (1978). Estimating the Dimension of a Model. *The Annals of Statistics* 6(2), 461–464. https://doi.org/10.1214/aos/1176344136
-- Shmueli, G. (2010). To Explain or to Predict?. *Statistical Science* 25(3), 289–310. https://doi.org/10.1214/10-sts330
 - Tibshirani, R. (1996). Regression Shrinkage and Selection Via the Lasso. *Journal of the Royal Statistical Society Series B: Statistical Methodology* 58(1), 267–288. https://doi.org/10.1111/j.2517-6161.1996.tb02080.x
-- Zou, H. and Hastie, T. (2005). Regularization and Variable Selection Via the Elastic Net. *Journal of the Royal Statistical Society Series B: Statistical Methodology* 67(2), 301–320. https://doi.org/10.1111/j.1467-9868.2005.00503.x
 
 ---
 [← All sessions](../README.md)

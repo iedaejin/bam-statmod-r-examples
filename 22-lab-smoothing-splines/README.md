@@ -36,11 +36,10 @@ Study guides to the recommended readings: what each chapter says, the key result
 
 Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
 
-- Cleveland, W. S. (1979). Robust Locally Weighted Regression and Smoothing Scatterplots. *Journal of the American Statistical Association* 74(368), 829–836. https://doi.org/10.1080/01621459.1979.10481038
-- Craven, P. and Wahba, G. (1978). Smoothing noisy data with spline functions: Estimating the correct degree of smoothing by the method of generalized cross-validation. *Numerische Mathematik* 31(4), 377–403. https://doi.org/10.1007/bf01404567
-- Eilers, P. H. C. and Marx, B. D. (1996). Flexible smoothing with B-splines and penalties. *Statistical Science* 11(2), 89–121. https://doi.org/10.1214/ss/1038425655
-- Eilers, P. H. C. and Marx, B. D. (2021). *Practical Smoothing: The Joys of P-splines*. Cambridge University Press. https://doi.org/10.1017/9781108610247
-- Silverman, B. W. (1985). Some Aspects of the Spline Smoothing Approach to Non-Parametric Regression Curve Fitting. *Journal of the Royal Statistical Society Series B: Statistical Methodology* 47(1), 1–21. https://doi.org/10.1111/j.2517-6161.1985.tb01327.x
+**Recommended reading**
+
+- Eilers, P. H. C. and Marx, B. D. (2021). *Practical Smoothing: The Joys of P-splines*. Cambridge University Press. https://doi.org/10.1017/9781108610247  
+  → Ch. 2 Bases, penalties, and likelihoods (pp. 6–35); Ch. 3 Optimal smoothing in action (pp. 36–58)
 
 ---
 [← All sessions](../README.md)

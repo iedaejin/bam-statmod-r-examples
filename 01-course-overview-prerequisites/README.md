@@ -40,10 +40,12 @@ Study guides to the recommended readings: what each chapter says, the key result
 
 Cited in the slides. Every entry was checked against Crossref (DOI) or Open Library (ISBN).
 
-- Faraway, J. J. (2014). *Linear Models with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/b17144
-- Pawitan, Y. (2001). *In All Likelihood: Statistical Modelling and Inference Using Likelihood*. Oxford University Press. https://doi.org/10.1093/oso/9780198507659.001.0001
-- Peng, R. D. (2011). Reproducible Research in Computational Science. *Science* 334(6060), 1226–1227. https://doi.org/10.1126/science.1213847
-- Wickham, H. (2014). Tidy Data. *Journal of Statistical Software* 59(10). https://doi.org/10.18637/jss.v059.i10
+**Recommended reading**
+
+- Pawitan, Y. (2001). *In All Likelihood: Statistical Modelling and Inference Using Likelihood*. Oxford University Press. https://doi.org/10.1093/oso/9780198507659.001.0001  
+  → Ch. 1 Introduction (pp. 1–20)
+- Faraway, J. J. (2014). *Linear Models with R*, 2nd ed. Chapman and Hall/CRC. https://doi.org/10.1201/b17144  
+  → Ch. 1 Introduction (pp. 1–12)
 
 ---
 [← All sessions](../README.md)
