@@ -42,7 +42,7 @@ Suppose $X^\top X=I_K$ and $S$ is diagonal with entries $s_1,\dots,s_K\ge0$.
 ### Exercise 7 (criteria in R)
 For `log(Ozone) ~ s(Temp)` on the 111 complete airquality cases, fit `method = "GCV.Cp"`, `"REML"` and `"ML"`.
 (a) Report $\hat\lambda$ and the edf of `s(Temp)` for each method.
-(b) Which method gives the smoothest fit? Explain using the analogy with variance components.
+(b) Which method gives the smoothest fit here? Discuss, using the analogy with variance components, whether you expect the ML--REML gap to be this large in general (for instance, simulate 100 data sets and compare the edf of the two fits).
 (c) For the REML fit, compare `sqrt(diag(vcov(fit)))` with `sqrt(diag(vcov(fit, unconditional = TRUE)))`. What does the difference represent?
 
 ### Exercise 8 (basis dimension in R)

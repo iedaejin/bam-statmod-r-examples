@@ -27,7 +27,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`21-regression-splines.Rmd`](21-regression-splines.Rmd) · [`.R`](21-regression-splines.R) | Regression splines: truncated powers, bs() and ns() | — |
 | [`21-smoothing-splines.Rmd`](21-smoothing-splines.Rmd) · [`.R`](21-smoothing-splines.R) | Smoothing splines and penalized truncated power splines | — |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `21-splines.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

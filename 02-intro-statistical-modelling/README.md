@@ -29,9 +29,9 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`02-data-quality.Rmd`](02-data-quality.Rmd) · [`.R`](02-data-quality.R) | Data quality: missingness, selection and measurement error | Measurement error; Selection bias: a thought experiment with New Haven |
 | [`02-reproducible-workflow.Rmd`](02-reproducible-workflow.Rmd) · [`.R`](02-reproducible-workflow.R) | A reproducible workflow in R | A reproducible script |
 
-The scripts read the CSV files in [`data/`](data/) with relative paths. Set the working directory to this folder (open it as an RStudio project, or *Session → Set Working Directory → To Source File Location*).
+The scripts read the CSV files in [`data/`](data/) with relative paths.
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `02-intro-statistical-modelling.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

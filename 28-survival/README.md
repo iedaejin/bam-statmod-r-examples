@@ -28,7 +28,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`28-cox-model.Rmd`](28-cox-model.Rmd) · [`.R`](28-cox-model.R) | Cox proportional hazards model | Worked example: a toy partial likelihood; Cox model in R; Hazard ratios with 95% intervals |
 | [`28-ph-diagnostics.Rmd`](28-ph-diagnostics.Rmd) · [`.R`](28-ph-diagnostics.R) | Checking proportional hazards and fixing a violation | Testing PH in the veteran model; Scaled Schoenfeld residuals for `karno`; Remedies in R; The Karnofsky effect over time |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `28-survival.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

@@ -27,7 +27,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`17-marginal-vs-conditional.Rmd`](17-marginal-vs-conditional.Rmd) · [`.R`](17-marginal-vs-conditional.R) | Conditional vs marginal effects in a logistic GLMM | Conditional and marginal curves; Checking the approximation by simulation |
 | [`17-poisson-olre.Rmd`](17-poisson-olre.Rmd) · [`.R`](17-poisson-olre.R) | Poisson GLMM with an observation-level random effect | A Poisson example: `lme4::grouseticks`; Fitting the OLRE model |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `17-glmm.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

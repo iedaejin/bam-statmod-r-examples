@@ -34,8 +34,7 @@ sapply(fits, function(m) round(sum(m$edf), 2))          # total edf incl. interc
 sapply(fits, function(m) signif(m$sp, 3))
 
 #' 
-#' ML gives the **smoothest** fit (largest $\lambda$, smallest edf). GCV gives
-#' the wiggliest `s(Temp)`. REML sits in between.
+#' Here ML gives the **smoothest** fit (a straight line) and GCV the wiggliest `s(Temp)`, with REML in between. This is one dataset: ML tends to give slightly smoother fits than REML, but the difference is usually much smaller than here.
 #' 
 #' ## 2. The criteria as functions of $\lambda$ (single smooth)
 #' 

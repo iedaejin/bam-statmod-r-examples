@@ -27,7 +27,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`03-wald-score-lr.Rmd`](03-wald-score-lr.Rmd) · [`.R`](03-wald-score-lr.R) | Wald, score and likelihood-ratio tests and intervals | The geometry of the three tests; The three tests in R; Computing a likelihood interval; aircondit: a skewed log-likelihood; Profile likelihood: the ridge of the surface |
 | [`03-numerical-optimization.Rmd`](03-numerical-optimization.Rmd) · [`.R`](03-numerical-optimization.R) | Numerical maximum likelihood | Newton–Raphson by hand; The same fit with `optim()`; Several maxima: Cauchy location; Non-identifiability: a flat ridge |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `03-maximum-likelihood.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

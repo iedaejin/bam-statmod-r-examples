@@ -27,7 +27,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`16-blup-shrinkage.Rmd`](16-blup-shrinkage.Rmd) · [`.R`](16-blup-shrinkage.R) | BLUPs and shrinkage | Shrinkage in `sleepstudy`; Unbalanced data: keep only Days 0–1 for six subjects |
 | [`16-inference-diagnostics.Rmd`](16-inference-diagnostics.Rmd) · [`.R`](16-inference-diagnostics.R) | Inference and diagnostics for LMMs | Likelihood ratio test for a fixed effect: ML fits; The mixture by simulation; Random slope for `sleepstudy`; Diagnostics for `(Days | Subject)`; Diagnostics in R |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `16-lmm-estimation-inference.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

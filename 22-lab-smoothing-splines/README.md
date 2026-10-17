@@ -26,7 +26,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`22-cv-pitfalls.Rmd`](22-cv-pitfalls.Rmd) · [`.R`](22-cv-pitfalls.R) | Cross-validating a smoother: three pitfalls | — |
 | [`22-heteroscedasticity.Rmd`](22-heteroscedasticity.Rmd) · [`.R`](22-heteroscedasticity.R) | Non-constant variance in the motorcycle data | — |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `22-lab-smoothing-splines.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

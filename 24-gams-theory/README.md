@@ -26,7 +26,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`24-penalized-fitting.Rmd`](24-penalized-fitting.Rmd) · [`.R`](24-penalized-fitting.R) | Bases, penalties, identifiability, PIRLS and edf | The smoothing parameter controls the fit; PIRLS by hand reproduces `gam()` |
 | [`24-smoothing-selection.Rmd`](24-smoothing-selection.Rmd) · [`.R`](24-smoothing-selection.R) | Choosing smoothing parameters, k, and inference | $k$ too small: a simulated example; `gam.check()` on the airquality model; The criteria as functions of $\lambda$; Three criteria on the three-smooth model; Posterior draws of `s(Wind)`; Effective df of a `loess` fit: `trace.hat`, not `enp` |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `24-gams-theory.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

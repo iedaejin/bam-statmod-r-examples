@@ -27,7 +27,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`15-pooling.Rmd`](15-pooling.Rmd) · [`.R`](15-pooling.R) | Complete, no and partial pooling (sleepstudy) | The residuals of one pooled `lm()` are correlated; Complete vs no vs partial pooling (six subjects); Partial pooling in the (intercept, slope) plane; Ignoring the grouping gives the wrong standard error |
 | [`15-random-intercept-slope.Rmd`](15-random-intercept-slope.Rmd) · [`.R`](15-random-intercept-slope.R) | Random intercepts, random slopes and the implied covariance | Random intercept for `sleepstudy`; Implied correlation of one subject's ten measurements; Random intercept and slope for `sleepstudy`; ICC and $V_i$ by hand |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `15-linear-mixed-models.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

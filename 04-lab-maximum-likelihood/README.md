@@ -26,7 +26,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`04-mle-toolkit.Rmd`](04-mle-toolkit.Rmd) · [`.R`](04-mle-toolkit.R) | A small toolkit for numerical MLE | Part 1: Poisson MLE with `optim()`; Wald and likelihood intervals |
 | [`04-mixture-starts.Rmd`](04-mixture-starts.Rmd) · [`.R`](04-mixture-starts.R) | Mixtures, starting values and identifiability | Part 3: a two-component normal mixture; Twenty random starts |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `04-lab-maximum-likelihood.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

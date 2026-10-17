@@ -5,20 +5,20 @@
 Exercises 1–5 are by hand; 6–8 use R (`mgcv`, `nlme`, `splines`).
 
 ### Exercise 1 (the variance ratio)
-In $y=X\beta+Zb+\varepsilon$ with $b\sim N(0,\sigma_b^2I)$ and $\varepsilon\sim N(0,\sigma^2I)$ independent:
+In $y=X\alpha+Zb+\varepsilon$ with $b\sim N(0,\sigma_b^2I)$ and $\varepsilon\sim N(0,\sigma^2I)$ independent:
 (a) Write $\log f(y\mid b)+\log f(b)$.
-(b) Show that maximising it over $(\beta,b)$ is a penalized least-squares problem and identify $\lambda$.
+(b) Show that maximising it over $(\alpha,b)$ is a penalized least-squares problem and identify $\lambda$.
 (c) Write the resulting linear system (Henderson's mixed-model equations).
 
 ### Exercise 2 (reparametrisation)
 Let $S=D_2^\top D_2$ for $K=12$, with eigen-decomposition $S=U\Sigma U^\top$, $U=[U_0\;U_+]$.
 (a) What are the dimensions of $U_0$, $U_+$, $\Sigma_+$, $X$ and $Z=BU_+\Sigma_+^{-1/2}$ when $n=100$?
-(b) Show that $\alpha=U_0\beta_0+U_+\Sigma_+^{-1/2}b$ gives $\alpha^\top S\alpha=b^\top b$.
-(c) Is the map $(\beta_0,b)\mapsto\alpha$ one-to-one? Justify.
+(b) Show that $\beta=U_0\alpha_0+U_+\Sigma_+^{-1/2}b$ gives $\beta^\top S\beta=b^\top b$.
+(c) Is the map $(\alpha_0,b)\mapsto\beta$ one-to-one? Justify.
 
 ### Exercise 3 (the null space and $[\mathbf 1,x]$)
-(a) Show that $D_2\alpha=0$ if and only if $\alpha_k=a+ck$ for constants $a,c$.
-(b) For cubic B-splines on equally spaced knots, $\sum_kB_k(x)=1$ and $\sum_k t_k^*B_k(x)=x$, where the knot averages $t_k^*$ are equally spaced. Deduce that $B\alpha$ is a linear function of $x$ for every $\alpha$ in the null space, so $BU_0$ spans the same space as $[\mathbf 1,x]$.
+(a) Show that $D_2\beta=0$ if and only if $\beta_k=a+ck$ for constants $a,c$.
+(b) For cubic B-splines on equally spaced knots, $\sum_kB_k(x)=1$ and $\sum_k t_k^*B_k(x)=x$, where the knot averages $t_k^*$ are equally spaced. Deduce that $B\beta$ is a linear function of $x$ for every $\beta$ in the null space, so $BU_0$ spans the same space as $[\mathbf 1,x]$.
 
 ### Exercise 4 (random intercepts as a smooth)
 For `height ~ s(age) + s(Subject, bs = "re")` on Oxboys, `gam.vcomp()` gives $\hat\sigma_b=8.097$ and $\hat\sigma=1.281$.

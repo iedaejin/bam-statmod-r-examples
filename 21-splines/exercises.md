@@ -23,9 +23,9 @@ Notation: knots $\kappa_k$ (B-spline knot sequence $t_j$), spline degree $q$, B-
 (c) Explain why the smoothing-spline fit with $\lambda \to \infty$ is the least squares straight line.
 
 **Exercise 4 (a P-spline you can invert by hand).** Take the identity basis $B = I_3$ (one coefficient per observation, the "Whittaker smoother"), data $y = (1, 4, 1)$ and $\lambda = 1$.
-(a) For $d = 1$, write $D_1$ and $D_1^\top D_1$, compute $\hat\theta = (I + \lambda D_1^\top D_1)^{-1}y$ and $\mathrm{edf}$.
+(a) For $d = 1$, write $D_1$ and $D_1^\top D_1$, compute $\hat\beta = (I + \lambda D_1^\top D_1)^{-1}y$ and $\mathrm{edf}$.
 (b) Repeat for $d = 2$.
-(c) In both cases check which "moments" $\sum_j j^k\hat\theta_j = \sum_j j^k y_j$ are conserved, and explain why with the moment property.
+(c) In both cases check which "moments" $\sum_j j^k\hat\beta_j = \sum_j j^k y_j$ are conserved, and explain why with the moment property.
 (d) What are the limits of the edf as $\lambda \to 0$ and $\lambda \to \infty$ for $d = 1$ and $d = 2$?
 
 **Exercise 5 (edf is between $d$ and $c$ and decreases with $\lambda$).** Assume $B$ has full column rank $c$ and write $B^\top B = R^\top R$ (Cholesky).
@@ -47,8 +47,8 @@ Notation: knots $\kappa_k$ (B-spline knot sequence $t_j$), spline degree $q$, B-
 (c) Estimate $\sigma$ at the chosen $\lambda$.
 
 **Exercise 7 (when polynomial reproduction fails).**
-(a) Linear B-splines ($q = 1$) on the knots $-1, 0, 1, 3, 4, 5$ have their peaks at $0, 1, 3, 4$. Show that the coefficients that represent $f(x) = x$ on $[0, 4]$ are $\theta = (0, 1, 3, 4)$.
-(b) Compute $D_2\theta$. Does a P-spline with $d = 2$ on these knots reproduce a straight line for every $\lambda$? Which condition of the property is violated?
+(a) Linear B-splines ($q = 1$) on the knots $-1, 0, 1, 3, 4, 5$ have their peaks at $0, 1, 3, 4$. Show that the coefficients that represent $f(x) = x$ on $[0, 4]$ are $\beta = (0, 1, 3, 4)$.
+(b) Compute $D_2\beta$. Does a P-spline with $d = 2$ on these knots reproduce a straight line for every $\lambda$? Which condition of the property is violated?
 (c) With equally spaced knots, cubic B-splines and $d = 3$, which polynomials are reproduced? Which are not if you use linear B-splines and $d = 3$, and why?
 
 **Exercise 8 (R: is the number of segments important?).** Use `bbase()` and `psfit()` from `21-bsplines-psplines.Rmd` on `mcycle`.

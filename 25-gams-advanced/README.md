@@ -27,7 +27,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`25-concurvity-selection.Rmd`](25-concurvity-selection.Rmd) · [`.R`](25-concurvity-selection.R) | Concurvity and term selection | Shrinkage selection: `select = TRUE`; A simulation; Same truth, different designs |
 | [`25-diagnostics-visualization.Rmd`](25-diagnostics-visualization.Rmd) · [`.R`](25-diagnostics-visualization.R) | Residual diagnostics, interpretation and visualisation | `gam.check()` on the interaction model; Residuals in time order and against fitted values; Predicted median ozone by temperature and wind; A contrast with its uncertainty; Visualisation tools |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `25-gams-advanced.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

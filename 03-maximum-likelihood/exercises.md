@@ -85,3 +85,15 @@ The Weibull density with shape $k$ and scale $s$ is $f(y)=\frac ks\left(\frac ys
 1. Suppose $y_i\sim N(ab,1)$ with both $a$ and $b$ unknown. Which function of $(a,b)$ is identifiable? What happens to the Hessian of $-\ell$ at any maximiser?
 2. In a two-component normal mixture $p\,N(\mu_1,\sigma_1^2)+(1-p)\,N(\mu_2,\sigma_2^2)$, give two different parameter vectors that define the same distribution.
 3. You observe 0 successes in 20 Bernoulli trials. Why does the usual Wald interval fail? Compute the 95% likelihood interval.
+
+---
+
+## Exercise 9 — Censored exponential lifetimes (preview of Session 28)
+
+Eight components are tested. Failure times (hours) are $5,\ 12,\ 20,\ 31,\ 52$; three other components were removed from the test, still working, at $8,\ 25,\ 40$ hours (right-censored). Assume exponential lifetimes with rate $\lambda$.
+
+1. Write the contribution of a failure and of a censored component to the likelihood, and show $\ell(\lambda)=d\log\lambda-\lambda\sum t_i$, where $d$ is the number of failures and the sum runs over all 8 components.
+2. Find $\hat\lambda$, $I(\hat\lambda)$, $\mathrm{se}(\hat\lambda)$ and a 95% Wald interval.
+3. Test $H_0:\lambda=0.04$ with the likelihood-ratio statistic.
+4. Compute $1/\bar t$ (all 8 times) and $d/\sum_{\text{failures}}t_i$. Why are both wrong? Which direction is the bias?
+5. Check your answers in R with `survival::survreg(Surv(t, delta) ~ 1, dist = "exponential")`.

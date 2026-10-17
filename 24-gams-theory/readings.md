@@ -23,7 +23,7 @@
 1. The derivation of PIRLS from the penalized log-likelihood, with $\lambda_j$ written once.
 2. The QR reparametrisation that imposes the sum-to-zero constraint, and why it costs one degree of freedom.
 3. GCV and UBRE as estimates of prediction error; REML and ML as marginal likelihoods of $\lambda$.
-4. Why ML tends to give smoother fits than REML, and why `mgcv`'s default `"GCV.Cp"` can undersmooth.
+4. Why ML tends to give slightly smoother fits than REML (usually a small difference), and why `mgcv`'s default `"GCV.Cp"` can undersmooth.
 5. edf $=\operatorname{tr}(F)$; the Bayesian covariance $V_\beta$ and what a pointwise credible band does and does not promise.
 
 ## R

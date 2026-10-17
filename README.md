@@ -8,19 +8,17 @@ This repository follows the slides session by session. Each folder has a **sessi
 ## Set up once
 
 1. Install R (≥ 4.3) and RStudio, or use [Posit Cloud](https://posit.cloud/) in the browser.
-2. Install the packages used in the course:
+2. Download this repository: green **Code** button → **Download ZIP** (or `git clone` it and `git pull` before each class, since new sessions are added during the term).
+3. Install the packages used in the course (run once, with the repository folder as working directory):
 
    ```r
-   install.packages(c("rmarkdown", "knitr", "tidyverse", "MASS", "faraway", "car",
-                      "glmnet", "leaps", "nlme", "lme4", "mgcv", "gamm4", "gratia", "survival"))
+   source("install_course_packages.R")
    ```
-
-3. Download this repository: green **Code** button → **Download ZIP** (or `git clone` it and `git pull` before each class, since new sessions are added during the term).
 
 ## Follow a session
 
 1. **Before class** — open the session folder and read `readings.md`.
-2. **In class** — open the folder in RStudio and run the scripts in the order of the session guide. A slide that says *Follow: r-examples/NN-name.Rmd* tells you which script to run at that point.
+2. **In class** — open the session's `.Rproj` (RStudio then works inside that folder) and run the scripts in the order of the session guide. A slide that says *Follow: r-examples/NN-name.Rmd* tells you which script to run at that point.
 3. **After class** — knit the `.Rmd` files to keep a report of what we did, and try `exercises.md`.
 4. **Labs** — the graded computer labs are in [bam-statmod-labs](https://github.com/iedaejin/bam-statmod-labs). Each lab ends with a learnr tutorial whose `.txt` you upload to Blackboard.
 

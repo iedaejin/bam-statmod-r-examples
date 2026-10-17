@@ -25,7 +25,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 |---|---|---|
 | [`18-lab-walkthrough.Rmd`](18-lab-walkthrough.Rmd) · [`.R`](18-lab-walkthrough.R) | Lab 04 walk-through: lmer, lme and glmer | Setup; Part 1: three ways to pool |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `18-lab-mixed-models.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

@@ -26,7 +26,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`11-binary-toolkit.Rmd`](11-binary-toolkit.Rmd) · [`.R`](11-binary-toolkit.R) | A toolkit for binary GLMs | Odds ratios on the right scale; Testing a block of predictors; Thresholds: choose on training, evaluate on test; The threshold trades sensitivity for specificity |
 | [`11-count-toolkit.Rmd`](11-count-toolkit.Rmd) · [`.R`](11-count-toolkit.R) | A toolkit for count GLMs | Poisson for a rate; Overdispersion checks; Randomized quantile residuals |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `11-lab-glm.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

@@ -29,7 +29,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`01-setup.Rmd`](01-setup.Rmd) · [`.R`](01-setup.R) | Setup | Next session and before it |
 | [`01-review.R`](01-review.R) | R script | — |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `01-course-overview-prerequisites.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

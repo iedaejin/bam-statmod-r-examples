@@ -22,7 +22,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 |---|---|---|
 | [`29-workflow-template.Rmd`](29-workflow-template.Rmd) · [`.R`](29-workflow-template.R) | A modelling workflow from question to communication | Worked example: GLM vs GAM; Diagnostics that work for a binary response; Communicating the result |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `29-group-project-workshop.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## References
 

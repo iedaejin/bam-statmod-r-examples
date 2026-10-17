@@ -26,7 +26,7 @@ Chapter numbers follow the editions listed in the syllabus. Check section number
 1. The truncated power basis and why it is badly conditioned; B-splines span the same space.
 2. The Cox–de Boor recursion; local support; partition of unity.
 3. The smoothing-spline theorem and its integration-by-parts proof.
-4. The P-spline estimator $\hat\theta = (B^\top B + \lambda D_d^\top D_d)^{-1}B^\top y$, $S_\lambda$, and $\mathrm{edf} = \mathrm{tr}(S_\lambda)$, including its limits $c$ and $d$.
+4. The P-spline estimator $\hat\beta = (B^\top B + \lambda D_d^\top D_d)^{-1}B^\top y$, $S_\lambda$, and $\mathrm{edf} = \mathrm{tr}(S_\lambda)$, including its limits $c$ and $d$.
 5. The conditions under which the difference penalty reproduces polynomials and conserves moments.
 6. GCV and AIC as functions of $\lambda$.
 

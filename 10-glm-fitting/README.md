@@ -28,7 +28,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`10-residuals.Rmd`](10-residuals.Rmd) · [`.R`](10-residuals.R) | Residuals for GLMs | Binary data: residual bands are not misfit; Randomized quantile residuals in R |
 | [`10-overdispersion-quine.Rmd`](10-overdispersion-quine.Rmd) · [`.R`](10-overdispersion-quine.R) | Overdispersion: school absences | Genuinely overdispersed: `MASS::quine`; Quasi-Poisson vs negative binomial on `quine`; Which variance function?; Residual check; Expected zeros |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `10-glm-fitting.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

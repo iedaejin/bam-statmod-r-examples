@@ -25,9 +25,9 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`07-lab-part1-savings.Rmd`](07-lab-part1-savings.Rmd) · [`.R`](07-lab-part1-savings.R) | Lab 02 walk-through, Part 1: inference and diagnostics | Setup; Part 1.1–1.2: fit, intervals, nested $F$ test; Part 1.3: the four default diagnostic plots; Part 1.4: leverage, outliers, influence; Part 1.5: collinearity |
 | [`07-lab-part2-prostate.Rmd`](07-lab-part2-prostate.Rmd) · [`.R`](07-lab-part2-prostate.R) | Lab 02 walk-through, Part 2: selection and the lasso | Part 2.1: split, then step with AIC and BIC; Part 2.2: lasso with fixed folds; Part 2.3: one honest comparison |
 
-The scripts read the CSV files in [`data/`](data/) with relative paths. Set the working directory to this folder (open it as an RStudio project, or *Session → Set Working Directory → To Source File Location*).
+The scripts read the CSV files in [`data/`](data/) with relative paths.
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `07-lab-linear-models-diagnostics.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

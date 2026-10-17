@@ -28,7 +28,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`06-model-selection.Rmd`](06-model-selection.Rmd) · [`.R`](06-model-selection.R) | Model selection with AIC, BIC and Mallows' Cp | Stepwise selection in R |
 | [`06-regularization.Rmd`](06-regularization.Rmd) · [`.R`](06-regularization.R) | Ridge, lasso and elastic net with glmnet | Lasso with fixed folds in R; Coefficient paths and the CV curve |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `06-linear-models-practice-model-selection.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

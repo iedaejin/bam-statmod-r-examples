@@ -27,7 +27,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`05-diagnostics-prediction.Rmd`](05-diagnostics-prediction.Rmd) · [`.R`](05-diagnostics-prediction.R) | Diagnostics and prediction | Savings: residual plots; Leverage, studentized residuals and influence together; Diagnostics in R; Cook's distance and what Libya changes; Worked example: a country with `pop15`=35, `pop75`=2, `dpi`=1000, `ddpi`=3 |
 | [`05-least-squares.Rmd`](05-least-squares.Rmd) · [`.R`](05-least-squares.R) | Least squares in matrix form | Normal equations, $H$ and QR in R |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `05-linear-models-theory.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

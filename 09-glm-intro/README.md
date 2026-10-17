@@ -28,7 +28,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`09-exponential-family.Rmd`](09-exponential-family.Rmd) · [`.R`](09-exponential-family.R) | The exponential family in R | Check the identities numerically; Three inverse links for binary data; Mean–variance relationships |
 | [`09-classification-pima.Rmd`](09-classification-pima.Rmd) · [`.R`](09-classification-pima.R) | From probabilities to decisions | Choose on training data, evaluate on test data; ROC curves and the leakage trap |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `09-glm-intro.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

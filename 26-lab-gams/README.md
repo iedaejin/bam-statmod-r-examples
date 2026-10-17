@@ -26,7 +26,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`26-lab06-extensions.Rmd`](26-lab06-extensions.Rmd) · [`.R`](26-lab06-extensions.R) | Lab 06 extensions: Gamma family, shrinkage and a parametric month effect | — |
 | [`26-lab06-walkthrough.Rmd`](26-lab06-walkthrough.Rmd) · [`.R`](26-lab06-walkthrough.R) | Lab 06 walk-through: from LM to GAM on airquality | — |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `26-lab-gams.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

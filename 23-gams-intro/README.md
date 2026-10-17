@@ -27,7 +27,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`23-gam-motivation.Rmd`](23-gam-motivation.Rmd) · [`.R`](23-gam-motivation.R) | Why additive models? LM residuals on airquality | Fitting a GAM with `mgcv::gam()`; The `summary()` output |
 | [`23-first-gams.Rmd`](23-first-gams.Rmd) · [`.R`](23-first-gams.R) | First GAMs with mgcv: Gaussian, Gamma and binomial | Partial-effect plots; Gamma GAM with a log link; Two models for a positive, skewed response; A binomial GAM: diabetes in Pima women; Pima: one linear and one non-linear effect |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `23-gams-intro.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

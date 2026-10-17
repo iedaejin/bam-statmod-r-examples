@@ -27,7 +27,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`20-local-smoothers.Rmd`](20-local-smoothers.Rmd) · [`.R`](20-local-smoothers.R) | Local smoothers: bins, neighbours, kernels and LOESS | Kernel smoothing in R |
 | [`20-smoother-matrix-cv.Rmd`](20-smoother-matrix-cv.Rmd) · [`.R`](20-smoother-matrix-cv.R) | Smoother matrices, effective df and cross-validation | Worked example (continued): residuals and criteria; Choosing $h$ in R |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `20-polynomial-scatterplot-smoothing.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 

@@ -27,7 +27,7 @@ Statistical Modelling (BAM), IE University, Spring 2027 · Prof. Dae-Jin Lee
 | [`27-random-effects-gam.Rmd`](27-random-effects-gam.Rmd) · [`.R`](27-random-effects-gam.R) | Random effects inside GAMs: Oxboys growth curves | `s(Subject, bs = "re")` on Oxboys; Population and subject curves; `gamm4::gamm4()`: the `lme4` back end |
 | [`27-gamm-correlation.Rmd`](27-gamm-correlation.Rmd) · [`.R`](27-gamm-correlation.R) | gamm(): the $gam and $lme parts, and correlated residuals | `mgcv::gamm()`: two objects in one; Daily ozone with AR(1) errors |
 
-Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
+Open `27-gamms.Rproj` first, so that RStudio works inside this folder (never use `setwd()`). Each `.Rmd` has a matching `.R` with the same code: knit the `.Rmd` for a report, or run the `.R` line by line during class.
 
 ## Reading summaries
 
